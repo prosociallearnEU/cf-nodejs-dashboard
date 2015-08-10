@@ -1,5 +1,5 @@
 {
-  "name": "cf-dashboard",
+  "name": "cf-nodejs-dashboard",
   "version": "0.0.1",
   "description": "A web application to manage Cloud Foundry",
   "main": "index.js",
@@ -15,6 +15,7 @@
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.13.3",
     "cf-nodejs-client": "git://github.com/jabrena/cf-nodejs-client.git#master",
     "express": "^4.13.3"
   }

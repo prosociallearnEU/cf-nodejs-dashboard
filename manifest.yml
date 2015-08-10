@@ -1,0 +1,9 @@
+---
+applications:
+- name: dashboard
+  memory: 512MB
+  instances: 2
+  command: node ./index.js
+  host: dashboard
+  path: .  
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
