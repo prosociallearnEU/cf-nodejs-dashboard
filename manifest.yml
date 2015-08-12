@@ -2,7 +2,8 @@
 applications:
 - name: dashboard
   memory: 512MB
-  instances: 2
+  disk_quota: 512MB
+  instances: 1
   command: node ./index.js
   host: dashboard
   path: .  
