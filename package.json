@@ -4,6 +4,7 @@
   "description": "A web application to manage Cloud Foundry",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -12,11 +13,16 @@
     "cloudfoundry",
     "cf"
   ],
+  "engines" : { 
+    "node" : "0.12.7",
+    "npm" : "2.11.3" 
+  },
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.13.3",
     "cf-nodejs-client": "git://github.com/jabrena/cf-nodejs-client.git#master",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "request": "^2.60.0"    
   }
 }

@@ -3,13 +3,58 @@
 <head>
 	<title>Cloud Foundry Manager</title>
 	<meta charset="utf-8">
+	<style>
+		#pageLogin,
+		#pageHome,
+		#pageApps,
+		#pageDeployApps{
+			display:none;
+		}
+	</style>
 </head>
 <body>
-	<h1>Login</h1>
-	<form method="post" action="/api/auth/login">
-		<input type="text" name="username" />
-		<input type="text" name="password" />
-		<input type="submit" value="Submit" />
-	</form>
+	<div id="main">
+		<div id="pageLogin">
+			<h1>Login</h1>
+			<form method="post" action="#">
+				<input type="text" name="username" id="username" />
+				<input type="text" name="password" id="password" />
+				<input type="button" id="btnLoginSubmit" value="Submit" />
+			</form>
+		</div>
+		<div id="pageHome">
+			<h1>Home</h1>
+			<ul>
+				<li><a href="#" id="btnApps">Apps</a></li>
+				<li><a href="#" id="btnLogout">Logout</a></li>
+			</ul>
+		</div>
+		<div id="pageApps">
+			<h1>Apps</h1>
+			<ul>
+				<li><a href="#" id="btnHome">Home</a></li>
+				<li><a href="#" id="btnDeployApp">Deploy App</a></li>
+				<li><a href="#" id="btnLogout">Logout</a></li>
+			</ul>
+			<div id="result">
+
+			</div>
+		</div>
+		<div id="pageDeployApps">
+			<h1>Deploy an App</h1>
+			<ul>
+				<li><a href="#" id="btnApps">Apps</a></li>
+				<li><a href="#" id="btnLogout">Logout</a></li>				
+			</ul>
+			<form method="post" action="#">
+				<input type="text" name="appname" id="appname" />
+				<input type="text" name="url" id="url" />
+				<input type="button" id="btnDeployAppSubmit" value="Submit" />
+			</form>
+		</div>	
+	</div>
+
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="./Scripts/main.js"></script>
 </body>
 </html>

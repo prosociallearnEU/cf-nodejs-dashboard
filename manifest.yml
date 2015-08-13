@@ -1,10 +1,10 @@
 ---
 applications:
-- name: dashboard
+- name: cfdashboard
   memory: 512MB
   disk_quota: 512MB
   instances: 1
   command: node ./index.js
-  host: dashboard
+  host: cfdashboard
   path: .  
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
