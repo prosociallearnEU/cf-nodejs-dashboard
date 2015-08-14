@@ -13,16 +13,16 @@
     "cloudfoundry",
     "cf"
   ],
-  "engines" : { 
-    "node" : "0.12.7",
-    "npm" : "2.11.3" 
+  "engines": {
+    "node": "0.12.7",
+    "npm": "2.11.3"
   },
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "cf-nodejs-client": "git://github.com/jabrena/cf-nodejs-client.git#master",
+    "cf-nodejs-client": "0.0.5",
     "express": "^4.13.3",
-    "request": "^2.60.0"    
+    "request": "^2.60.0"
   }
 }
