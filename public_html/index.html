@@ -42,14 +42,18 @@
 		</div>
 		<div id="pageDeployApps">
 			<h1>Deploy an App</h1>
+			<h2>Create App</h2>
 			<ul>
 				<li><a href="#" id="btnApps">Apps</a></li>
 				<li><a href="#" id="btnLogout">Logout</a></li>				
 			</ul>
 			<form method="post" action="#">
 				<input type="text" name="appname" id="appname" />
-				<input type="text" name="url" id="url" />
-				<input type="button" id="btnDeployAppSubmit" value="Submit" />
+				<select name="buildpack" id="buildpack">
+					<option value="https://github.com/cloudfoundry/staticfile-buildpack">Static</option>
+					<option value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</option>
+				</select>				
+				<input type="button" id="btCreateApp" value="Submit" />
 			</form>
 		</div>	
 	</div>

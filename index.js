@@ -19,7 +19,11 @@ var cloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var cloudFoundryApps = require("cf-nodejs-client").Apps;
 cloudFoundry = new cloudFoundry(config.CF_API_URL);
 cloudFoundryApps = new cloudFoundryApps(config.CF_API_URL);
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+var appMacros = require("./AppMacros");
+appMacros = new appMacros(config.CF_API_URL,config.username,config.password);
 
 //WEB
 
@@ -70,6 +74,31 @@ app.get("/api/apps", jsonParser, function (req, res) {
 	}).then(function (result) {
             return cloudFoundryApps.getApps(result.token_type,result.access_token);
 	}).then(function (result) {
+        res.json(result); 
+	}).catch(function (reason) {
+	    res.json({"error": reason});
+	});
+
+});
+
+function randomInt (low, high) {
+    return Math.floor(Math.random() * (high - low) + low);
+}
+
+app.post("/api/apps/create", jsonParser, function (req, res) {
+
+    var appname = req.body.appname;
+
+    console.log(appname);
+
+	var token_endpoint = null;
+
+	var appName = "demo" + randomInt(1,100);
+	var staticBuildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
+	//appMacros.createApp(appName,staticBuildPack)
+
+	return appMacros.createApp(appName,staticBuildPack).then(function (result) {
+        var app_guid = result.metadata.guid;
         res.json(result); 
 	}).catch(function (reason) {
 	    res.json({"error": reason});

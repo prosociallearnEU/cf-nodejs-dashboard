@@ -82,6 +82,36 @@ $( document ).ready(function() {
 
 	});
 
+	$("#pageDeployApps").find("#btCreateApp").click(function(event) {
+		event.preventDefault();
+
+		$('#btCreateApp').attr('disabled','disabled');
+
+		var url = "/api/apps/create";
+		var appname = $("#appname").val();
+
+		//Form validation
+		if (!appname.trim()) {
+    		console.log("Form validation problem");
+    		return false;
+		}
+
+		var data = {
+			appname: appname
+		}
+
+		$.ajax({
+		    url: url, 
+		    type: 'POST', 
+		    contentType: 'application/json', 
+		    data: JSON.stringify(data)}
+		).done(function( data ) {
+		  	console.log(data);
+		  	//$("#pageLogin").hide();
+		  	//$("#pageHome").show();
+		});
+	});
+
 	$("#btnDeployApp").on("click", function(event) {
 		event.preventDefault();
 
