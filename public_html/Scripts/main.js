@@ -43,7 +43,7 @@ $( document ).ready(function() {
 		});
 	});
 
-	$("#main").on("click","#btnLogout", function(event) {
+	$("body").on("click","#btnLogout", function(event) {
 		event.preventDefault();
 
 		$("#pageLogin").show();
@@ -52,7 +52,7 @@ $( document ).ready(function() {
 		$("#pageDeployApps").hide();
 	});
 
-	$("#main").on("click","#btnHome", function(event) {
+	$("body").on("click","#btnHome", function(event) {
 		event.preventDefault();
 
 		$("#pageLogin").hide();
@@ -61,7 +61,7 @@ $( document ).ready(function() {
 		$("#pageDeployApps").hide();
 	});
 
-	$("#main").on("click","#btnApps", function(event) {
+	$("body").on("click","#btnApps", function(event) {
 		event.preventDefault();
 
 		var url = "/api/apps";
@@ -70,9 +70,26 @@ $( document ).ready(function() {
 		    type: 'GET', 
 		    contentType: 'application/json'
 		}).done(function( data ) {
-		  	console.log(data);
+
+			//var result = JSON.stringify(data);
+		  	//console.log(result);
 		  	//Process
-		  	$("#pageApps").find("#result").text(JSON.stringify(data));
+		  	//$("#pageApps").find("#result").text();
+		  	var htmlcode = "";
+		  	$.each(data.resources, function(index) {
+		  		htmlcode += "<tr>";
+		  		htmlcode += "<td>" + index + "</td>";
+		  		htmlcode += "<td>" + data.resources[index].entity.name + "</td>";
+		  		htmlcode += "<td>";
+		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Stop</a> ";
+		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Start</a> ";
+		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Upgrade</a> ";
+		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Logs</a> ";
+		  		htmlcode += "</td>";
+		  		htmlcode += "<tr>";
+			});
+
+			$("#pageApps").find("#result").html(htmlcode);
 
 		  	$("#pageLogin").hide();
 			$("#pageHome").hide();

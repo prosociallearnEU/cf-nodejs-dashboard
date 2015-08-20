@@ -21,8 +21,10 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "cf-nodejs-client": "0.0.5",
+    "bootstrap": "^3.3.5",
+    "cf-nodejs-client": "0.0.6",
     "express": "^4.13.3",
+    "jquery": "^2.1.4",
     "request": "^2.60.0"
   }
 }

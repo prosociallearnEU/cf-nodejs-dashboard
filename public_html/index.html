@@ -1,64 +1,123 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-	<title>Cloud Foundry Manager</title>
-	<meta charset="utf-8">
-	<style>
-		#pageLogin,
-		#pageHome,
-		#pageApps,
-		#pageDeployApps{
-			display:none;
-		}
-	</style>
+    <title>Cloud Foundry Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./Styles/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #pageLogin,
+        #pageHome,
+        #pageApps,
+        #pageDeployApps{
+            display:none;
+        }
+
+        body {
+            padding-top: 50px;
+        }
+    </style>
 </head>
 <body>
-	<div id="main">
-		<div id="pageLogin">
-			<h1>Login</h1>
-			<form method="post" action="#">
-				<input type="text" name="username" id="username" />
-				<input type="text" name="password" id="password" />
-				<input type="button" id="btnLoginSubmit" value="Submit" />
-			</form>
-		</div>
-		<div id="pageHome">
-			<h1>Home</h1>
-			<ul>
-				<li><a href="#" id="btnApps">Apps</a></li>
-				<li><a href="#" id="btnLogout">Logout</a></li>
-			</ul>
-		</div>
-		<div id="pageApps">
-			<h1>Apps</h1>
-			<ul>
-				<li><a href="#" id="btnHome">Home</a></li>
-				<li><a href="#" id="btnDeployApp">Deploy App</a></li>
-				<li><a href="#" id="btnLogout">Logout</a></li>
-			</ul>
-			<div id="result">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Cloud Foundry Manager</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <!--
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                -->
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
 
-			</div>
-		</div>
-		<div id="pageDeployApps">
-			<h1>Deploy an App</h1>
-			<h2>Create App</h2>
-			<ul>
-				<li><a href="#" id="btnApps">Apps</a></li>
-				<li><a href="#" id="btnLogout">Logout</a></li>				
-			</ul>
-			<form method="post" action="#">
-				<input type="text" name="appname" id="appname" />
-				<select name="buildpack" id="buildpack">
-					<option value="https://github.com/cloudfoundry/staticfile-buildpack">Static</option>
-					<option value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</option>
-				</select>				
-				<input type="button" id="btCreateApp" value="Submit" />
-			</form>
-		</div>	
-	</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
 
-	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-	<script src="./Scripts/main.js"></script>
+                <div id="pageLogin">
+                    <h1>Login</h1>
+
+                    <form method="post" action="#">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" >
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <button type="submit" id="btnLoginSubmit" class="btn btn-default">Submit</button>
+                    </form>
+
+                </div>
+
+                <div id="pageHome">
+                    <h1>Home</h1>
+                    <ul>
+                        <li><a href="#" id="btnApps">Apps</a></li>
+                        <li><a href="#" id="btnLogout">Logout</a></li>
+                    </ul>
+                </div>
+
+                <div id="pageApps">
+                    <h1>Apps</h1>
+                    <ul>
+                        <li><a href="#" id="btnHome">Home</a></li>
+                        <li><a href="#" id="btnDeployApp">Deploy App</a></li>
+                        <li><a href="#" id="btnLogout">Logout</a></li>
+                    </ul>
+<table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>App</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody id="result">
+      </tbody>
+    </table>
+                </div>
+
+                <div id="pageDeployApps">
+                    <h1>Deploy an App</h1>
+                    <h2>Create App</h2>
+                    <ul>
+                        <li><a href="#" id="btnApps">Apps</a></li>
+                        <li><a href="#" id="btnLogout">Logout</a></li>              
+                    </ul>
+                    <form method="post" action="#">
+                        <input type="text" name="appname" id="appname" />
+                        <select name="buildpack" id="buildpack">
+                            <option value="https://github.com/cloudfoundry/staticfile-buildpack">Static</option>
+                            <option value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</option>
+                        </select>               
+                        <input type="button" id="btCreateApp" value="Submit" />
+                    </form>
+                </div> 
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script src="./Scripts/jquery.min.js"></script>
+    <script src="./Scripts/bootstrap.min.js"></script>
+    <script src="./Scripts/main.js"></script>
 </body>
 </html>
