@@ -2,13 +2,15 @@
 var username = null;
 var password = null;
 
-$( document ).ready(function() {
+$(document).ready(function() {
 
 	function initApp(){
+		$("#mainNavBar").hide();
+		$("#mainNavBar2").hide();
 		$("#pageLogin").show();
 		$("#pageHome").hide();
 		$("#pageApps").hide();
-		$("#pageDeployApps").hide();
+		$("#pageCreateApps").hide();
 	}
 
 	initApp();
@@ -37,7 +39,8 @@ $( document ).ready(function() {
 		    contentType: 'application/json', 
 		    data: JSON.stringify(data)}
 		).done(function( data ) {
-		  	console.log(data);
+			$("#mainNavBar").show();
+			$("#mainNavBar2").show();			
 		  	$("#pageLogin").hide();
 		  	$("#pageHome").show();
 		});
@@ -46,10 +49,15 @@ $( document ).ready(function() {
 	$("body").on("click","#btnLogout", function(event) {
 		event.preventDefault();
 
+		$("#username").val("");
+		$("#password").val("");
+
+		$("#mainNavBar").hide();
+		$("#mainNavBar2").hide();
 		$("#pageLogin").show();
 		$("#pageHome").hide();
 		$("#pageApps").hide();
-		$("#pageDeployApps").hide();
+		$("#pageCreateApps").hide();
 	});
 
 	$("body").on("click","#btnHome", function(event) {
@@ -58,7 +66,7 @@ $( document ).ready(function() {
 		$("#pageLogin").hide();
 		$("#pageHome").show();
 		$("#pageApps").hide();
-		$("#pageDeployApps").hide();
+		$("#pageCreateApps").hide();
 	});
 
 	$("body").on("click","#btnApps", function(event) {
@@ -69,37 +77,37 @@ $( document ).ready(function() {
 		    url: url, 
 		    type: 'GET', 
 		    contentType: 'application/json'
-		}).done(function( data ) {
+		}).done(function(data) {
 
-			//var result = JSON.stringify(data);
-		  	//console.log(result);
-		  	//Process
-		  	//$("#pageApps").find("#result").text();
+			console.log(data);
+
 		  	var htmlcode = "";
 		  	$.each(data.resources, function(index) {
+		  		//console.log(data.resources[index]);
 		  		htmlcode += "<tr>";
 		  		htmlcode += "<td>" + index + "</td>";
 		  		htmlcode += "<td>" + data.resources[index].entity.name + "</td>";
+		  		htmlcode += "<td>" + data.resources[index].entity.package_state + "</td>";
+		  		htmlcode += "<td>" + data.resources[index].entity.state + "</td>";
+		  		htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
 		  		htmlcode += "<td>";
-		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Stop</a> ";
-		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Start</a> ";
-		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Upgrade</a> ";
-		  		htmlcode += "<a class='btn btn-default' href='#' role='button'>Logs</a> ";
+		  		htmlcode += "<a class='btn btn-default' href='#' onclick='viewApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>View</a>";
 		  		htmlcode += "</td>";
 		  		htmlcode += "<tr>";
 			});
 
 			$("#pageApps").find("#result").html(htmlcode);
 
-		  	$("#pageLogin").hide();
+			$("#pageLogin").hide();
 			$("#pageHome").hide();
 			$("#pageApps").show();
-			$("#pageDeployApps").hide();			
+			$("#pageAppView").hide();			
+			$("#pageCreateApps").hide();
 		});
 
 	});
 
-	$("#pageDeployApps").find("#btCreateApp").click(function(event) {
+	$("#pageCreateApps").find("#btCreateApp").click(function(event) {
 		event.preventDefault();
 
 		$('#btCreateApp').attr('disabled','disabled');
@@ -129,13 +137,43 @@ $( document ).ready(function() {
 		});
 	});
 
-	$("#btnDeployApp").on("click", function(event) {
+	$("#btnAppCreate").on("click", function(event) {
 		event.preventDefault();
 
-		$("#pageLogin").hide();
 		$("#pageHome").hide();
 		$("#pageApps").hide();
-		$("#pageDeployApps").show();		
+		$("#pageCreateApps").show();		
 	});
 
+});
+
+function viewApp(app_guid){
+	console.log(app_guid);
+
+	var url = "/api/apps/" + app_guid + "/view";
+	$.ajax({
+	    url: url, 
+	    type: 'GET', 
+	    contentType: 'application/json'
+	}).done(function(data) {
+		$("#pageApps").hide();
+		$("#pageAppView").show();
+		
+	  	console.log(data);
+
+	  	var htmlcode = "";
+	  	$.each(data, function(index) {
+	  		htmlcode += "<tr>";
+	  		htmlcode += "<td>" + index + "</td>";
+	  		htmlcode += "<td>" + data[index]  + "</td>";
+	  		htmlcode += "<tr>";
+		});
+
+		$("#pageAppView").find("#result").html(htmlcode);	  	
+	});		
+
+}
+
+$(window).on('beforeunload', function(){
+      return 'Are you sure you want to leave?';
 });

@@ -6,18 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./Styles/bootstrap.min.css" rel="stylesheet">
-    <style>
-        #pageLogin,
-        #pageHome,
-        #pageApps,
-        #pageDeployApps{
-            display:none;
-        }
-
-        body {
-            padding-top: 50px;
-        }
-    </style>
+    <link href="./Styles/main.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -32,89 +21,157 @@
                 <a class="navbar-brand" href="#">Cloud Foundry Manager</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
-                <!--
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                
+                <ul class="nav navbar-nav" id="mainNavBar">
+                    <li><a href="#" id="btnHome">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Applications <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="btnApps">Get Applications</a></li>
+                            <li role="separator" class="divider"></li>                            
+                            <li><a href="#" id="btnAppCreate">Create a new Application</a></li>
+                        </ul>
+                    </li>               
                 </ul>
-                -->
+                <ul class="nav navbar-nav navbar-right" id="mainNavBar2">
+                    <li><a href="#" id="btnLogout">Logout</a></li>
+                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
 
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
 
-                <div id="pageLogin">
-                    <h1>Login</h1>
+        <div id="pageLogin">
 
-                    <form method="post" action="#">
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" >
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
-                        </div>
-                        <button type="submit" id="btnLoginSubmit" class="btn btn-default">Submit</button>
-                    </form>
+            <form method="post" action="#" class="form-signin">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus autocomplete="off">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required autocomplete="off">
+                <button class="btn btn-lg btn-primary btn-block" type="submit" id="btnLoginSubmit">Sign in</button>
+            </form>
 
-                </div>
-
-                <div id="pageHome">
-                    <h1>Home</h1>
-                    <ul>
-                        <li><a href="#" id="btnApps">Apps</a></li>
-                        <li><a href="#" id="btnLogout">Logout</a></li>
-                    </ul>
-                </div>
-
-                <div id="pageApps">
-                    <h1>Apps</h1>
-                    <ul>
-                        <li><a href="#" id="btnHome">Home</a></li>
-                        <li><a href="#" id="btnDeployApp">Deploy App</a></li>
-                        <li><a href="#" id="btnLogout">Logout</a></li>
-                    </ul>
-<table class="table table-hover">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>App</th>
-          <th>Options</th>
-        </tr>
-      </thead>
-      <tbody id="result">
-      </tbody>
-    </table>
-                </div>
-
-                <div id="pageDeployApps">
-                    <h1>Deploy an App</h1>
-                    <h2>Create App</h2>
-                    <ul>
-                        <li><a href="#" id="btnApps">Apps</a></li>
-                        <li><a href="#" id="btnLogout">Logout</a></li>              
-                    </ul>
-                    <form method="post" action="#">
-                        <input type="text" name="appname" id="appname" />
-                        <select name="buildpack" id="buildpack">
-                            <option value="https://github.com/cloudfoundry/staticfile-buildpack">Static</option>
-                            <option value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</option>
-                        </select>               
-                        <input type="button" id="btCreateApp" value="Submit" />
-                    </form>
-                </div> 
-
-            </div>
         </div>
 
 
+        <div id="pageHome">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Home</h1>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="pageApps">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h1>Applications</h1>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>App</th>
+                                <th>Package State</th>
+                                <th>State</th>
+                                <th>Last update</th>
+                                <th>Options</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result">
+                        </tbody>
+                    </table>
+                    <p>
+                        <!--
+                        <button type="button" class="btn btn-primary" id="btnAppCreate">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Create a new application
+                        </button>
+                        
+                        <button type="button" class="btn btn-default" id="btnApps">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            Refresh
+                        </button>
+                        -->
+                    </p>
+                </div>
+            </div>                            
+        </div>
+
+        <div id="pageAppView">
+            <h1>Applications</h1>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result">
+                        </tbody>
+                    </table>
+                    <p>
+                        <button type="button" class="btn btn-primary" id="btnApps">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                            Back
+                        </button>
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div id="pageCreateApps">
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h1>Create App</h1>
+
+                    <form method="post" action="#">
+                        <div class="form-group">
+                            <label for="appname" class="sr-only">Application name</label>
+                            <input type="text" class="form-control" id="appname" placeholder="Application name">
+                        </div>
+                        <div class="form-group">
+                            <select name="buildpack" id="buildpack" class="form-control">
+                                <option value="https://github.com/cloudfoundry/staticfile-buildpack">Static</option>
+                                <option value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="btCreateApp">Submit</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div> 
+
     </div>
 
+<!--
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted"><a href="http://atos.net/en-us/home/we-are/insights-innovation/research-and-innovation.html" target="_blank">ARI</a> &copy; 2015</p>
+        </div>
+    </footer>
+-->
 
     <script src="./Scripts/jquery.min.js"></script>
     <script src="./Scripts/bootstrap.min.js"></script>
