@@ -8,20 +8,22 @@ var app = express();
 var http = require('http').Server(app);
 
 //Express
-app.use(express.static(__dirname + '/public_html'));
 app.use(bodyParser.json());
 
 //Routes
-var Default = require('./routes/Default');
-var Login = require('./routes/Login');
-var Apps = require('./routes/Apps');
+//var Login = require('./routes/Login');
+//var Apps = require('./routes/Apps');
 
 //REST API
-app.get('/', Default.init);
-app.post('/api/auth/login', Login.login);
-app.get('/api/apps', Apps.getApps);
-app.get('/api/apps/:guid/view', Apps.view);
-app.post('/api/apps/create', Apps.create);
+app.use('/api', require('./routes/Demo')(express));
+/*    
+    .post('/auth/login', Login.login)
+    .get('/apps', Apps.getApps)
+    .get('/apps/:guid/view', Apps.view)
+    .post('/apps/create', Apps.create));
+*/
+
+app.use(express.static(__dirname + '/public'));
 
 //Server
 var localPort = process.env.VCAP_APP_PORT || 3000;
