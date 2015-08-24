@@ -4,7 +4,7 @@
 var bodyParser = require('body-parser');
 
 //Routes
-var Login = require('./Login');
+var Login = require('../Login');
 var Apps = require('./Apps');
 
 module.exports = function (express) {

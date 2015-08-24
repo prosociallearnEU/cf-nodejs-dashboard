@@ -6,7 +6,7 @@ var app = express();
 var http = require('http').Server(app);
 
 //REST API
-app.use('/api/v1', require('./routes/v1')(express));
+app.use('/api/v1', require('./routes/v1/index')(express));
 app.use(express.static(__dirname + '/public'));
 
 //Server

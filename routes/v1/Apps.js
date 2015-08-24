@@ -2,7 +2,7 @@
 "use strict";
 
 //CF
-var config = require('../config.json');
+var config = require('../../config.json');
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
 CloudFoundry = new CloudFoundry(config.CF_API_URL);
