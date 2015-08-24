@@ -1,28 +1,12 @@
 /*jslint node: true*/
 "use strict";
 
-//Dependencies
-var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 
-//Express
-app.use(bodyParser.json());
-
-//Routes
-//var Login = require('./routes/Login');
-//var Apps = require('./routes/Apps');
-
 //REST API
-app.use('/api', require('./routes/Demo')(express));
-/*    
-    .post('/auth/login', Login.login)
-    .get('/apps', Apps.getApps)
-    .get('/apps/:guid/view', Apps.view)
-    .post('/apps/create', Apps.create));
-*/
-
+app.use('/api/v1', require('./routes/v1')(express));
 app.use(express.static(__dirname + '/public'));
 
 //Server

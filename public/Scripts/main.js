@@ -18,7 +18,7 @@ $(document).ready(function() {
 	$("#pageLogin").find("#btnLoginSubmit").click(function(event) {
 		event.preventDefault();
 
-		var url = "/api/auth/login";
+		var url = "/api/v1/auth/login";
 		username = $("#username").val();
 		password = $("#password").val();
 
@@ -72,7 +72,7 @@ $(document).ready(function() {
 	$("body").on("click","#btnApps", function(event) {
 		event.preventDefault();
 
-		var url = "/api/apps";
+		var url = "/api/v1/apps";
 		$.ajax({
 		    url: url, 
 		    type: 'GET', 
@@ -112,7 +112,7 @@ $(document).ready(function() {
 
 		$('#btCreateApp').attr('disabled','disabled');
 
-		var url = "/api/apps/create";
+		var url = "/api/v1/apps/create";
 		var appname = $("#appname").val();
 
 		//Form validation
@@ -150,7 +150,7 @@ $(document).ready(function() {
 function viewApp(app_guid){
 	console.log(app_guid);
 
-	var url = "/api/apps/" + app_guid + "/view";
+	var url = "/api/v1/apps/" + app_guid + "/view";
 	$.ajax({
 	    url: url, 
 	    type: 'GET', 
