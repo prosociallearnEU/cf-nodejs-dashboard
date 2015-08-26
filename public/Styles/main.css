@@ -2,7 +2,8 @@
         #pageHome,
         #pageApps,
         #pageAppView,
-        #pageCreateApps{
+        #pageCreateApps,
+        #pageUpgradeApps{
             display:none;
         }
 
