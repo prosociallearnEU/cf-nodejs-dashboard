@@ -2,7 +2,7 @@
 "use strict";
 
 //CF
-var config = require('../../config.json');
+var config = require('../config.json');
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
 CloudFoundry = new CloudFoundry(config.CF_API_URL);
@@ -68,5 +68,32 @@ exports.create = function (req, res) {
     }).catch(function (reason) {
         res.json({"error": reason});
     });
+
+};
+
+exports.upgrade = function (req, res) {
+
+    console.log("POST Upgrade App");
+
+    var app_guid = req.body.guid;
+    var appName = "demo";
+    var zipPath = "./staticApp.zip";
+
+    console.log(app_guid);
+    console.log(appName);
+    console.log(zipPath);
+
+    var token_endpoint = null;
+
+    CloudFoundry.getInfo().then(function (result) {
+        token_endpoint = result.token_endpoint;
+        return CloudFoundry.login(token_endpoint, config.username, config.password);
+    }).then(function (result) {        
+        console.log(result);
+        res.json("result" + guid);
+    }).catch(function (reason) {
+        res.json({"error": reason});
+    });
+ 
 
 };

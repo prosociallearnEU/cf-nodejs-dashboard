@@ -4,7 +4,7 @@
 var bodyParser = require('body-parser');
 
 //Routes
-var Login = require('../Login');
+var Login = require('./Login');
 var Apps = require('./Apps');
 
 module.exports = function (express) {
@@ -16,6 +16,7 @@ module.exports = function (express) {
     router.get('/apps', Apps.getApps);
     router.get('/apps/:guid/view', Apps.view);
     router.post('/apps/create', Apps.create);
+    router.post('/apps/upgrade', Apps.upgrade);
 
     return router;
 };
