@@ -17,6 +17,8 @@ module.exports = function (express) {
     router.get('/apps/:guid/view', Apps.view);
     router.post('/apps/create', Apps.create);
     router.post('/apps/upgrade', Apps.upgrade);
+    router.post('/apps/stop', Apps.stop);
+    router.post('/apps/start', Apps.startApp);
 
     return router;
 };

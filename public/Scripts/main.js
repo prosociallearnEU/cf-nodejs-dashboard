@@ -89,14 +89,16 @@ $(document).ready(function() {
 		  	$.each(data.resources, function(index) {
 		  		//console.log(data.resources[index]);
 		  		htmlcode += "<tr>";
-		  		htmlcode += "<td>" + index + "</td>";
+		  		htmlcode += "<td>" + (index+1) + "</td>";
 		  		htmlcode += "<td>" + data.resources[index].entity.name + "</td>";
 		  		htmlcode += "<td>" + data.resources[index].entity.package_state + "</td>";
 		  		htmlcode += "<td>" + data.resources[index].entity.state + "</td>";
 		  		htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
 		  		htmlcode += "<td>";
 		  		htmlcode += "<a class='btn btn-default' href='#' onclick='viewApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>View</a>&nbsp;";
-		  		htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>Upgrade</a>";
+		  		htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>Upgrade</a>&nbsp;";
+		  		htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>Stop</a>&nbsp;";
+		  		htmlcode += "<a class='btn btn-default' href='#' onclick='startApp(\"" + data.resources[index].metadata.guid + "\"); return false;'>Start</a>&nbsp;";
 		  		htmlcode += "</td>";
 		  		htmlcode += "<tr>";
 			});
@@ -194,6 +196,27 @@ function upgradeApp(app_guid){
 	$("#pageApps").hide();
 	$("#pageUpgradeApps").show();
 	
+
+}
+
+function stopApp(app_guid){
+	console.log(app_guid);
+
+	var url = "/api/apps/stop";
+	var data = {
+		guid: app_guid
+	};
+
+	$.ajax({
+	    url: url, 
+	    type: 'POST', 
+	    contentType: 'application/json', 
+	    data: JSON.stringify(data)
+	}).done(function(data) {
+		
+	  	console.log(data);
+	  	
+	});		
 
 }
 
