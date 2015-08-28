@@ -107,28 +107,19 @@ exports.stop = function (req, res) {
     var app_guid = req.body.guid;
     console.log(app_guid);
 
-
     var token_endpoint = null;
 
-/*
     CloudFoundry.getInfo().then(function (result) {
         token_endpoint = result.token_endpoint;
         return CloudFoundry.login(token_endpoint, config.username, config.password);
     }).then(function (result) { 
-        return CloudFoundryApps.uploadApp(result.token_type, result.access_token, appName, app_guid, zipPath);       
+        return CloudFoundryApps.stopApp(result.token_type, result.access_token, app_guid);
     }).then(function (result) {         
-        console.log(result);
-        res.json("result" + "demo");
+        console.log(result.entity.state);
+        res.json(result.entity.state);
     }).catch(function (reason) {
         res.json({"error": reason});
-    });
-
-            return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                return CloudFoundryApps.stopApp(result.token_type, result.access_token, app_guid);
-            });    
-*/
-    res.json("result" + "demo");
- 
+    });   
 
 };
 
@@ -142,27 +133,16 @@ exports.startApp = function (req, res) {
 
     var token_endpoint = null;
 
-/*
     CloudFoundry.getInfo().then(function (result) {
         token_endpoint = result.token_endpoint;
         return CloudFoundry.login(token_endpoint, config.username, config.password);
     }).then(function (result) { 
-        return CloudFoundryApps.uploadApp(result.token_type, result.access_token, appName, app_guid, zipPath);       
+        return CloudFoundryApps.startApp(result.token_type, result.access_token, app_guid);
     }).then(function (result) {         
-        console.log(result);
-        res.json("result" + "demo");
+        console.log(result.entity.state);
+        res.json(result.entity.state);
     }).catch(function (reason) {
         res.json({"error": reason});
-    });
-*/
-
-/*
-                return CloudFoundry.login(token_endpoint, username, password).then(function (result) {
-                    return CloudFoundryApps.startApp(result.token_type, result.access_token, app_guid);
-                });
- */
-
-    res.json("result" + "demo");
- 
+    }); 
 
 };
