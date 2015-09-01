@@ -1,30 +1,15 @@
 /*jslint node: true*/
 "use strict";
 
-//CF
 var config = require('../config.json');
-var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
-var CloudFoundryApps = require("cf-nodejs-client").Apps;
-CloudFoundry = new CloudFoundry(config.CF_API_URL);
-CloudFoundryApps = new CloudFoundryApps(config.CF_API_URL);
-
-var AppMacros = require("./AppMacros");
-AppMacros = new AppMacros(config.CF_API_URL, config.username, config.password);
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+var AppServices = require("../Services/AppServices");
+AppServices = new AppServices(config.CF_API_URL, config.username, config.password);
 
 exports.getApps = function (req, res) {
 
     console.log("GET Apps");
 
-    var token_endpoint = null;
-
-    CloudFoundry.getInfo().then(function (result) {
-        token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
-    }).then(function (result) {
-        return CloudFoundryApps.getApps(result.token_type, result.access_token);
-    }).then(function (result) {
+    return AppServices.getApps().then(function (result) {
         res.json(result);
     }).catch(function (reason) {
         res.json({"error": reason});
@@ -38,14 +23,8 @@ exports.view = function (req, res) {
 
     var app_guid = req.params.guid;
     console.log(app_guid);
-    var token_endpoint = null;
 
-    CloudFoundry.getInfo().then(function (result) {
-        token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
-    }).then(function (result) {
-        return CloudFoundryApps.getSummary(result.token_type, result.access_token, app_guid);    
-    }).then(function (result) {
+    return AppServices.view(app_guid).then(function (result) {
         res.json(result);
     }).catch(function (reason) {
         res.json({"error": reason});
@@ -59,12 +38,13 @@ exports.create = function (req, res) {
 
     var appName = req.body.appname;
     var staticBuildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
+    var app_guid = null;
 
     console.log(appName);
 
-    return AppMacros.createApp(appName,staticBuildPack).then(function (result) {
-        var app_guid = result.metadata.guid;
-        res.json(result); 
+    return AppServices.createApp(appName, staticBuildPack).then(function (result) {
+        app_guid = result.metadata.guid;
+        res.json(app_guid);
     }).catch(function (reason) {
         res.json({"error": reason});
     });
@@ -83,20 +63,13 @@ exports.upgrade = function (req, res) {
     console.log(appName);
     console.log(zipPath);
 
-    var token_endpoint = null;
-
-    CloudFoundry.getInfo().then(function (result) {
-        token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
-    }).then(function (result) { 
-        return CloudFoundryApps.uploadApp(result.token_type, result.access_token, appName, app_guid, zipPath);       
-    }).then(function (result) {         
+    return AppServices.uploadApp(appName, app_guid, zipPath).then(function (result) {
         console.log(result);
-        res.json("result" + "demo");
+        res.json(result);
     }).catch(function (reason) {
+        console.log(reason);
         res.json({"error": reason});
     });
- 
 
 };
 
@@ -107,19 +80,13 @@ exports.stop = function (req, res) {
     var app_guid = req.body.guid;
     console.log(app_guid);
 
-    var token_endpoint = null;
-
-    CloudFoundry.getInfo().then(function (result) {
-        token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
-    }).then(function (result) { 
-        return CloudFoundryApps.stopApp(result.token_type, result.access_token, app_guid);
-    }).then(function (result) {         
-        console.log(result.entity.state);
-        res.json(result.entity.state);
+    return AppServices.stop(app_guid).then(function (result) {
+        console.log(result);
+        res.json(result);
     }).catch(function (reason) {
+        console.log(reason);
         res.json({"error": reason});
-    });   
+    });
 
 };
 
@@ -130,19 +97,12 @@ exports.startApp = function (req, res) {
     var app_guid = req.body.guid;
     console.log(app_guid);
 
-
-    var token_endpoint = null;
-
-    CloudFoundry.getInfo().then(function (result) {
-        token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
-    }).then(function (result) { 
-        return CloudFoundryApps.startApp(result.token_type, result.access_token, app_guid);
-    }).then(function (result) {         
-        console.log(result.entity.state);
-        res.json(result.entity.state);
+    return AppServices.start(app_guid).then(function (result) {
+        console.log(result);
+        res.json(result);
     }).catch(function (reason) {
+        console.log(reason);
         res.json({"error": reason});
-    }); 
+    });
 
 };
