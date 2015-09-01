@@ -272,4 +272,59 @@ AppServices.prototype.start = function (app_guid) {
     });
 };
 
+AppServices.prototype.remove = function (app_guid) {
+
+    var token_endpoint = null;
+
+    var self = this;
+
+    return new Promise(function (resolve, reject) {
+
+        CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, self.username, self.password);
+        }).then(function (result) {
+            return CloudFoundryApps.deleteApp(result.token_type, result.access_token, app_guid);
+        }).then(function (result) {
+            console.log(result);
+            return resolve(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            return reject(reason);
+        });
+
+    });
+};
+
+AppServices.prototype.open = function (app_guid) {
+
+    var token_endpoint = null;
+    var url = null;
+
+    var self = this;
+
+    return new Promise(function (resolve, reject) {
+
+        CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, self.username, self.password);
+        }).then(function (result) {
+            return CloudFoundryApps.getStats(result.token_type, result.access_token, app_guid);
+        }).then(function (result) {
+            if (result["0"].state === "RUNNING") {
+                url = "http://" + result["0"].stats.uris[0];
+                return resolve(url);
+            }
+
+            console.log("result");
+            return reject("App is not OK");
+            
+        }).catch(function (reason) {
+            console.log(reason);
+            return reject(reason);
+        });
+
+    });
+};
+
 module.exports = AppServices;

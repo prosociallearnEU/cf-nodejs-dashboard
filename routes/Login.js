@@ -9,6 +9,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 exports.login = function (req, res) {
 
+    console.log("POST Login");
+
     var username = req.body.username;
     var password = req.body.password;
 

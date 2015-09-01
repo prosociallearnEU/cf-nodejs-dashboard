@@ -19,6 +19,8 @@ module.exports = function (express) {
     router.post('/apps/upgrade', Apps.upgrade);
     router.post('/apps/stop', Apps.stop);
     router.post('/apps/start', Apps.startApp);
+    router.post('/apps/remove', Apps.removeApp);
+    router.post('/apps/open', Apps.open);//MOVE TO GET
 
     return router;
 };

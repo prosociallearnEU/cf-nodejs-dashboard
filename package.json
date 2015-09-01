@@ -20,11 +20,11 @@
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.13.3",
-    "bootstrap": "^3.3.5",
+    "body-parser": "1.13.3",
+    "bootstrap": "3.3.5",
     "cf-nodejs-client": "0.0.6",
-    "express": "^4.13.3",
-    "jquery": "^2.1.4",
-    "request": "^2.60.0"
+    "express": "4.13.3",
+    "jquery": "2.1.4",
+    "multer": "1.0.3"
   }
 }

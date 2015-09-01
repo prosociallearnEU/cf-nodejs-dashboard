@@ -106,3 +106,37 @@ exports.startApp = function (req, res) {
     });
 
 };
+
+exports.removeApp = function (req, res) {
+
+    console.log("POST Remove App");
+
+    var app_guid = req.body.guid;
+    console.log(app_guid);
+
+    return AppServices.remove(app_guid).then(function (result) {
+        console.log(result);
+        res.json(result);
+    }).catch(function (reason) {
+        console.log(reason);
+        res.json({"error": reason});
+    });
+
+};
+
+exports.open = function (req, res) {
+
+    console.log("GET Open App");
+
+    var app_guid = req.body.guid;
+    console.log(app_guid);
+
+    return AppServices.open(app_guid).then(function (result) {
+        console.log(result);
+        res.json(result);
+    }).catch(function (reason) {
+        console.log(reason);
+        res.json({"error": reason});
+    });
+
+};
