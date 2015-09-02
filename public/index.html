@@ -176,24 +176,12 @@
 
                     </p>
 
-                    <form method="post" action="/api/apps/upload" class="dropzone" id="dropzoneExample" enctype="multipart/form-data">
+                    <form method="post" action="/api/apps/upload/" class="dropzone" id="dropzoneExample" enctype="multipart/form-data">
+                        <input type="hidden" name="app_guid" id="app_guid" value="" />
                         <div class="fallback">
                             <input name="file" type="file" />
                             <button type="submit">Upload App</button>
                         </div>
-                    </form>
-
-                    <h1>Upgrade App</h1>
-                    <p>
-
-                    </p>
-
-                    <form method="post" action="#">
-                        <input type="hidden" name="app_guid" id="app_guid" value="" />
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary" id="btUpgradeApp">Upgrade App</button>
-                        </div>
-
                     </form>
 
                 </div>

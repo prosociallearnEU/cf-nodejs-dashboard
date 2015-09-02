@@ -26,6 +26,7 @@
     "dropzone": "4.0.1",
     "express": "4.13.3",
     "jquery": "2.1.4",
-    "multer": "1.0.3"
+    "multer": "1.0.3",
+    "xreq": "^1.1.1"
   }
 }

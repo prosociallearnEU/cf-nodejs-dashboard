@@ -154,11 +154,14 @@ AppServices.prototype.createApp = function (appName, buildPack) {
 
 };
 
-AppServices.prototype.uploadApp = function (appName, app_guid, filePath) {
+AppServices.prototype.uploadApp = function (app_guid, filePath) {
 
     console.log("upload");
 
     var token_endpoint = null;
+
+    //TODO: Remove
+    var appName = "dummy";
 
     var self = this;
 
@@ -318,7 +321,7 @@ AppServices.prototype.open = function (app_guid) {
 
             console.log("result");
             return reject("App is not OK");
-            
+
         }).catch(function (reason) {
             console.log(reason);
             return reject(reason);

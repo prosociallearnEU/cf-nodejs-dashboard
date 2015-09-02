@@ -32,7 +32,7 @@ function drawAppTable() {
             htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
             htmlcode += "<td>";
             htmlcode += "<a class='btn btn-default' href='#' onclick='viewApp(\"" + app_guid + "\"); return false;'>View</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + app_guid + "\"); return false;'>Upgrade</a>&nbsp;";
+            htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + app_guid + "\"); return false;'>Upload</a>&nbsp;";
 
             if (state === "STARTED") {
                 htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + app_guid + "\"); return false;'>Stop</a>&nbsp;";
@@ -383,6 +383,8 @@ $(function () {
         init: function () {
             this.on("success", function (file) {
                 console.log("Added file: ", file.name);
+
+                drawAppTable();
             });
         }
     };
