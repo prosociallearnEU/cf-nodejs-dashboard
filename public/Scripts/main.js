@@ -1,5 +1,5 @@
 
-/*global alert, window */
+/*global alert, window, Dropzone */
 /*jslint node: true*/
 "use strict";
 
@@ -14,31 +14,37 @@ function drawAppTable() {
         contentType: 'application/json'
     }).done(function (data) {
 
-        //console.log(data);
-        console.log("OK");
-
         var htmlcode = "";
         var app_guid = null;
+        var state = null;
         $.each(data.resources, function (index) {
 
             app_guid = data.resources[index].metadata.guid;
+            state = data.resources[index].entity.state;
 
             //console.log(data.resources[index]);
             htmlcode += "<tr>";
             htmlcode += "<td>" + (index + 1) + "</td>";
             htmlcode += "<td><a href='#' onclick='openApp(\"" + app_guid + "\"); return false;'>" + data.resources[index].entity.name + "</a></td>";
             htmlcode += "<td>" + data.resources[index].entity.package_state + "</td>";
-            htmlcode += "<td>" + data.resources[index].entity.state + "</td>";
+            htmlcode += "<td>" + state + "</td>";
             htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
             htmlcode += "<td>";
             htmlcode += "<a class='btn btn-default' href='#' onclick='viewApp(\"" + app_guid + "\"); return false;'>View</a>&nbsp;";
             htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + app_guid + "\"); return false;'>Upgrade</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + app_guid + "\"); return false;'>Stop</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='#' onclick='startApp(\"" + app_guid + "\"); return false;'>Start</a>&nbsp;";
+
+            if (state === "STARTED") {
+                htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + app_guid + "\"); return false;'>Stop</a>&nbsp;";
+            } else {
+                htmlcode += "<a class='btn btn-default' href='#' onclick='startApp(\"" + app_guid + "\"); return false;'>Start</a>&nbsp;";
+            }
+
             htmlcode += "<a class='btn btn-default' href='#' onclick='removeApp(\"" + app_guid + "\"); return false;'>Remove</a>&nbsp;";
             htmlcode += "</td>";
             htmlcode += "<tr>";
         });
+
+        console.log("OK");
 
         $("#pageApps").find("#result").html(htmlcode);
 
@@ -74,7 +80,7 @@ $(document).ready(function () {
 
         //Form validation
         if ((!username.trim()) && (!password.trim())) {
-            console.log("Form validation problem");
+            alert("Form validation problem");
             return false;
         }
 
@@ -136,7 +142,7 @@ $(document).ready(function () {
 
         //Form validation
         if (!appname.trim()) {
-            console.log("Form validation problem");
+            alert("Form validation problem");
             return false;
         }
 
@@ -150,14 +156,19 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(data)
         }).done(function (data) {
-            console.log(data);
+
+            if (data.error) {
+                alert(data.error);
+            } else {
+                console.log("APP Created");
+            }
 
             //Reset form
             $("#appname").val("");
             $('#btCreateApp').removeAttr("disabled");
 
             //Return to GetApps View
-            $("#btnApps").trigger("click");
+            drawAppTable();
         });
     });
 
@@ -187,18 +198,51 @@ $(document).ready(function () {
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data)
+        }).done(function () {
+            //console.log(data);
+
+            //Return to GetApps View
+            drawAppTable();
+        });
+    });
+
+    $("#pageUpgradeApps").find("#btUploadApp").click(function (event) {
+        event.preventDefault();
+
+        $('#btUploadApp').attr('disabled', 'disabled');
+
+        var url = "/api/apps/upload";
+        var appFile = $("#appFile").val();
+        console.log(appFile);
+
+        $.post(url, { name: appFile }).done(function (data) {
+            console.log(data);
+
+            $('#btUploadApp').removeAttr("disabled");
+
+            //Return to GetApps View
+            drawAppTable();
+        });
+
+/*
+        $.ajax({
+            url: url,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
         }).done(function (data) {
             console.log(data);
 
             //Return to GetApps View
-            $("#btnApps").trigger("click");
+            drawAppTable();
         });
+*/
     });
 
 });
 
 function viewApp(app_guid) {
-    console.log(app_guid);
+    //console.log(app_guid);
 
     var url = "/api/apps/" + app_guid + "/view";
     $.ajax({
@@ -208,7 +252,7 @@ function viewApp(app_guid) {
     }).done(function (data) {
         $("#pageApps").hide();
         $("#pageAppView").show();
-        console.log(data);
+        //console.log(data);
 
         var htmlcode = "";
         $.each(data, function (index) {
@@ -224,7 +268,7 @@ function viewApp(app_guid) {
 }
 
 function upgradeApp(app_guid) {
-    console.log(app_guid);
+    //console.log(app_guid);
 
     $("#app_guid").val(app_guid);
 
@@ -233,7 +277,7 @@ function upgradeApp(app_guid) {
 }
 
 function stopApp(app_guid) {
-    console.log(app_guid);
+    //console.log(app_guid);
 
     var url = "/api/apps/stop";
     var data = {
@@ -246,7 +290,14 @@ function stopApp(app_guid) {
         contentType: 'application/json',
         data: JSON.stringify(data)
     }).done(function (data) {
-        console.log(data);
+        if (data.error) {
+            var message = $.parseJSON(data.error);
+            console.log(message);
+            alert(message.description);
+        } else {
+            console.log(data);
+            drawAppTable();
+        }
     });
 
 }
@@ -268,13 +319,16 @@ function startApp(app_guid) {
             var message = $.parseJSON(data.error);
             console.log(message);
             alert(message.description);
+        } else {
+            console.log(data);
+            drawAppTable();
         }
     });
 
 }
 
 function removeApp(app_guid) {
-    console.log(app_guid);
+    //console.log(app_guid);
 
     var url = "/api/apps/remove";
     var data = {
@@ -295,7 +349,7 @@ function removeApp(app_guid) {
 }
 
 function openApp(app_guid) {
-    console.log(app_guid);
+    //console.log(app_guid);
 
     var url = "/api/apps/open";
     var data = {
@@ -320,6 +374,15 @@ function openApp(app_guid) {
 
 }
 
+$(function () {
+    Dropzone.options.dropzoneExample = {
+        init: function () {
+            this.on("success", function (file) {
+                console.log("Added file: ", file.name);
+            });
+        }
+    };
+});
 
 $(window).on('beforeunload', function () {
     return 'Are you sure you want to leave?';

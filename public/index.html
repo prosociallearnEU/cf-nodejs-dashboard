@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./Styles/bootstrap.min.css" rel="stylesheet">
+    <link href="./Styles/dropzone.min.css" rel="stylesheet">
     <link href="./Styles/main.css" rel="stylesheet">
 </head>
 <body>
@@ -168,6 +169,18 @@
             <div class="row">
                 <div class="col-md-12">
 
+                    <h1>Upload App</h1>
+                    <p>
+
+                    </p>
+
+                    <form method="post" action="/api/apps/upload" class="dropzone" id="dropzoneExample" enctype="multipart/form-data">
+                        <div class="fallback">
+                            <input name="file" type="file" />
+                            <button type="submit">Upload App</button>
+                        </div>
+                    </form>
+
                     <h1>Upgrade App</h1>
                     <p>
 
@@ -189,16 +202,9 @@
 
     </div>
 
-<!--
-    <footer class="footer">
-        <div class="container">
-            <p class="text-muted"><a href="http://atos.net/en-us/home/we-are/insights-innovation/research-and-innovation.html" target="_blank">ARI</a> &copy; 2015</p>
-        </div>
-    </footer>
--->
-
     <script src="./Scripts/jquery.min.js"></script>
     <script src="./Scripts/bootstrap.min.js"></script>
-    <script src="./Scripts/main.js"></script>
+    <script src="./Scripts/dropzone.min.js"></script>
+    <script src="./Scripts/main.js"></script>   
 </body>
 </html>

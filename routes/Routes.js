@@ -2,6 +2,7 @@
 "use strict";
 
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
 //Routes
 var Login = require('./Login');
@@ -10,17 +11,28 @@ var Apps = require('./Apps');
 module.exports = function (express) {
 
     var router = express.Router();
-    router.use(bodyParser.json());
+    var jsonParser = bodyParser.json();
+    var upload = multer({ dest: 'uploads/' });
 
-    router.post('/auth/login', Login.login);
-    router.get('/apps', Apps.getApps);
-    router.get('/apps/:guid/view', Apps.view);
-    router.post('/apps/create', Apps.create);
-    router.post('/apps/upgrade', Apps.upgrade);
-    router.post('/apps/stop', Apps.stop);
-    router.post('/apps/start', Apps.startApp);
-    router.post('/apps/remove', Apps.removeApp);
-    router.post('/apps/open', Apps.open);//MOVE TO GET
+    router.post('/auth/login', jsonParser, Login.login);
+    router.get('/apps', jsonParser, Apps.getApps);
+    router.get('/apps/:guid/view', jsonParser, Apps.view);
+    router.post('/apps/create', jsonParser, Apps.create);
+    router.post('/apps/upgrade', jsonParser, Apps.upgrade);
+    router.post('/apps/stop', jsonParser, Apps.stop);
+    router.post('/apps/start', jsonParser, Apps.startApp);
+    router.post('/apps/remove', jsonParser, Apps.removeApp);
+    router.post('/apps/open', jsonParser, Apps.open);//MOVE TO GET
+    router.post('/apps/upload', upload.single('file'), function (req, res) {
+
+        console.log("POST Upload");
+
+        console.log(req.file);
+
+        res.sendStatus(200);
+
+    });
+
 
     return router;
 };
