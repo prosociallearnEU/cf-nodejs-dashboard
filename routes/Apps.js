@@ -140,3 +140,12 @@ exports.open = function (req, res) {
     });
 
 };
+
+exports.upload = function (req, res) {
+
+    console.log("POST Upload");
+
+    console.log(req.file);
+
+    res.sendStatus(200);
+};

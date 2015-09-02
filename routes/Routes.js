@@ -23,16 +23,7 @@ module.exports = function (express) {
     router.post('/apps/start', jsonParser, Apps.startApp);
     router.post('/apps/remove', jsonParser, Apps.removeApp);
     router.post('/apps/open', jsonParser, Apps.open);//MOVE TO GET
-    router.post('/apps/upload', upload.single('file'), function (req, res) {
-
-        console.log("POST Upload");
-
-        console.log(req.file);
-
-        res.sendStatus(200);
-
-    });
-
+    router.post('/apps/upload', upload.single('file'), Apps.upload);
 
     return router;
 };
