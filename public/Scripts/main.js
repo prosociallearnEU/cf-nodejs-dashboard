@@ -3,6 +3,7 @@
 /*jslint node: true*/
 "use strict";
 
+var endpoint = null;
 var username = null;
 var password = null;
 
@@ -75,6 +76,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         var url = "/api/auth/login";
+        endpoint = $("#endpoint").val();
         username = $("#username").val();
         password = $("#password").val();
 
@@ -85,6 +87,7 @@ $(document).ready(function () {
         }
 
         var data = {
+            endpoint: endpoint,
             username: username,
             password: password
         };
@@ -124,6 +127,7 @@ $(document).ready(function () {
         $("#pageHome").show();
         $("#pageApps").hide();
         $("#pageCreateApps").hide();
+        $("#pageUpgradeApps").hide();
     });
 
     $("body").on("click", "#btnApps", function (event) {

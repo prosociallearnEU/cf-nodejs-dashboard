@@ -11,9 +11,11 @@ exports.login = function (req, res) {
 
     console.log("POST Login");
 
+    var endpoint = req.body.endpoint;
     var username = req.body.username;
     var password = req.body.password;
 
+    console.log(endpoint);
     console.log(username);
     console.log(password);
 
@@ -21,7 +23,7 @@ exports.login = function (req, res) {
 
     CloudFoundry.getInfo().then(function (result) {
         token_endpoint = result.token_endpoint;
-        return CloudFoundry.login(token_endpoint, config.username, config.password);
+        return CloudFoundry.login(endpoint, username, password);
     }).then(function (result) {
         res.json({ "auth_token" : result.token_type + " " + result.access_token});
     }).catch(function (reason) {
