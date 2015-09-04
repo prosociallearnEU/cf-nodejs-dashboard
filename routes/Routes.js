@@ -18,7 +18,6 @@ module.exports = function (express) {
     router.get('/apps', jsonParser, Apps.getApps);
     router.get('/apps/:guid/view', jsonParser, Apps.view);
     router.post('/apps/create', jsonParser, Apps.create);
-    router.post('/apps/upgrade', jsonParser, Apps.upgrade);
     router.post('/apps/stop', jsonParser, Apps.stop);
     router.post('/apps/start', jsonParser, Apps.startApp);
     router.post('/apps/remove', jsonParser, Apps.removeApp);

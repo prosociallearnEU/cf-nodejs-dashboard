@@ -51,28 +51,6 @@ exports.create = function (req, res) {
 
 };
 
-exports.upgrade = function (req, res) {
-
-    console.log("POST Upgrade App");
-
-    var app_guid = req.body.guid;
-    var appName = "demo";
-    var zipPath = "./staticApp.zip";
-
-    console.log(app_guid);
-    console.log(appName);
-    console.log(zipPath);
-
-    return AppServices.uploadApp(appName, app_guid, zipPath).then(function (result) {
-        console.log(result);
-        res.json(result);
-    }).catch(function (reason) {
-        console.log(reason);
-        res.json({"error": reason});
-    });
-
-};
-
 exports.stop = function (req, res) {
 
     console.log("POST Stop App");
@@ -145,7 +123,18 @@ exports.upload = function (req, res) {
 
     console.log("POST Upload");
 
-    console.log(req.file);
+    var app_guid = req.body.app_guid;
+    var zipPath = req.file.destination + req.file.filename;
 
-    res.sendStatus(200);
+    console.log(app_guid);
+    console.log(zipPath);
+
+    return AppServices.uploadApp(app_guid, zipPath).then(function (result) {
+        console.log(result);
+        res.json(result);
+    }).catch(function (reason) {
+        console.log(reason);
+        res.json({"error": reason});
+    });
+
 };
