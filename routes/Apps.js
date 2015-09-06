@@ -2,7 +2,7 @@
 "use strict";
 
 var config = require('../config.json');
-var AppServices = require("../Services/AppServices");
+var AppServices = require("../services/AppServices");
 AppServices = new AppServices(config.CF_API_URL, config.username, config.password);
 
 exports.getApps = function (req, res) {
