@@ -14,19 +14,19 @@
     "cf"
   ],
   "engines": {
-    "node": "0.12.7",
-    "npm": "2.11.3"
+    "node": "4.0.0",
+    "npm": "2.14.2"
   },
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
-  "license": "MIT",
+  "license": "Apache 2.0",
   "dependencies": {
-    "body-parser": "1.13.3",
-    "bootstrap": "3.3.5",
-    "cf-nodejs-client": "0.6.1",
-    "dropzone": "4.0.1",
     "express": "4.13.3",
+    "body-parser": "1.14.1",
+    "multer": "1.0.5",
+    "ejs": "2.3.4",
+    "cf-nodejs-client": "0.8.0",
     "jquery": "2.1.4",
-    "multer": "1.0.3",
-    "xreq": "^1.1.1"
+    "bootstrap": "3.3.5",
+    "dropzone": "4.0.1"
   }
 }

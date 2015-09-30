@@ -41,6 +41,7 @@ function drawAppTable() {
             }
 
             htmlcode += "<a class='btn btn-default' href='#' onclick='removeApp(\"" + app_guid + "\"); return false;'>Remove</a>&nbsp;";
+            htmlcode += "<a class='btn btn-default' href='#' onclick='logApp(\"" + app_guid + "\"); return false;'>Log</a>&nbsp;";
             htmlcode += "</td>";
             htmlcode += "<tr>";
         });
@@ -136,6 +137,7 @@ $(document).ready(function () {
         drawAppTable();
     });
 
+    //$("body").on("click", "#btCreateApp", function (event) {
     $("#pageCreateApps").find("#btCreateApp").click(function (event) {
         event.preventDefault();
 
@@ -143,6 +145,11 @@ $(document).ready(function () {
 
         var url = "/api/apps/create";
         var appname = $("#appname").val();
+        var buildPack = "";
+        var selected = $("input[type='radio'][name='buildpack']:checked");
+        if (selected.length > 0) {
+            buildPack = selected.val();
+        }
 
         //Form validation
         if (!appname.trim()) {
@@ -151,7 +158,8 @@ $(document).ready(function () {
         }
 
         var data = {
-            appname: appname
+            appname: appname,
+            buildpack: buildPack,
         };
 
         $.ajax({
@@ -373,6 +381,30 @@ function openApp(app_guid) {
         } else {
             console.log(data);
             window.open(data, '_blank');
+        }
+    });
+
+}
+
+function logApp(app_guid) {
+
+    var url = "/api/apps/log";
+    var data = {
+        guid: app_guid
+    };
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+    }).done(function (data) {
+        if (data.error) {
+            var message = $.parseJSON(data.error);
+            console.log(message);
+            alert(message.description);
+        } else {
+            console.log(data);
         }
     });
 

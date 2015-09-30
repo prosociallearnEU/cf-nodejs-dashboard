@@ -1,10 +1,10 @@
 ---
 applications:
-- name: cfdashboard
+- name: psldeploymanager2
   memory: 512MB
   disk_quota: 512MB
   instances: 1
   command: node ./index.js
-  host: cfdashboard
+  host: psldeploymanager2
   path: .  
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack

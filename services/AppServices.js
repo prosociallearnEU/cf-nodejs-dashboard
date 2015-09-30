@@ -8,6 +8,7 @@ var CloudFoundrySpaces = require("cf-nodejs-client").Spaces;
 var CloudFoundryDomains = require("cf-nodejs-client").Domains;
 var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
+var CloudFoundryLogs = require("cf-nodejs-client").Logs;
 
 //TODO: Remove
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -23,6 +24,7 @@ function AppServices(_CF_API_URL, _username, _password) {
     CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
     CloudFoundryRoutes = new CloudFoundryRoutes(this.CF_API_URL);
     CloudFoundryJobs = new CloudFoundryJobs(this.CF_API_URL);
+    CloudFoundryLogs = new CloudFoundryLogs();
 }
 
 AppServices.prototype.createApp = function (appName, buildPack) {
@@ -73,9 +75,17 @@ AppServices.prototype.createApp = function (appName, buildPack) {
                     return CloudFoundryApps.stopApp(result.token_type, result.access_token, app_guid);
                 });
             } else {
+
+                var appOptions = {
+                    "name": appName,
+                    "space_guid": space_guid,
+                    "buildpack" : buildPack
+                };
+
                 //console.log("Create App");
                 return CloudFoundry.login(token_endpoint, self.username, self.password).then(function (result) {
-                    return CloudFoundryApps.createApp(result.token_type, result.access_token, appName, space_guid, buildPack).then(function (result) {
+                    return CloudFoundryApps.create(result.token_type, result.access_token, appOptions).then(function (result) {
+                    //return CloudFoundryApps.createApp(result.token_type, result.access_token, appName, space_guid, buildPack).then(function (result) {
                         return new Promise(function (resolve) {
                             //console.log(result);
                             app_guid = result.metadata.guid;
@@ -171,7 +181,7 @@ AppServices.prototype.uploadApp = function (app_guid, filePath) {
             token_endpoint = result.token_endpoint;
             return CloudFoundry.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
-            return CloudFoundryApps.uploadApp(result.token_type, result.access_token, appName, app_guid, filePath);
+            return CloudFoundryApps.uploadApp(result.token_type, result.access_token, app_guid, filePath, false);
         }).then(function (result) {
             console.log(result);
             return resolve(result);
@@ -322,6 +332,38 @@ AppServices.prototype.open = function (app_guid) {
             console.log("result");
             return reject("App is not OK");
 
+        }).catch(function (reason) {
+            console.log(reason);
+            return reject(reason);
+        });
+
+    });
+};
+
+AppServices.prototype.getLogs = function (app_guid) {
+
+    var token_endpoint = null;
+    var logging_endpoint = null;
+
+    var self = this;
+
+    return new Promise(function (resolve, reject) {
+
+        CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            logging_endpoint = result.logging_endpoint;
+
+            //Process URL
+            logging_endpoint = logging_endpoint.replace("wss", "https");
+            logging_endpoint = logging_endpoint.replace(":4443", "");
+            CloudFoundryLogs.setEndpoint(logging_endpoint);
+
+            return CloudFoundry.login(token_endpoint, self.username, self.password);
+        }).then(function (result) {
+            return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
+        }).then(function (result) {
+            console.log(result);
+            return resolve(result);
         }).catch(function (reason) {
             console.log(reason);
             return reject(reason);

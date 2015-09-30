@@ -7,7 +7,14 @@ var http = require('http').Server(app);
 
 //REST API
 app.use('/api', require('./routes/Routes')(express));
+
+//Templates in HTML
 app.use(express.static(__dirname + '/public'));
+app.set('views', './views');
+//app.set('view engine', 'jade');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');    
+
 
 //Server
 var localPort = process.env.VCAP_APP_PORT || 3000;

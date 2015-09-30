@@ -37,12 +37,13 @@ exports.create = function (req, res) {
     console.log("POST Create App");
 
     var appName = req.body.appname;
-    var staticBuildPack = "https://github.com/cloudfoundry/staticfile-buildpack";
+    var buildPack = req.body.buildpack;
     var app_guid = null;
 
     console.log(appName);
+    console.log(buildPack);
 
-    return AppServices.createApp(appName, staticBuildPack).then(function (result) {
+    return AppServices.createApp(appName, buildPack).then(function (result) {
         app_guid = result.metadata.guid;
         res.json(app_guid);
     }).catch(function (reason) {
@@ -130,6 +131,23 @@ exports.upload = function (req, res) {
     console.log(zipPath);
 
     return AppServices.uploadApp(app_guid, zipPath).then(function (result) {
+        console.log(result);
+        res.json(result);
+    }).catch(function (reason) {
+        console.log(reason);
+        res.json({"error": reason});
+    });
+
+};
+
+exports.log = function (req, res) {
+
+    console.log("GET Log");
+
+    var app_guid = req.body.guid;
+    console.log(app_guid);
+
+    return AppServices.getLogs(app_guid).then(function (result) {
         console.log(result);
         res.json(result);
     }).catch(function (reason) {
