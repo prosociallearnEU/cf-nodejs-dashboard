@@ -20,13 +20,14 @@
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "Apache 2.0",
   "dependencies": {
-    "express": "4.13.3",
     "body-parser": "1.14.1",
-    "multer": "1.0.5",
-    "ejs": "2.3.4",
-    "cf-nodejs-client": "0.8.0",
-    "jquery": "2.1.4",
     "bootstrap": "3.3.5",
-    "dropzone": "4.0.1"
+    "cf-nodejs-client": "0.8.1",
+    "cookie-parser": "1.4.0",
+    "dropzone": "4.0.1",
+    "ejs": "2.3.4",
+    "express": "4.13.3",
+    "jquery": "2.1.4",
+    "multer": "1.0.5"
   }
 }

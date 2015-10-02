@@ -60,6 +60,7 @@ function drawAppTable() {
 $(document).ready(function () {
 
     function initApp() {
+        /*
         $("#mainNavBar").hide();
         $("#mainNavBar2").hide();
         $("#pageLogin").show();
@@ -67,6 +68,9 @@ $(document).ready(function () {
         $("#pageApps").hide();
         $("#pageCreateApps").hide();
         $("#pageUpgradeApps").hide();
+        */
+       
+       drawAppTable();
     }
 
     initApp();
@@ -74,7 +78,7 @@ $(document).ready(function () {
     $("#pageLogin").find("#btnLoginSubmit").click(function (event) {
         event.preventDefault();
 
-        var url = "/api/auth/login";
+        var url = "/auth/login";
         endpoint = $("#endpoint").val();
         username = $("#username").val();
         password = $("#password").val();

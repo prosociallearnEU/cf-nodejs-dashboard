@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cloud Foundry Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/Styles/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="/Styles/lib/dropzone.min.css" rel="stylesheet">
+    <link href="/Styles/main2.css" rel="stylesheet">
+
+    <link rel="icon" href="/Images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/Images/favicon.png" type="image/x-icon" />
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Cloud Foundry Manager</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div id="pageLogin">
+
+            <form method="post" action="/auth/login" class="form-signin">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="endpoint" class="sr-only">API Endpoint</label>
+                <input type="text" id="endpoint" name="endpoint" class="form-control" placeholder="https://api.run.pivotal.io" required autofocus >
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required >
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required >
+                <button class="btn btn-lg btn-primary btn-block" type="submit" id="btnLoginSubmit">Sign in</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="/Scripts/lib/jquery.min.js"></script>
+    <script src="/Scripts/lib/bootstrap.min.js"></script>
+    <script src="/Scripts/lib/dropzone.min.js"></script>
+    <!-- <script src="/Scripts/main2.js"></script> -->
+</body>
+</html>

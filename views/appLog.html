@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cloud Foundry Manager</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/Styles/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="/Styles/lib/dropzone.min.css" rel="stylesheet">
+    <link href="/Styles/main2.css" rel="stylesheet">
+
+    <link rel="icon" href="/Images/favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/Images/favicon.png" type="image/x-icon" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Cloud Foundry Manager</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                
+                <ul class="nav navbar-nav" id="mainNavBar">
+                    <li><a href="/home" id="btnHome">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Applications <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/apps/" id="btnApps">Get Applications</a></li>
+                            <li role="separator" class="divider"></li>                            
+                            <li><a href="#" id="btnAppCreate">Create a new Application</a></li>
+                        </ul>
+                    </li>               
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="mainNavBar2">
+                    <li><a href="/auth/logout" id="btnLogout">Logout</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div id="pageAppView">
+            <h1>Applications</h1>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Log</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result">
+                        </tbody>
+                    </table>
+                    <p>
+                        <a href="/apps" class="btn btn-primary" role="button">
+                            <span class="glyphicon glyphicon-arrow-left"></span>
+                            Back
+                        </a>
+                        <a href="/apps" class="btn btn-default" role="button" id="btLogRefresh">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            Refresh
+                        </a>                        
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="/Scripts/lib/jquery.min.js"></script>
+    <script src="/Scripts/lib/bootstrap.min.js"></script>
+    <script src="/Scripts/Apps.js"></script>
+    <script>
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        $( document ).ready(function() {
+            var apps = new Apps();
+            var app_guid = getUrlParameter("app_guid");
+            apps.logApp(app_guid);
+
+            $("body").on("click", "#btLogRefresh", function (event) {
+                event.preventDefault();
+
+                apps.logApp(app_guid);
+            });            
+        });
+    </script>
+</body>
+</html>

@@ -9,23 +9,28 @@ var CloudFoundryDomains = require("cf-nodejs-client").Domains;
 var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
 var CloudFoundryLogs = require("cf-nodejs-client").Logs;
-
-//TODO: Remove
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+CloudFoundry = new CloudFoundry();
+CloudFoundryApps = new CloudFoundryApps(this.CF_API_URL);
+CloudFoundrySpaces = new CloudFoundrySpaces(this.CF_API_URL);
+CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
+CloudFoundryRoutes = new CloudFoundryRoutes(this.CF_API_URL);
+CloudFoundryJobs = new CloudFoundryJobs(this.CF_API_URL);
+CloudFoundryLogs = new CloudFoundryLogs();
 
 function AppServices(_CF_API_URL, _username, _password) {
     this.CF_API_URL = _CF_API_URL;
     this.username = _username;
     this.password = _password;
-
-    CloudFoundry = new CloudFoundry(this.CF_API_URL);
-    CloudFoundryApps = new CloudFoundryApps(this.CF_API_URL);
-    CloudFoundrySpaces = new CloudFoundrySpaces(this.CF_API_URL);
-    CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
-    CloudFoundryRoutes = new CloudFoundryRoutes(this.CF_API_URL);
-    CloudFoundryJobs = new CloudFoundryJobs(this.CF_API_URL);
-    CloudFoundryLogs = new CloudFoundryLogs();
 }
+
+AppServices.prototype.setEndpoint = function (endpoint) {
+    this.CF_API_URL = endpoint;
+};
+
+AppServices.prototype.setCredential = function (username, password) {
+    this.username = username;
+    this.password = password;
+};
 
 AppServices.prototype.createApp = function (appName, buildPack) {
 
@@ -36,6 +41,12 @@ AppServices.prototype.createApp = function (appName, buildPack) {
     var routeName = null;
     var route_guid = null;
     var route_create_flag = false;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundrySpaces.setEndPoint(this.CF_API_URL);
+    CloudFoundryDomains.setEndPoint(this.CF_API_URL);
+    CloudFoundryRoutes.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     var self = this;
 
@@ -170,9 +181,6 @@ AppServices.prototype.uploadApp = function (app_guid, filePath) {
 
     var token_endpoint = null;
 
-    //TODO: Remove
-    var appName = "dummy";
-
     var self = this;
 
     return new Promise(function (resolve, reject) {
@@ -221,6 +229,9 @@ AppServices.prototype.view = function (app_guid) {
 
     var self = this;
 
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
     return new Promise(function (resolve, reject) {
 
         CloudFoundry.getInfo().then(function (result) {
@@ -243,6 +254,9 @@ AppServices.prototype.getApps = function () {
     var token_endpoint = null;
 
     var self = this;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
@@ -347,6 +361,8 @@ AppServices.prototype.getLogs = function (app_guid) {
 
     var self = this;
 
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+
     return new Promise(function (resolve, reject) {
 
         CloudFoundry.getInfo().then(function (result) {
@@ -356,10 +372,12 @@ AppServices.prototype.getLogs = function (app_guid) {
             //Process URL
             logging_endpoint = logging_endpoint.replace("wss", "https");
             logging_endpoint = logging_endpoint.replace(":4443", "");
+            console.log(logging_endpoint);
             CloudFoundryLogs.setEndpoint(logging_endpoint);
 
             return CloudFoundry.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
+            //console.log(result);
             return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
         }).then(function (result) {
             console.log(result);
