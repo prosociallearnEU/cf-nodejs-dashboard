@@ -207,6 +207,61 @@ module.exports = function (express) {
 
     });
 
+    router.get('/apps/upload', nocache, function (req, res) {
+        res.render('appUpload');
+    });
+
+    router.post('/apps/upload', upload.single('file'), function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("POST Upload");
+
+        var app_guid = req.body.app_guid;
+        var zipPath = req.file.destination + req.file.filename;
+
+        console.log(app_guid);
+        console.log(zipPath);
+
+        return AppServices.uploadApp(app_guid, zipPath).then(function (result) {
+            console.log(result);
+            res.json(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            res.json({"error": reason});
+        });
+            
+    });
+
+    router.post('/apps/open/:guid', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Open App");
+
+        var app_guid = req.params.guid;
+        console.log(app_guid);
+
+        return AppServices.open(app_guid).then(function (result) {
+            console.log(result);
+            res.json(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            res.json({"error": reason});
+        });
+
+    });
+
     return router;
 };
 

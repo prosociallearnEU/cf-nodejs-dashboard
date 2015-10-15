@@ -46,131 +46,6 @@
 
     <div class="container">
 
-        <div id="pageLogin">
-
-            <form method="post" action="#" class="form-signin">
-                <h2 class="form-signin-heading">Please sign in</h2>asdf
-                <label for="endpoint" class="sr-only">API Endpoint</label>
-                <input type="text" id="endpoint" name="endpoint" class="form-control" placeholder="https://api.run.pivotal.io" required autofocus >
-                <label for="username" class="sr-only">Username</label>
-                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required >
-                <label for="password" class="sr-only">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required >
-                <button class="btn btn-lg btn-primary btn-block" type="submit" id="btnLoginSubmit">Sign in</button>
-            </form>
-
-        </div>
-
-
-        <div id="pageHome">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Home</h1>
-
-                </div>
-            </div>
-
-        </div>
-
-
-        <div id="pageApps">
-
-            <div class="row">
-                <div class="col-md-12">
-
-                    <h1>Applications</h1>
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>App</th>
-                                <th>Package State</th>
-                                <th>App State</th>
-                                <th>Last update</th>
-                                <th>Options</th>
-                            </tr>
-                        </thead>
-                        <tbody id="result">
-                        </tbody>
-                    </table>
-                    <p>
-                        
-                        <button type="button" class="btn btn-primary" id="btnAppCreate">
-                            <span class="glyphicon glyphicon-plus"></span>
-                            Create a new application
-                        </button>
-                        
-                        <button type="button" class="btn btn-default" id="btnApps">
-                            <span class="glyphicon glyphicon-refresh"></span>
-                            Refresh
-                        </button>
-                        
-                    </p>
-                </div>
-            </div>                            
-        </div>
-
-        <div id="pageAppView">
-            <h1>Applications</h1>
-
-            <div class="row">
-                <div class="col-md-12">
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Field</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="result">
-                        </tbody>
-                    </table>
-                    <p>
-                        <button type="button" class="btn btn-primary" id="btnApps">
-                            <span class="glyphicon glyphicon-arrow-left"></span>
-                            Back
-                        </button>
-                    </p>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div id="pageCreateApps">
-
-            <div class="row">
-                <div class="col-md-12">
-
-                    <h1>Create App</h1>
-
-                    <form method="post" action="#">
-                        <div class="form-group">
-                            <label for="appname" class="sr-only">Application name</label>
-                            <input type="text" class="form-control" id="appname" placeholder="Application name">
-                        </div>
-                        <div class="form-group">
-                            <label class="radio-inline">
-                                <input type="radio" name="buildpack" id="buildpack" value="https://github.com/cloudfoundry/staticfile-buildpack" checked="checked">Static</input>
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="buildpack" id="buildpack" value="https://github.com/cloudfoundry/nodejs-buildpack">Node.js</input>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary" id="btCreateApp">Submit</button>
-                        </div>
-
-                    </form>
-
-                </div>
-            </div>
-
-
-        </div> 
-
         <div id="pageUpgradeApps">
 
             <div class="row">
@@ -181,7 +56,7 @@
 
                     </p>
 
-                    <form method="post" action="/api/apps/upload/" class="dropzone" id="dropzoneExample" enctype="multipart/form-data">
+                    <form method="post" action="/apps/upload/" class="dropzone" id="dropzoneExample" enctype="multipart/form-data">
                         <input type="hidden" name="app_guid" id="app_guid" value="" />
                         <div class="fallback">
                             <input name="file" type="file" />
@@ -200,6 +75,41 @@
     <script src="/Scripts/lib/jquery.min.js"></script>
     <script src="/Scripts/lib/bootstrap.min.js"></script>
     <script src="/Scripts/lib/dropzone.min.js"></script>
+    <script>
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        $( document ).ready(function() {
+            var app_guid = getUrlParameter("app_guid");
+            $("#app_guid").val(app_guid);
+        });
+    </script>
+    <script>
+        $(function () {
+            Dropzone.options.dropzoneExample = {
+                init: function () {
+                    this.on("success", function (file) {
+                        console.log("Added file: ", file.name);
+
+                        //drawAppTable();
+                        document.location.href="/apps/";
+                    });
+                }
+            };
+        });
+    </script>
 
 </body>
 </html>

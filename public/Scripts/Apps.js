@@ -30,7 +30,7 @@ Apps.prototype.drawAppTable = function () {
             htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
             htmlcode += "<td>";
             htmlcode += "<a class='btn btn-default' href='/apps/view?app_guid=" + app_guid + "'>View</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='#' onclick='upgradeApp(\"" + app_guid + "\"); return false;'>Upload</a>&nbsp;";
+            htmlcode += "<a class='btn btn-default' href='/apps/upload?app_guid=" + app_guid + "'>Upload</a>&nbsp;";
 
             if (state === "STARTED") {
                 htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + app_guid + "\"); return false;'>Stop</a>&nbsp;";
@@ -159,6 +159,28 @@ function removeApp(app_guid) {
         console.log(data);
         //drawAppTable();
         location.reload();
+    });
+
+}
+
+function openApp(app_guid) {
+    //console.log(app_guid);
+
+    var url = "/apps/open/" + app_guid;
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json'
+    }).done(function (data) {
+        if (data.error) {
+            var message = $.parseJSON(data.error);
+            console.log(message);
+            alert(message.description);
+        } else {
+            console.log(data);
+            window.open(data, '_blank');
+        }
     });
 
 }

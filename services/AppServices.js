@@ -181,6 +181,9 @@ AppServices.prototype.uploadApp = function (app_guid, filePath) {
 
     var token_endpoint = null;
 
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
     var self = this;
 
     return new Promise(function (resolve, reject) {
@@ -336,6 +339,9 @@ AppServices.prototype.open = function (app_guid) {
 
     var token_endpoint = null;
     var url = null;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     var self = this;
 
