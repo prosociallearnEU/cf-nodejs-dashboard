@@ -30,16 +30,24 @@
 
     <div class="container">
 
-        <br />
-        <div class="alert alert-danger" role="alert">Bad credentials</div>
-        <p>
-            Please, try to <a href="/">login</a> again.
-        </p>
+        <div id="pageLogin">
+
+            <form method="post" action="/auth/login" class="form-signin">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="endpoint" class="sr-only">API Endpoint</label>
+                <input type="text" id="endpoint" name="endpoint" class="form-control" placeholder="https://api.run.pivotal.io" required autofocus >
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required >
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required >
+                <button class="btn btn-lg btn-primary btn-block" type="submit" id="btnLoginSubmit">Sign in</button>
+            </form>
+
+        </div>
 
     </div>
 
     <script src="/Scripts/lib/jquery.min.js"></script>
     <script src="/Scripts/lib/bootstrap.min.js"></script>
-    <script src="/Scripts/lib/dropzone.min.js"></script>
 </body>
 </html>

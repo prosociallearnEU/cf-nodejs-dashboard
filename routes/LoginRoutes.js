@@ -1,7 +1,7 @@
 /*jslint node: true*/
 "use strict";
 
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 //Routes
@@ -28,14 +28,10 @@ module.exports = function (express) {
     }
 
     router.get('/', nocache, function (req, res) {
-        res.redirect('/auth');
+        res.render('login/login');
     });
 
-    router.get('/auth', nocache, function (req, res) {
-        res.render('login');
-    });
-
-    router.post('/auth/login', nocache, function (req, res) {
+    router.post('/login', nocache, function (req, res) {
 
         console.log("POST Login");
 
@@ -63,26 +59,13 @@ module.exports = function (express) {
 
     });
 
-    router.get('/auth/loginError', nocache, function (req, res) {
-        res.render('loginError');
+    router.get('/loginError', nocache, function (req, res) {
+        res.render('login/loginError');
     });
 
-    router.get('/auth/logout', nocache, function (req, res) {
+    router.get('/logout', nocache, function (req, res) {
         res.clearCookie(cookieName);
         res.redirect('/auth');
-    });
-
-    router.get('/home', nocache, function (req, res) {
-
-        if(req.signedCookies['psl_session']){
-            console.log(req.signedCookies.psl_session);
-        }
-
-        if(req.cookies.psl_session){
-            console.log(req.cookies.psl_session);
-        }
-
-        res.render('home');
     });
 
     return router;

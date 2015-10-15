@@ -28,11 +28,11 @@ module.exports = function (express) {
         next();
     }
 
-    router.get('/apps', nocache, function (req, res) {
-        res.render('apps');
+    router.get('/', nocache, function (req, res) {
+        res.render('apps/apps');
     });
 
-    router.get('/apps/getApps', nocache, function (req, res) {
+    router.get('/getApps', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -50,11 +50,11 @@ module.exports = function (express) {
 
     });
 
-    router.get('/apps/view', nocache, function (req, res) {
-        res.render('appView');
+    router.get('/view', nocache, function (req, res) {
+        res.render('apps/appView');
     });
 
-    router.get('/apps/view/:guid', nocache, function (req, res) {
+    router.get('/view/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -75,11 +75,11 @@ module.exports = function (express) {
 
     });    
 
-    router.get('/apps/add', nocache, function (req, res) {
-        res.render('appAdd');
+    router.get('/add', nocache, function (req, res) {
+        res.render('apps/appAdd');
     });
 
-    router.post('/apps/add', nocache, function (req, res) {
+    router.post('/add', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -98,18 +98,18 @@ module.exports = function (express) {
 
         return AppServices.createApp(appName, buildPack).then(function (result) {
             app_guid = result.metadata.guid;
-            res.render('apps');
+            res.render('apps/apps');
         }).catch(function (reason) {
             res.json({"error": reason});
         });
 
     });
 
-    router.get('/apps/log', nocache, function (req, res) {
-        res.render('appLog');
+    router.get('/log', nocache, function (req, res) {
+        res.render('apps/appLog');
     });
 
-    router.get('/apps/log/:guid', nocache, function (req, res) {
+    router.get('/log/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -133,7 +133,7 @@ module.exports = function (express) {
 
     });  
 
-    router.get('/apps/stop/:guid', nocache, function (req, res) {
+    router.get('/stop/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -157,7 +157,7 @@ module.exports = function (express) {
 
     });
 
-    router.get('/apps/start/:guid', nocache, function (req, res) {
+    router.get('/start/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -181,7 +181,7 @@ module.exports = function (express) {
 
     });
 
-    router.get('/apps/remove/:guid', nocache, function (req, res) {
+    router.get('/remove/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -207,11 +207,11 @@ module.exports = function (express) {
 
     });
 
-    router.get('/apps/upload', nocache, function (req, res) {
+    router.get('/upload', nocache, function (req, res) {
         res.render('appUpload');
     });
 
-    router.post('/apps/upload', upload.single('file'), function (req, res) {
+    router.post('/upload', upload.single('file'), function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);
@@ -238,7 +238,7 @@ module.exports = function (express) {
             
     });
 
-    router.post('/apps/open/:guid', nocache, function (req, res) {
+    router.post('/open/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
             var cookie = JSON.parse(req.cookies.psl_session);

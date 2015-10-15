@@ -18,16 +18,17 @@
     "npm": "2.14.2"
   },
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "1.14.1",
     "bootstrap": "3.3.5",
     "cf-nodejs-client": "0.8.1",
     "cookie-parser": "1.4.0",
-    "dropzone": "4.0.1",
+    "dropzone": "4.2.0",
     "ejs": "2.3.4",
     "express": "4.13.3",
+    "jade": "1.11.0",
     "jquery": "2.1.4",
-    "multer": "1.0.5"
+    "multer": "1.0.6"
   }
 }
