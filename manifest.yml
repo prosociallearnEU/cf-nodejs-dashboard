@@ -1,10 +1,10 @@
 ---
 applications:
-- name: psldeploymanager2
+- name: psldeploymanager3
   memory: 512MB
   disk_quota: 512MB
   instances: 1
   command: node ./index.js
-  host: psldeploymanager2
+  host: psldeploymanager3
   path: .  
   buildpack: https://github.com/cloudfoundry/nodejs-buildpack
