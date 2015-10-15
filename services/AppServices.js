@@ -206,6 +206,9 @@ AppServices.prototype.stop = function (app_guid) {
 
     var self = this;
 
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
     return new Promise(function (resolve, reject) {
 
         CloudFoundry.getInfo().then(function (result) {
@@ -281,6 +284,9 @@ AppServices.prototype.start = function (app_guid) {
 
     var self = this;
 
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
     return new Promise(function (resolve, reject) {
 
         CloudFoundry.getInfo().then(function (result) {
@@ -304,6 +310,9 @@ AppServices.prototype.remove = function (app_guid) {
     var token_endpoint = null;
 
     var self = this;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
@@ -372,12 +381,10 @@ AppServices.prototype.getLogs = function (app_guid) {
             //Process URL
             logging_endpoint = logging_endpoint.replace("wss", "https");
             logging_endpoint = logging_endpoint.replace(":4443", "");
-            console.log(logging_endpoint);
             CloudFoundryLogs.setEndpoint(logging_endpoint);
 
             return CloudFoundry.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
-            //console.log(result);
             return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
         }).then(function (result) {
             console.log(result);

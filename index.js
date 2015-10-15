@@ -6,7 +6,7 @@ var app = express();
 var http = require('http').Server(app);
 
 //REST API
-app.use('/api', require('./routes/Routes')(express));
+//app.use('/api', require('./routes/Routes')(express));
 app.use('/', require('./routes/LoginRoutes')(express));
 app.use('/', require('./routes/AppRoutes')(express));
 

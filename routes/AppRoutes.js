@@ -87,7 +87,7 @@ module.exports = function (express) {
             AppServices.setCredential(cookie.username,cookie.password);
         }
 
-        console.log("GET Apps View");
+        console.log("POST Apps Create");
 
         var appName = req.body.appname;
         var buildPack = req.body.buildpack;
@@ -132,6 +132,80 @@ module.exports = function (express) {
         });
 
     });  
+
+    router.get('/apps/stop/:guid', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Apps Stop");
+
+        var app_guid = req.params.guid;
+        console.log(app_guid);
+
+        return AppServices.stop(app_guid).then(function (result) {
+            console.log(result);
+            res.json(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            res.json({"error": reason});
+        });
+
+    });
+
+    router.get('/apps/start/:guid', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Apps Start");
+
+        var app_guid = req.params.guid;
+        console.log(app_guid);
+
+        return AppServices.start(app_guid).then(function (result) {
+            console.log(result);
+            res.json(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            res.json({"error": reason});
+        });
+
+    });
+
+    router.get('/apps/remove/:guid', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Apps Remove");
+
+        var app_guid = req.params.guid;
+        console.log(app_guid);
+
+        return AppServices.remove(app_guid).then(function (result) {
+            console.log(result);
+            res.json(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            res.json({"error": reason});
+        });
+
+        res.json("result");
+
+    });
 
     return router;
 };
