@@ -1,0 +1,23 @@
+//- appAdd.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div(id="pageCreateApps")
+        div.col-md-12
+            h1 Create App
+            form(method="post", action="/apps/add")
+                div.form-group
+                    label.sr-only(for='appname') Application name
+                    input.form-control(type="text", id="appname", name="appname", placeholder="Application name")
+                div.form-group
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/staticfile-buildpack" checked="checked").
+                        span.
+                            Static 
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/nodejs-buildpack")
+                        span.
+                            Node.js
+                div.form-group
+                    button.btn.btn-primary(type="submit", id="btCreateApp") Submit

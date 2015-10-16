@@ -1,0 +1,24 @@
+//- mainPageTemplate.jade
+extends ./baseTemplate.jade
+
+block navContent
+    div.collapse.navbar-collapse(id="navbar")
+        ul.nav.navbar-nav(id="mainNavBar")
+            li
+                a(href="/home" id="btnHome") Home
+            li.dropdown
+                a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Applications 
+                    span.caret                            
+                ul.dropdown-menu
+                    li
+                        a(href="/apps/" id="btnApps") Get Applications
+                    li.divider(role="separator")
+                    li
+                        a(href="#" id="btnAppCreate") Create a new Application                                  
+        ul.nav.navbar-nav.navbar-right(id="mainNavBar2")
+            li
+                a(href="/auth/logout" id="btnLogout") Logout
+
+block bodyContent
+
+block bodyScripts

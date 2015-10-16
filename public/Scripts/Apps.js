@@ -184,3 +184,4 @@ function openApp(app_guid) {
     });
 
 }
+

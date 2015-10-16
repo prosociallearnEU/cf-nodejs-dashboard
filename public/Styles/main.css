@@ -1,15 +1,6 @@
-        #pageLogin,
-        #pageHome,
-        #pageApps,
-        #pageAppView,
-        #pageCreateApps,
-        #pageUpgradeApps{
-            display:none;
-        }
-
-        body {
-            padding-top: 50px;
-        }
+body {
+    padding-top: 50px;
+}
 
 .form-signin {
   max-width: 330px;

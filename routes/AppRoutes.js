@@ -16,7 +16,6 @@ module.exports = function (express) {
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({ extended: false }));// parse application/x-www-form-urlencoded
 
-
     var cookieName = "psl_session";
     var cookieSecret = "secret";//TODO: Move to config file
     router.use(cookieParser(cookieSecret));
@@ -29,7 +28,7 @@ module.exports = function (express) {
     }
 
     router.get('/', nocache, function (req, res) {
-        res.render('apps/apps');
+        res.render('apps/apps.jade');
     });
 
     router.get('/getApps', nocache, function (req, res) {
@@ -51,7 +50,7 @@ module.exports = function (express) {
     });
 
     router.get('/view', nocache, function (req, res) {
-        res.render('apps/appView');
+        res.render('apps/appView.jade');
     });
 
     router.get('/view/:guid', nocache, function (req, res) {
@@ -76,7 +75,7 @@ module.exports = function (express) {
     });    
 
     router.get('/add', nocache, function (req, res) {
-        res.render('apps/appAdd');
+        res.render('apps/appAdd.jade');
     });
 
     router.post('/add', nocache, function (req, res) {
@@ -106,7 +105,7 @@ module.exports = function (express) {
     });
 
     router.get('/log', nocache, function (req, res) {
-        res.render('apps/appLog');
+        res.render('apps/appLog.jade');
     });
 
     router.get('/log/:guid', nocache, function (req, res) {
@@ -208,7 +207,7 @@ module.exports = function (express) {
     });
 
     router.get('/upload', nocache, function (req, res) {
-        res.render('appUpload');
+        res.render('apps/appUpload.jade');
     });
 
     router.post('/upload', upload.single('file'), function (req, res) {

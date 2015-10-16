@@ -1,0 +1,54 @@
+//- appAdd.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div.pageAppView
+        h1 Applications
+        div.row
+            div.col-md-12
+                table.table.table-hover
+                    thead
+                        tr
+                            th Log
+                    tbody(id="result")
+
+                p
+                    a.btn.btn-primary(href="/apps", role="button")
+                        span.glyphicon.glyphicon-arrow-left.
+                            Back
+                    button.btn.btn-default(type="button", id="btnApps")
+                        span.glyphicon.glyphicon-refresh.
+                            Refresh
+
+block bodyScripts
+
+    script(src='/Scripts/Apps.js')
+    script(type='text/javascript').
+
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        $(function() {
+            var apps = new Apps();
+            var app_guid = getUrlParameter("app_guid");
+            apps.logApp(app_guid);
+
+            $("body").on("click", "#btLogRefresh", function (event) {
+                event.preventDefault();
+
+                apps.logApp(app_guid);
+            });            
+        });

@@ -41,7 +41,7 @@ module.exports = function (express) {
 	        console.log(req.cookies.psl_session);
 	    }
 
-	    res.render('home');
+	    res.render('home.jade');
 	});
 
     return router;

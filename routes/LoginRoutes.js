@@ -1,5 +1,5 @@
 /*jslint node: true*/
-"use strict";
+"use strict"
 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -7,17 +7,16 @@ var bodyParser = require('body-parser');
 //Routes
 var Login = require('../services/Login');
 Login = new Login();
-//var Apps = require('./Apps');
-
 
 module.exports = function (express) {
 
     var router = express.Router();
     router.use(bodyParser.json());
-    router.use(bodyParser.urlencoded({ extended: false }));// parse application/x-www-form-urlencoded
+    router.use(bodyParser.urlencoded({extended: false}));// parse application/x-www-form-urlencoded
 
     var cookieName = "psl_session";
-    var cookieSecret = "secret";//TODO: Move to config file
+    //TODO: Move to config file
+    var cookieSecret = "secret";
     router.use(cookieParser(cookieSecret));
 
     function nocache(req, res, next) {
@@ -28,7 +27,7 @@ module.exports = function (express) {
     }
 
     router.get('/', nocache, function (req, res) {
-        res.render('login/login');
+        res.render('login/login.jade');
     });
 
     router.post('/login', nocache, function (req, res) {
@@ -43,14 +42,14 @@ module.exports = function (express) {
         console.log(username);
         console.log(password);
 
-        Login.auth(endpoint,username,password).then(function (result) {
+        Login.auth(endpoint, username, password).then(function (result) {
             console.log(result);
             var cookieValue = {
-                "endpoint" : endpoint,
-                "username" : username,
-                "password" : password
-            }
-            res.cookie(cookieName, JSON.stringify(cookieValue), { expires: 0, httpOnly: true});
+                endpoint: endpoint,
+                username: username,
+                password: password
+            };
+            res.cookie(cookieName, JSON.stringify(cookieValue), {expires: 0, httpOnly: true});
             res.redirect('/home');
         }).catch(function (reason) {
             console.log(reason);
@@ -60,7 +59,7 @@ module.exports = function (express) {
     });
 
     router.get('/loginError', nocache, function (req, res) {
-        res.render('login/loginError');
+        res.render('login/loginError.jade');
     });
 
     router.get('/logout', nocache, function (req, res) {

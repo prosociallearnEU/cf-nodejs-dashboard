@@ -1,0 +1,42 @@
+//- loginError.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div(id="pageApps")
+        div.row
+            div.col-md-12
+                h1 Applications
+                table.table.table-hover
+                    thead
+                        tr
+                            th #
+                            th App
+                            th Package State
+                            th App State
+                            th Last update
+                            th Options
+                    tbody(id="result")
+                p
+                    a.btn.btn-primary(href="/apps/add", role="button")
+                        span.glyphicon.glyphicon-plus.
+                            Create a new application
+                    button.btn.btn-default(type="button", id="btnApps")
+                        span.glyphicon.glyphicon-refresh.
+                            Refresh
+
+block bodyScripts
+
+    script(src='/Scripts/Apps.js')
+    script(type='text/javascript').
+
+        $( document ).ready(function() {
+            var apps = new Apps();
+            apps.drawAppTable();
+
+            $("body").on("click", "#btnApps", function (event) {
+                event.preventDefault();
+
+                apps.drawAppTable();
+            });
+        });
