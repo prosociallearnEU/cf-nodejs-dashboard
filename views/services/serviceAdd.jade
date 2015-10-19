@@ -1,0 +1,29 @@
+//- appAdd.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div.col-md-12
+        h1 Create an User provided service
+        form(method="post", action="/services/add")
+            div.form-group
+                label.sr-only(for='servicename') User provided service name
+                input.form-control(type="text", id="servicename", name="servicename", placeholder="User provided service name")
+            div.form-group
+                label.sr-only(for='host') host
+                input.form-control(type="text", id="host", name="host", placeholder="host")
+            div.form-group
+                label.sr-only(for='port') port
+                input.form-control(type="text", id="port", name="port", placeholder="port")
+            div.form-group
+                label.sr-only(for='username') username
+                input.form-control(type="text", id="username", name="username", placeholder="username")
+            div.form-group
+                label.sr-only(for='password') password
+                input.form-control(type="text", id="password", name="password", placeholder="password")
+            div.form-group
+                label.sr-only(for='dbname') dbname
+                input.form-control(type="text", id="dbname", name="dbname", placeholder="dbname")
+
+            div.form-group
+                button.btn.btn-primary(type="submit", id="btCreateApp") Submit

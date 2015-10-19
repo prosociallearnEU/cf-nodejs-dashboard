@@ -90,7 +90,6 @@ module.exports = function (express) {
 
         var appName = req.body.appname;
         var buildPack = req.body.buildpack;
-        var app_guid = null;
 
         console.log(appName);
         console.log(buildPack);

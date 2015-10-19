@@ -5,7 +5,7 @@ block navContent
     div.collapse.navbar-collapse(id="navbar")
         ul.nav.navbar-nav(id="mainNavBar")
             li
-                a(href="/home" id="btnHome") Home
+                a(href="/home/") Home
             li.dropdown
                 a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Applications 
                     span.caret                            
@@ -14,7 +14,9 @@ block navContent
                         a(href="/apps/" id="btnApps") Get Applications
                     li.divider(role="separator")
                     li
-                        a(href="#" id="btnAppCreate") Create a new Application                                  
+                        a(href="#" id="btnAppCreate") Create a new Application 
+            li
+                a(href="/services/") Services                                                         
         ul.nav.navbar-nav.navbar-right(id="mainNavBar2")
             li
                 a(href="/auth/logout" id="btnLogout") Logout

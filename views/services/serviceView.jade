@@ -1,0 +1,26 @@
+//- loginError.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div(id="pageApps")
+        div.row
+            div.col-md-12
+                h1 Services
+                table.table.table-hover
+                    thead
+                        tr
+                            th #
+                            th Field
+                            th Value
+                    tbody(id="result")
+                        - var n = 0
+                        each credential, value in pageData.credentials
+                            tr
+                                td= n++
+                                td #{value}
+                                td #{credential}
+                p
+                    a.btn.btn-primary(href="/services/", role="button")
+                        span.glyphicon.glyphicon-arrow-left.
+                            Back

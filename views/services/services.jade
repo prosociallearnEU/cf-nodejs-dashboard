@@ -1,0 +1,29 @@
+//- loginError.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+    div(id="pageApps")
+        div.row
+            div.col-md-12
+                h1 Services
+                table.table.table-hover
+                    thead
+                        tr
+                            th #
+                            th Services
+                            th Options
+                    tbody(id="result")
+                        - var n = 0
+                        each service in pageData.services
+                            tr
+                                td= n++
+                                td #{service.entity.name}
+                                td 
+                                    a.btn.btn-default(href="/services/view/#{service.metadata.guid}", role="button") View
+                                    a.btn.btn-default(href="/services/remove/#{service.metadata.guid}", role="button") Remove
+
+                p
+                    a.btn.btn-primary(href="/services/add", role="button")
+                        span.glyphicon.glyphicon-plus.
+                            Create a new service
