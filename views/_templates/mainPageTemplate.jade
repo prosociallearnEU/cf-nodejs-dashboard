@@ -15,8 +15,16 @@ block navContent
                     li.divider(role="separator")
                     li
                         a(href="#" id="btnAppCreate") Create a new Application 
-            li
-                a(href="/services/") Services                                                         
+            li.dropdown
+                a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Services 
+                    span.caret                            
+                ul.dropdown-menu
+                    li
+                        a(href="/services/") User provided services
+                    li.divider(role="separator")
+                    li
+                        a(href="/services/bindings/") Service binding 
+
         ul.nav.navbar-nav.navbar-right(id="mainNavBar2")
             li
                 a(href="/auth/logout" id="btnLogout") Logout

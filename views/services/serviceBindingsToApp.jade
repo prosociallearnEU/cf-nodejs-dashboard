@@ -1,0 +1,28 @@
+//- loginError.jade
+extends ../_templates/mainPageTemplate.jade
+
+block bodyContent
+
+
+
+    div(id="pageApps")
+        div.row
+            div.col-md-12
+                h1 Service Bindings
+                table.table.table-hover
+                    thead
+                        tr
+                            th #
+                            th App
+                            th Options
+                    tbody(id="result")
+                        if (typeof(pageData.apps) !== 'undefined')
+                            - var n = 0
+                            each app in pageData.apps
+                                tr
+                                    td= n++
+                                    td #{app.entity.name}
+                                    td 
+                                        a.btn.btn-default(href="/services/bindings/bind/#{app.metadata.guid}", role="button") Bind
+                                        a.btn.btn-default(href="/services/remove/unbind/#{app.metadata.guid}", role="button") Unbind
+                        

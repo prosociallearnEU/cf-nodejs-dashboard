@@ -7,8 +7,6 @@ var CloudFoundryApps = require("cf-nodejs-client").Apps;
 var CloudFoundrySpaces = require("cf-nodejs-client").Spaces;
 var CloudFoundryDomains = require("cf-nodejs-client").Domains;
 var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
-var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
-var CloudFoundryLogs = require("cf-nodejs-client").Logs;
 var CloudFoundryUserProvidedServices = require("cf-nodejs-client").UserProvidedServices;
 var CloudFoundryServiceBindings = require("cf-nodejs-client").ServiceBindings;
 CloudFoundry = new CloudFoundry();
@@ -16,8 +14,6 @@ CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryDomains = new CloudFoundryDomains();
 CloudFoundryRoutes = new CloudFoundryRoutes();
-CloudFoundryJobs = new CloudFoundryJobs();
-CloudFoundryLogs = new CloudFoundryLogs();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 CloudFoundryServiceBindings = new CloudFoundryServiceBindings();
 
@@ -152,6 +148,32 @@ ServicesService.prototype.addService = function (serviceName,host,port,username,
             });
         }).then(function (result) {           
             return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials)
+        }).then(function (result) {
+            return resolve(result);
+        }).catch(function (reason) {
+            console.log(reason);
+            return reject(reason);
+        });
+
+    });
+};
+
+ServicesService.prototype.getAppsAvailableToBind = function () {
+
+    var token_endpoint = null;
+
+    var self = this;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
+    return new Promise(function (resolve, reject) {
+
+        CloudFoundry.getInfo().then(function (result) {
+            token_endpoint = result.token_endpoint;
+            return CloudFoundry.login(token_endpoint, self.username, self.password);
+        }).then(function (result) {
+            return CloudFoundryApps.getApps(result.token_type, result.access_token);
         }).then(function (result) {
             return resolve(result);
         }).catch(function (reason) {

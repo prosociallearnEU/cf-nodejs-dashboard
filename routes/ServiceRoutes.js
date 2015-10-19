@@ -134,6 +134,50 @@ module.exports = function (express) {
         });
     }); 
 
+    router.get('/bindings/', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            ServicesService.setEndpoint(cookie.endpoint);
+            ServicesService.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Bindings");
+
+        return ServicesService.getServices().then(function (result) {
+            //console.log(result.resources);
+            res.render('services/serviceBindings.jade', {pageData: {services : result.resources}});
+        }).catch(function (reason) {
+            res.json({"error": reason});
+        });        
+
+        
+    });
+
+    router.get('/bindings/bind/step2/:service_guid', nocache, function (req, res) {
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            ServicesService.setEndpoint(cookie.endpoint);
+            ServicesService.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Bindings // Bind");
+
+        var service_guid = req.params.service_guid;
+        console.log(service_guid);
+
+        return ServicesService.getAppsAvailableToBind().then(function (result) {
+            //console.log(result.resources);
+            //res.render('services/serviceBindingsToApp.jade');
+            res.render('services/serviceBindingsToApp.jade', {pageData: {service_guid: service_guid , apps : result.resources}});
+        }).catch(function (reason) {
+            res.json({"error": reason});
+        });
+    
+
+    });
+
     return router;
 };
 
