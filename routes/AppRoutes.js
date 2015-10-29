@@ -95,8 +95,8 @@ module.exports = function (express) {
         console.log(buildPack);
 
         return AppServices.createApp(appName, buildPack).then(function (result) {
-            app_guid = result.metadata.guid;
-            res.render('apps/apps');
+            console.log(result);
+            res.redirect('/apps');
         }).catch(function (reason) {
             res.json({"error": reason});
         });

@@ -95,7 +95,7 @@ Apps.prototype.logApp = function (app_guid) {
             alert(message.description);
         } else {
             console.log(data);
-            $("#pageAppView").find("#result").html(data);
+            $("#result").html(data);
         }
     });
 
@@ -185,3 +185,14 @@ function openApp(app_guid) {
 
 }
 
+$("#formAppAdd").submit(function( event ) {
+
+    var appName = $("#appname").val();
+    if (appName.match(/^[a-z0-9]{5,10}$/)) {
+        return true;
+    }else {
+        alert("Your app uses a bad name.\nPattern: [a-z0-9]{5,15}");
+    }
+
+    event.preventDefault();
+});

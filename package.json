@@ -24,7 +24,7 @@
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "Apache-2.0",
   "dependencies": {
-    "cf-nodejs-client": "0.8.3",
+    "cf-nodejs-client": "0.9.1",
     "express": "4.13.3",
     "body-parser": "1.14.1",
     "cookie-parser": "1.4.0",

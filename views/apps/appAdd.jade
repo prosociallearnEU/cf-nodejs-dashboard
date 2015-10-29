@@ -6,7 +6,7 @@ block bodyContent
     div(id="pageCreateApps")
         div.col-md-12
             h1 Create App
-            form(method="post", action="/apps/add")
+            form(method="post", action="/apps/add", id="formAppAdd")
                 div.form-group
                     label.sr-only(for='appname') Application name
                     input.form-control(type="text", id="appname", name="appname", placeholder="Application name")
@@ -20,4 +20,9 @@ block bodyContent
                         span.
                             Node.js
                 div.form-group
-                    button.btn.btn-primary(type="submit", id="btCreateApp") Submit
+                    input(type='submit' value="Submit") 
+                    //button.btn.btn-primary(type="submit",) Submit
+
+block bodyScripts
+
+    script(src='/Scripts/Apps.js')
