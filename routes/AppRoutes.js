@@ -89,7 +89,7 @@ module.exports = function (express) {
         console.log(buildPack);
 
         return AppServices.createApp(appName, buildPack).then(function (result) {
-            console.log(result);
+            //console.log(result);
             res.redirect('/apps');
         }).catch(function (reason) {
             res.json({"error": reason});
