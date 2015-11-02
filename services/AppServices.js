@@ -59,15 +59,15 @@ AppServices.prototype.createApp = function (appName, buildPack) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
 
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password).then(function (result) {
-                token_type = result.token_type;
-                access_token = result.access_token;
-                return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        space_guid = result.resources[0].metadata.guid;
-                        //console.log("Space guid: ", space_guid);
-                        return resolve();
-                    });
+            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+        }).then(function () {
+            token_type = result.token_type;
+            access_token = result.access_token;
+            return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+                return new Promise(function (resolve) {
+                    space_guid = result.resources[0].metadata.guid;
+                    //console.log("Space guid: ", space_guid);
+                    return resolve();
                 });
             });
         //Does exist the application?   
@@ -82,7 +82,7 @@ AppServices.prototype.createApp = function (appName, buildPack) {
             //If exist the application, Reject
             if (result.total_results === 1) {
                 return new Promise(function (resolve, reject) {
-                    return reject("EXIST_ROUTE");
+                    return reject("EXIST_APP");
                 });               
             } else {
 
