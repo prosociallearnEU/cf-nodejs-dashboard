@@ -3,7 +3,7 @@ extends ../_templates/baseTemplate.jade
 
 block bodyContent
 
-    form.form-signin(method="post", action="/auth/login", id="formLogin")
+    form.form-signin(method="post", action="/auth/login", id="formLogin" novalidate="novalidate")
         h2.form-signin-heading Please sign in
         label.sr-only(for='endpoint') API Endpoint
         input.form-control(type="text", id="endpoint", name="endpoint", placeholder="https://api.run.pivotal.io", required, autofocus)
