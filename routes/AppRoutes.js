@@ -45,28 +45,6 @@ module.exports = function (express) {
         });
     });
 
-    router.get('/getApps', nocache, function (req, res) {
-
-        if(req.cookies.psl_session){
-            var cookie = JSON.parse(req.cookies.psl_session);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
-        }
-
-        console.log("GET Apps");
-
-        return AppServices.getApps().then(function (result) {
-            res.json(result);
-        }).catch(function (reason) {
-            res.json({"error": reason});
-        });
-
-    });
-
-    router.get('/view', nocache, function (req, res) {
-        res.render('apps/appView.jade');
-    });
-
     router.get('/view/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
@@ -81,12 +59,14 @@ module.exports = function (express) {
         console.log(app_guid);
 
         return AppServices.view(app_guid).then(function (result) {
-            res.json(result);
+            console.log(result);
+            res.render('apps/appView.jade', {pageData: {info : result}});
         }).catch(function (reason) {
             res.json({"error": reason});
         });
 
-    });    
+        
+    });
 
     router.get('/add', nocache, function (req, res) {
         res.render('apps/appAdd.jade');

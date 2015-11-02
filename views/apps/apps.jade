@@ -27,7 +27,7 @@ block bodyContent
                                 td #{app.entity.state}
                                 td #{app.metadata.updated_at}
                                 td 
-                                    a.btn.btn-default(href="/apps/view?app_guid=#{app.metadata.guid}", role="button") View
+                                    a.btn.btn-default(href="/apps/view/#{app.metadata.guid}", role="button") View
                                     span  
                                     a.btn.btn-default(href="/apps/upload?app_guid=#{app.metadata.guid}", role="button") Upload  
                                     span 
