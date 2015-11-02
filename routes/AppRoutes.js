@@ -27,8 +27,22 @@ module.exports = function (express) {
         next();
     }
 
+    // GET /apps/
     router.get('/', nocache, function (req, res) {
-        res.render('apps/apps.jade');
+
+        if(req.cookies.psl_session){
+            var cookie = JSON.parse(req.cookies.psl_session);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username,cookie.password);
+        }
+
+        console.log("GET Apps");
+
+        return AppServices.getApps().then(function (result) {
+            res.render('apps/apps.jade', {pageData: {apps : result.resources}});
+        }).catch(function (reason) {
+            res.json({"error": reason});
+        });
     });
 
     router.get('/getApps', nocache, function (req, res) {

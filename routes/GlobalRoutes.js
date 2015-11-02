@@ -24,7 +24,7 @@ module.exports = function (express) {
 	    if (ssl) {
 	        res.redirect('/auth');
 	    } else {
-	        res.redirect('https://psldeploymanager3.cfapps.io');
+	        res.redirect('https://psldeploymanager6.cfapps.io');
 	    }
 	});
 

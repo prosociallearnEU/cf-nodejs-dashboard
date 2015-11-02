@@ -5,51 +5,6 @@ function Apps() {
     return undefined;
 }
 
-Apps.prototype.drawAppTable = function () {
-    var url = "/apps/getApps";
-    $.ajax({
-        url: url,
-        type: 'GET',
-        contentType: 'application/json'
-    }).done(function (data) {
-
-        var htmlcode = "";
-        var app_guid = null;
-        var state = null;
-        $.each(data.resources, function (index) {
-
-            app_guid = data.resources[index].metadata.guid;
-            state = data.resources[index].entity.state;
-
-            //console.log(data.resources[index]);
-            htmlcode += "<tr>";
-            htmlcode += "<td>" + (index + 1) + "</td>";
-            htmlcode += "<td><a href='#' onclick='openApp(\"" + app_guid + "\"); return false;'>" + data.resources[index].entity.name + "</a></td>";
-            htmlcode += "<td>" + data.resources[index].entity.package_state + "</td>";
-            htmlcode += "<td>" + state + "</td>";
-            htmlcode += "<td>" + data.resources[index].metadata.updated_at + "</td>";
-            htmlcode += "<td>";
-            htmlcode += "<a class='btn btn-default' href='/apps/view?app_guid=" + app_guid + "'>View</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='/apps/upload?app_guid=" + app_guid + "'>Upload</a>&nbsp;";
-
-            if (state === "STARTED") {
-                htmlcode += "<a class='btn btn-default' href='#' onclick='stopApp(\"" + app_guid + "\"); return false;'>Stop</a>&nbsp;";
-            } else {
-                htmlcode += "<a class='btn btn-default' href='#' onclick='startApp(\"" + app_guid + "\"); return false;'>Start</a>&nbsp;";
-            }
-
-            htmlcode += "<a class='btn btn-default' href='#' onclick='removeApp(\"" + app_guid + "\"); return false;'>Remove</a>&nbsp;";
-            htmlcode += "<a class='btn btn-default' href='/apps/log?app_guid=" + app_guid + "'>Log</a>&nbsp;";
-            htmlcode += "</td>";
-            htmlcode += "<tr>";
-        });
-
-        console.log("OK");
-
-        $("#pageApps").find("#result").html(htmlcode);
-    });
-};
-
 Apps.prototype.viewApp = function (app_guid) {
     //console.log(app_guid);
 

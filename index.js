@@ -18,7 +18,9 @@ app.engine('jade', require('jade').__express);
 app.set('view engine', 'jade');
 
 //Server
-var localPort = process.env.VCAP_APP_PORT || 5000;
+//console.log("VCAP_APP_PORT" + process.env.VCAP_APP_PORT)
+//console.log("PORT" + process.env.PORT) // Diego
+var localPort = process.env.PORT || 5000;
 http.listen(localPort, function () {
     console.log('Listening on *:' + localPort);
 });
