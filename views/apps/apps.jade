@@ -3,50 +3,49 @@ extends ../_templates/mainPageTemplate.jade
 
 block bodyContent
 
-    div(id="pageApps")
-        div.row
-            div.col-md-12
-                h1 Applications
-                table.table.table-hover
-                    thead
+    div.row
+        div.col-md-12
+            h1 Applications
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th App
+                        th Package State
+                        th App State
+                        th Last update
+                        th Options
+                tbody(id="result")
+                    - var n = 1
+                    each app in pageData.apps
                         tr
-                            th #
-                            th App
-                            th Package State
-                            th App State
-                            th Last update
-                            th Options
-                    tbody(id="result")
-                        - var n = 1
-                        each app in pageData.apps
-                            tr
-                                td= n++
-                                td 
-                                    a(href="#", onclick='openApp(\'#{app.metadata.guid}\'); return false;') #{app.entity.name}
-                                td #{app.entity.package_state}
-                                td #{app.entity.state}
-                                td #{app.metadata.updated_at}
-                                td 
-                                    a.btn.btn-default(href="/apps/view/#{app.metadata.guid}", role="button") View
-                                    span  
-                                    a.btn.btn-default(href="/apps/upload?app_guid=#{app.metadata.guid}", role="button") Upload  
-                                    span 
-                                    if (app.entity.state === "STARTED")
-                                        a.btn.btn-default(href="#", onclick='stopApp(\'#{app.metadata.guid}\'); return false;') Stop
-                                    else
-                                        a.btn.btn-default(href="#", onclick='startApp(\'#{app.metadata.guid}\'); return false;') Start
-                                    span 
-                                    a.btn.btn-default(href="#", onclick='removeApp(\'#{app.metadata.guid}\'); return false;') Remove
-                                    span 
-                                    a.btn.btn-default(href="/apps/log/#{app.metadata.guid}", role="button") Log            
-                p
-                    a.btn.btn-primary(href="/apps/add", role="button")
-                        span.glyphicon.glyphicon-plus.
-                            Create a new application
-                    span  
-                    a.btn.btn-default(type="button", id="btnApps")
-                        span.glyphicon.glyphicon-refresh.
-                            Refresh
+                            td= n++
+                            td 
+                                a(href="#", onclick='openApp(\'#{app.metadata.guid}\'); return false;') #{app.entity.name}
+                            td #{app.entity.package_state}
+                            td #{app.entity.state}
+                            td #{app.metadata.updated_at}
+                            td 
+                                a.btn.btn-default(href="/apps/view/#{app.metadata.guid}", role="button") View
+                                span  
+                                a.btn.btn-default(href="/apps/upload?app_guid=#{app.metadata.guid}", role="button") Upload  
+                                span 
+                                if (app.entity.state === "STARTED")
+                                    a.btn.btn-default(href="#", onclick='stopApp(\'#{app.metadata.guid}\'); return false;') Stop
+                                else
+                                    a.btn.btn-default(href="#", onclick='startApp(\'#{app.metadata.guid}\'); return false;') Start
+                                span 
+                                a.btn.btn-default(href="#", onclick='removeApp(\'#{app.metadata.guid}\'); return false;') Remove
+                                span 
+                                a.btn.btn-default(href="/apps/log/#{app.metadata.guid}", role="button") Log            
+            p
+                a.btn.btn-primary(href="/apps/add", role="button")
+                    span.glyphicon.glyphicon-plus.
+                        Create a new application
+                span  
+                a.btn.btn-default(type="button", id="btnApps")
+                    span.glyphicon.glyphicon-refresh.
+                        Refresh
 
 block bodyScripts
 

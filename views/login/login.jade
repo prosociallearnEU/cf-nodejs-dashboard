@@ -2,14 +2,50 @@
 extends ../_templates/baseTemplate.jade
 
 block bodyContent
-    div.pageLogin
-        form.form-signin(method="post", action="/auth/login")
-            h2.form-signin-heading Please sign in
-            label.sr-only(for='endpoint') API Endpoint
-            input.form-control(type="text", id="endpoint", name="endpoint", placeholder="https://api.run.pivotal.io", required, autofocus)
-            label.sr-only(for='username') Username
-            input.form-control(type="text", id="username", name="username", placeholder="Username", required)
-            label.sr-only(for='password') Password
-            input.form-control(type="password", id="password", name="password", placeholder="Password", required )
-            button.btn.btn-lg.btn-primary.btn-block(type='submit', id="btnLoginSubmit") Sign in
 
+    form.form-signin(method="post", action="/auth/login", id="formLogin")
+        h2.form-signin-heading Please sign in
+        label.sr-only(for='endpoint') API Endpoint
+        input.form-control(type="text", id="endpoint", name="endpoint", placeholder="https://api.run.pivotal.io", required, autofocus)
+        label.sr-only(for='username') Username
+        input.form-control(type="text", id="username", name="username", placeholder="Username", required)
+        label.sr-only(for='password') Password
+        input.form-control(type="password", id="password", name="password", placeholder="Password", required )
+        button.btn.btn-lg.btn-primary.btn-block(type='submit', id="btnLoginSubmit") Sign in
+
+block bodyScripts
+
+    script(type='text/javascript').
+
+        $("#formLogin").submit(function( event ) {
+
+            var endpoint = $("#endpoint").val();
+            endpoint = String(endpoint).toLowerCase()
+            var username = $("#username").val();
+            var password = $("#password").val();
+            
+            var endpoint_regex = /^(http|https)/;
+            var username_regex = /^[a-zA-Z0-9]{5,15}$/;
+
+            if (endpoint.match(endpoint_regex)) {
+                if (username.match(username_regex)) {
+                    if (password.match(username_regex)) {
+                        return true;
+                    }else {
+                        alert("Password format is not correct.\nPattern: [a-zA-Z0-9]{5,15}");
+                        $("#password").val("");
+                        $("#password").focus();
+                    }
+                }else {
+                    alert("Username format is not correct.\nPattern: [a-zA-Z0-9]{5,15}");
+                    $("#username").val("");
+                    $("#username").focus();                    
+                }
+            } else {
+                alert("Define a right CC endpoint.");
+                $("#endpoint").val("");
+                $("#endpoint").focus();
+            }
+
+            event.preventDefault();
+        });

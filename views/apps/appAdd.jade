@@ -3,7 +3,7 @@ extends ../_templates/mainPageTemplate.jade
 
 block bodyContent
 
-    div(id="pageCreateApps")
+    div.row
         div.col-md-12
             h1 Create App
             form(method="post", action="/apps/add", id="formAppAdd")
@@ -20,8 +20,7 @@ block bodyContent
                         span.
                             Node.js
                 div.form-group
-                    input(type='submit' value="Submit") 
-                    //button.btn.btn-primary(type="submit",) Submit
+                    button.btn.btn-primary(type="submit",) Submit
 
 block bodyScripts
 

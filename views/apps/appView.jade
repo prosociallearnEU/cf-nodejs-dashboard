@@ -3,24 +3,25 @@ extends ../_templates/mainPageTemplate.jade
 
 block bodyContent
 
-    div(id="pageAppView")
-        h1 Applications
-        div.row
-            div.col-md-12
-                table.table.table-hover
-                    thead
-                        tr
-                            th Field
-                            th Value
-                    tbody(id="result")
-                        - var n = 0
-                        each val, index in pageData.info
+    div.row
+        div.col-md-12
+            h1 Applications
+            div.row
+                div.col-md-12
+                    table.table.table-hover
+                        thead
                             tr
-                                td #{index}
-                                td #{val}
-                p
-                    a.btn.btn-primary(href="/apps", role="button")
-                        span.glyphicon.glyphicon-arrow-left.
-                            Back
+                                th Field
+                                th Value
+                        tbody(id="result")
+                            - var n = 0
+                            each val, index in pageData.info
+                                tr
+                                    td #{index}
+                                    td #{val}
+                    p
+                        a.btn.btn-primary(href="/apps", role="button")
+                            span.glyphicon.glyphicon-arrow-left.
+                                Back
 
 

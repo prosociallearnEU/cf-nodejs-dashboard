@@ -3,17 +3,21 @@ extends ../_templates/mainPageTemplate.jade
 
 block bodyContent
 
-    div(id="pageUpgradeApps")
-        div.row
-            div.col-md-12
-                h1 Upload App
-                p
+    div.row
+        div.col-md-12
+            h1 Upload App
+            p
 
-                form.dropzone(method="post", action="/apps/upload/", id="dropzoneExample", enctype="multipart/form-data")
-                    input(type="hidden", name="app_guid", id="app_guid")
-                    div.fallback
-                        input(type="file", name="file")
-                        button(type="submit") Upload App
+            form.dropzone(method="post", action="/apps/upload/", id="dropzoneExample", enctype="multipart/form-data")
+                input(type="hidden", name="app_guid", id="app_guid")
+                div.fallback
+                    input(type="file", name="file")
+                    button(type="submit") Upload App
+            p
+            p
+                a.btn.btn-primary(href="/apps", role="button")
+                    span.glyphicon.glyphicon-arrow-left.
+                        Back
 
 block bodyScripts
 
