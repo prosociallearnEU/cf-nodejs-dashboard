@@ -38,7 +38,7 @@ block bodyContent
                                     span 
                                     a.btn.btn-default(href="#", onclick='removeApp(\'#{app.metadata.guid}\'); return false;') Remove
                                     span 
-                                    a.btn.btn-default(href="/apps/log?app_guid=#{app.metadata.guid}", role="button") Log            
+                                    a.btn.btn-default(href="/apps/log/#{app.metadata.guid}", role="button") Log            
                 p
                     a.btn.btn-primary(href="/apps/add", role="button")
                         span.glyphicon.glyphicon-plus.

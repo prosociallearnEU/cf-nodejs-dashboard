@@ -5,57 +5,6 @@ function Apps() {
     return undefined;
 }
 
-Apps.prototype.viewApp = function (app_guid) {
-    //console.log(app_guid);
-
-    var url = "/apps/view/" + app_guid;
-    $.ajax({
-        url: url,
-        type: 'GET',
-        contentType: 'application/json'
-    }).done(function (data) {
-        $("#pageApps").hide();
-        $("#pageAppView").show();
-        //console.log(data);
-
-        var htmlcode = "";
-        $.each(data, function (index) {
-            htmlcode += "<tr>";
-            htmlcode += "<td>" + index + "</td>";
-            htmlcode += "<td>" + data[index]  + "</td>";
-            htmlcode += "<tr>";
-        });
-
-        $("#pageAppView").find("#result").html(htmlcode);
-    });
-
-}
-
-Apps.prototype.logApp = function (app_guid) {
-
-    var url = "/apps/log/" + app_guid;
-    var data = {
-        guid: app_guid
-    };
-
-    $.ajax({
-        url: url,
-        type: 'GET',
-        contentType: 'application/json',
-        data: JSON.stringify(data)
-    }).done(function (data) {
-        if (data.error) {
-            var message = $.parseJSON(data.error);
-            console.log(message);
-            alert(message.description);
-        } else {
-            console.log(data);
-            $("#result").html(data);
-        }
-    });
-
-};
-
 function stopApp(app_guid) {
     //console.log(app_guid);
 

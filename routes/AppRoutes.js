@@ -97,10 +97,6 @@ module.exports = function (express) {
 
     });
 
-    router.get('/log', nocache, function (req, res) {
-        res.render('apps/appLog.jade');
-    });
-
     router.get('/log/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
@@ -113,17 +109,17 @@ module.exports = function (express) {
         console.log("GET Apps Log");
 
         var app_guid = req.params.guid;
-        //console.log(app_guid);
+        console.log(app_guid);
 
         return AppServices.getLogs(app_guid).then(function (result) {
-            console.log(result);
-            res.json(result);
+            //console.log(result);
+            res.render('apps/appLog.jade', {pageData: {log: result, guid:app_guid}});
         }).catch(function (reason) {
-            //console.log(reason);
             res.json({"error": reason});
         });
 
-    });  
+        
+    });
 
     router.get('/stop/:guid', nocache, function (req, res) {
 
