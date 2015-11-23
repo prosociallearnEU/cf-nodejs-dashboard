@@ -3,6 +3,7 @@
 "use strict";
 
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
+var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
 var CloudFoundrySpaces = require("cf-nodejs-client").Spaces;
 var CloudFoundryDomains = require("cf-nodejs-client").Domains;
@@ -10,6 +11,7 @@ var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
 var CloudFoundryLogs = require("cf-nodejs-client").Logs;
 CloudFoundry = new CloudFoundry();
+CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps(this.CF_API_URL);
 CloudFoundrySpaces = new CloudFoundrySpaces(this.CF_API_URL);
 CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
@@ -32,7 +34,7 @@ AppServices.prototype.setCredential = function (username, password) {
     this.password = password;
 };
 
-AppServices.prototype.createApp = function (appName, buildPack) {
+AppServices.prototype.add = function (appName, buildPack) {
 
     var token_endpoint = null;
     var authorization_endpoint = null;
@@ -55,113 +57,105 @@ AppServices.prototype.createApp = function (appName, buildPack) {
 
     return new Promise(function (resolve, reject) {
 
-        CloudFoundry.getInfo().then(function (result) {
-            token_endpoint = result.token_endpoint;
-            authorization_endpoint = result.authorization_endpoint;
+        try {
 
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
-        }).then(function () {
-            token_type = result.token_type;
-            access_token = result.access_token;
-            return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
-                return new Promise(function (resolve) {
-                    space_guid = result.resources[0].metadata.guid;
-                    //console.log("Space guid: ", space_guid);
-                    return resolve();
+            CloudFoundry.getInfo().then(function (result) {
+                token_endpoint = result.token_endpoint;
+                authorization_endpoint = result.authorization_endpoint;
+                CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+                return CloudFoundryUsersUAA.login(self.username, self.password);
+            }).then(function (result) {
+                token_type = result.token_type;
+                access_token = result.access_token;
+
+                return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
+                    return new Promise(function (resolve) {
+                        space_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
                 });
-            });
-        //Does exist the application?   
-        }).then(function () {
-            var filter = {
-                'q': 'name:' + appName,
-                'inline-relations-depth': 1
-            };
-            return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter);           
-        }).then(function (result) {
+            }).then(function (result) {
+                return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
+                    return new Promise(function (resolve) {
+                        domain_guid = result.resources[0].metadata.guid;
+                        return resolve();
+                    });
+                });
 
-            //If exist the application, Reject
-            if (result.total_results === 1) {
-                return new Promise(function (resolve, reject) {
-                    return reject("EXIST_APP");
-                });               
-            } else {
-
+            //VALIDATIONS
+            //1. Duplicated app
+            }).then(function (result) {
+                var filter = {
+                    'q': 'name:' + appName,
+                    'inline-relations-depth': 1
+                };
+                return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid, filter).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        if (result.total_results === 1) {
+                            return reject("EXIST_APP");
+                        }
+                        return resolve();
+                    });
+                });   
+            //2. Duplicated route
+            }).then(function (result) {
+                var filter = {
+                    'q': 'host:' + appName + ';domain_guid:' + domain_guid,
+                    'inline-relations-depth': 1
+                };
+                return CloudFoundryRoutes.getRoutes(token_type, access_token, filter).then(function (result) {
+                    return new Promise(function (resolve, reject) {
+                        if (result.total_results === 1) {
+                            return reject("EXIST_ROUTE");
+                        }
+                        return resolve();
+                    });
+                }); 
+            }).then(function (result) {
                 var appOptions = {
                     "name": appName,
                     "space_guid": space_guid,
+                    "instances" : 1,
+                    "memory" : 256,
+                    "disk_quota" : 256,
                     "buildpack" : buildPack
                 };
-
-                return CloudFoundryApps.create(token_type, access_token, appOptions).then(function (result) {
+                return CloudFoundryApps.add(token_type, access_token, appOptions).then(function (result) {
                     return new Promise(function (resolve) {
                         app_guid = result.metadata.guid;
                         return resolve();
                     });
                 });
-            }
-        }).then(function () {
-            //TODO: How to make the inference?
-            return CloudFoundryDomains.getSharedDomains(token_type, access_token);
-        }).then(function () {
-            return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
-                return new Promise(function (resolve) {
-                    domain_guid = result.resources[0].metadata.guid;
-                    //console.log("Domain guid: " , domain_guid);
-                    return resolve();
-                });
-            });
-        }).then(function () {
-            return CloudFoundryRoutes.checkRoute(token_type, access_token, appName, domain_guid).then(function (result) {
-                return new Promise(function (resolve) {
-                    if (result.total_results === 1) {
-                        console.log("Exist a Route");
-                        //console.log(result.resources);
-                        route_guid = result.resources[0].metadata.guid;
-                        console.log("Route guid: ", route_guid);
-                        return resolve(result);
-                    } else {
-                        //Add Route
-                        route_create_flag = true; //Workaround
-                        return resolve();
-                    }
-
-                });
-            });
-        }).then(function () {
-            //TODO: Refactor syntax to code in the right place
-            if (route_create_flag) {
-                //Add Route
-                //console.log("Create a Route");
-                routeName = appName;
-                return CloudFoundryRoutes.addRoute(token_type, access_token, domain_guid, space_guid, routeName).then(function (result) {
+            }).then(function () {
+                var routeOptions = {
+                    'domain_guid' : domain_guid,
+                    'space_guid' : space_guid,
+                    'host' : appName
+                };
+                return CloudFoundryRoutes.add(token_type, access_token, routeOptions).then(function (result) {
                     return new Promise(function (resolve) {
-                        //console.log(result);
                         route_guid = result.metadata.guid;
                         return resolve(result);
                     });
                 });
-            } else {
-                return new Promise(function (resolve) {
-                    return resolve();
-                });
-            }
-        }).then(function () {
-            return CloudFoundryApps.associateRoute(token_type, access_token, appName, app_guid, domain_guid, space_guid, route_guid);
-        }).then(function (result) {
-            //console.log(result);
-            return resolve(result);
-        }).catch(function (reason) {
-            console.error("Error: " + reason);
-            return reject(reason);
-        });
+            }).then(function () {
+                return CloudFoundryApps.associateRoute(token_type, access_token, app_guid, route_guid);
+            }).then(function (result) {
+                return resolve(result);
+            }).catch(function (reason) {
+                console.error("Error: " + reason);
+                return reject(reason);
+            });
+
+        } catch(error) {
+            return reject(error);
+        };
 
     });
 
 };
 
-AppServices.prototype.uploadApp = function (app_guid, filePath) {
-
-    console.log("upload");
+AppServices.prototype.upload = function (app_guid, filePath) {
 
     var token_endpoint = null;
     var authorization_endpoint = null;
@@ -178,11 +172,12 @@ AppServices.prototype.uploadApp = function (app_guid, filePath) {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
-            return CloudFoundryApps.uploadApp(token_typetoken_type, access_token.access_token, app_guid, filePath, false);
+            return CloudFoundryApps.upload(token_type, access_token, app_guid, filePath, false);
         }).then(function (result) {
             console.log(result);
             return resolve(result);
@@ -209,12 +204,13 @@ AppServices.prototype.stop = function (app_guid) {
 
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            authorization_endpoint = result.authorization_endpoint;            
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+            authorization_endpoint = result.authorization_endpoint;
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;            
-            return CloudFoundryApps.stopApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.stop(token_type, access_token, app_guid);
         }).then(function (result) {
             return resolve(result.entity.state);
         }).catch(function (reason) {
@@ -242,7 +238,8 @@ AppServices.prototype.view = function (app_guid) {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;              
@@ -274,7 +271,8 @@ AppServices.prototype.getApps = function () {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;             
@@ -306,13 +304,13 @@ AppServices.prototype.start = function (app_guid) {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;             
-            return CloudFoundryApps.startApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.start(token_type, access_token, app_guid);
         }).then(function (result) {
-            console.log(result.entity.state);
             return resolve(result.entity.state);
         }).catch(function (reason) {
             console.log(reason);
@@ -334,24 +332,25 @@ AppServices.prototype.remove = function (app_guid) {
 
     CloudFoundry.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
+    CloudFoundryRoutes.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;    
             return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
         }).then(function (result) {
             route_guid = result.resources[0].metadata.guid;                      
-            return CloudFoundryApps.deleteApp(token_type, access_token, app_guid);
+            return CloudFoundryApps.remove(token_type, access_token, app_guid);
         }).then(function (result) {
-            return CloudFoundryRoutes.deleteRoute(token_type, access_token, route_guid);            
-        }).then(function (result) {            
-            console.log(result);
+            return CloudFoundryRoutes.remove(token_type, access_token, route_guid);            
+        }).then(function (result) {
             return resolve(result);
         }).catch(function (reason) {
             console.log(reason);
@@ -379,7 +378,8 @@ AppServices.prototype.open = function (app_guid) {
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
             authorization_endpoint = result.authorization_endpoint;
-            return CloudFoundry.login(authorization_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;              
@@ -390,9 +390,8 @@ AppServices.prototype.open = function (app_guid) {
                 return resolve(url);
             }
 
-            console.log("result");
-            return reject("App is not OK");
-
+            console.log(result);
+            return reject(result);
         }).catch(function (reason) {
             console.log(reason);
             return reject(reason);
@@ -404,6 +403,7 @@ AppServices.prototype.open = function (app_guid) {
 AppServices.prototype.getLogs = function (app_guid) {
 
     var token_endpoint = null;
+    var authorization_endpoint = null;
     var logging_endpoint = null;
 
     var self = this;
@@ -414,16 +414,17 @@ AppServices.prototype.getLogs = function (app_guid) {
 
         CloudFoundry.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
+            authorization_endpoint = result.authorization_endpoint;
             logging_endpoint = result.logging_endpoint;
 
             //Process URL
             logging_endpoint = logging_endpoint.replace("wss", "https");
             logging_endpoint = logging_endpoint.replace(":4443", "");
-            CloudFoundryLogs.setEndpoint(logging_endpoint);
 
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+            return CloudFoundryUsersUAA.login(self.username, self.password);
         }).then(function (result) {
-            return CloudFoundryLogs.getRecent(result.token_type, result.access_token, app_guid);
+            return CloudFoundryLogs.getRecent(logging_endpoint, result.token_type, result.access_token, app_guid);
         }).then(function (result) {
             console.log(result);
             return resolve(result);

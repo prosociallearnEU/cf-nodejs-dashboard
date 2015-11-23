@@ -36,15 +36,17 @@ module.exports = function (express) {
             AppServices.setCredential(cookie.username,cookie.password);
         }
 
-        console.log("GET Apps");
+        console.log("GET /apps");
 
         return AppServices.getApps().then(function (result) {
             res.render('apps/apps.jade', {pageData: {apps : result.resources}});
         }).catch(function (reason) {
-            res.json({"error": reason});
+            console.log(reason);
+            res.render('global/globalError', {pageData: reason});
         });
     });
 
+    // GET /apps/view/:guid
     router.get('/view/:guid', nocache, function (req, res) {
 
         if(req.cookies.psl_session){
@@ -53,16 +55,17 @@ module.exports = function (express) {
             AppServices.setCredential(cookie.username,cookie.password);
         }
 
-        console.log("GET Apps View");
+        console.log("GET /apps/view/:guid");
 
         var app_guid = req.params.guid;
-        console.log(app_guid);
+        console.log("app_guid: " + app_guid);
 
         return AppServices.view(app_guid).then(function (result) {
             console.log(result);
             res.render('apps/appView.jade', {pageData: {info : result}});
         }).catch(function (reason) {
-            res.json({"error": reason});
+            console.log(reason);
+            res.render('global/globalError', {pageData: reason});
         });
 
         
@@ -80,19 +83,19 @@ module.exports = function (express) {
             AppServices.setCredential(cookie.username,cookie.password);
         }
 
-        console.log("POST Apps Create");
+        console.log("POST /apps/add");
 
         var appName = req.body.appname;
         var buildPack = req.body.buildpack;
 
-        console.log(appName);
-        console.log(buildPack);
+        console.log("App: " + appName);
+        console.log("Buildpack: " + buildPack);
 
-        return AppServices.createApp(appName, buildPack).then(function (result) {
-            //console.log(result);
+        return AppServices.add(appName, buildPack).then(function (result) {
             res.redirect('/apps');
         }).catch(function (reason) {
-            res.json({"error": reason});
+            console.log(reason);
+            res.render('global/globalError', {pageData: reason});
         });
 
     });
@@ -140,7 +143,7 @@ module.exports = function (express) {
             res.json(result);
         }).catch(function (reason) {
             console.log(reason);
-            res.json({"error": reason});
+            res.render('global/globalError', {pageData: reason});
         });
 
     });
@@ -164,7 +167,7 @@ module.exports = function (express) {
             res.json(result);
         }).catch(function (reason) {
             console.log(reason);
-            res.json({"error": reason});
+            res.render('global/globalError', {pageData: reason});
         });
 
     });
@@ -188,7 +191,7 @@ module.exports = function (express) {
             res.json(result);
         }).catch(function (reason) {
             console.log(reason);
-            res.json({"error": reason});
+            res.render('global/globalError', {pageData: reason});
         });
 
         res.json("result");
@@ -216,12 +219,12 @@ module.exports = function (express) {
         console.log(app_guid);
         console.log(zipPath);
 
-        return AppServices.uploadApp(app_guid, zipPath).then(function (result) {
+        return AppServices.upload(app_guid, zipPath).then(function (result) {
             console.log(result);
             res.json(result);
         }).catch(function (reason) {
             console.log(reason);
-            res.json({"error": reason});
+            res.render('global/globalError', {pageData: reason});
         });
             
     });
@@ -245,7 +248,7 @@ module.exports = function (express) {
             res.json(result);
         }).catch(function (reason) {
             console.log(reason);
-            res.json({"error": reason});
+            res.render('global/globalError', {pageData: reason});
         });
 
     });
