@@ -1,7 +1,6 @@
 /*jslint node: true*/
-"use strict";
 
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 
@@ -10,11 +9,11 @@ var AppServices = require("../services/AppServices");
 AppServices = new AppServices();
 
 module.exports = function (express) {
-
+    "use strict";
     var router = express.Router();
-    var upload = multer({ dest: 'uploads/' });
+    var upload = multer({dest: 'uploads/'});
     router.use(bodyParser.json());
-    router.use(bodyParser.urlencoded({ extended: false }));// parse application/x-www-form-urlencoded
+    router.use(bodyParser.urlencoded({extended: false}));// parse application/x-www-form-urlencoded
 
     var cookieName = "psl_session";
     var cookieSecret = "secret";//TODO: Move to config file
@@ -30,16 +29,16 @@ module.exports = function (express) {
     // GET /apps/
     router.get('/', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET /apps");
 
         return AppServices.getApps().then(function (result) {
-            res.render('apps/apps.jade', {pageData: {apps : result.resources}});
+            res.render('apps/apps.jade', {pageData: {apps: result.resources}});
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
@@ -49,10 +48,10 @@ module.exports = function (express) {
     // GET /apps/view/:guid
     router.get('/view/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET /apps/view/:guid");
@@ -61,14 +60,12 @@ module.exports = function (express) {
         console.log("app_guid: " + app_guid);
 
         return AppServices.view(app_guid).then(function (result) {
-            console.log(result);
-            res.render('apps/appView.jade', {pageData: {info : result}});
+            //console.log(result);
+            res.render('apps/appView.jade', {pageData: {info: result}});
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
         });
-
-        
     });
 
     router.get('/add', nocache, function (req, res) {
@@ -77,10 +74,10 @@ module.exports = function (express) {
 
     router.post('/add', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("POST /apps/add");
@@ -91,7 +88,7 @@ module.exports = function (express) {
         console.log("App: " + appName);
         console.log("Buildpack: " + buildPack);
 
-        return AppServices.add(appName, buildPack).then(function (result) {
+        return AppServices.add(appName, buildPack).then(function () {
             res.redirect('/apps');
         }).catch(function (reason) {
             console.log(reason);
@@ -102,11 +99,11 @@ module.exports = function (express) {
 
     router.get('/log/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET Apps Log");
@@ -116,21 +113,19 @@ module.exports = function (express) {
 
         return AppServices.getLogs(app_guid).then(function (result) {
             //console.log(result);
-            res.render('apps/appLog.jade', {pageData: {log: result, guid:app_guid}});
+            res.render('apps/appLog.jade', {pageData: {log: result, guid: app_guid}});
         }).catch(function (reason) {
-            res.json({"error": reason});
+            res.json({error: reason});
         });
-
-        
     });
 
     router.get('/stop/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET Apps Stop");
@@ -150,11 +145,11 @@ module.exports = function (express) {
 
     router.get('/start/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET Apps Start");
@@ -174,11 +169,11 @@ module.exports = function (express) {
 
     router.get('/remove/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET Apps Remove");
@@ -194,8 +189,6 @@ module.exports = function (express) {
             res.render('global/globalError', {pageData: reason});
         });
 
-        res.json("result");
-
     });
 
     router.get('/upload', nocache, function (req, res) {
@@ -204,11 +197,11 @@ module.exports = function (express) {
 
     router.post('/upload', upload.single('file'), function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("POST Upload");
@@ -226,16 +219,15 @@ module.exports = function (express) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
         });
-            
     });
 
     router.post('/open/:guid', nocache, function (req, res) {
 
-        if(req.cookies.psl_session){
+        if (req.cookies.psl_session) {
             var cookie = JSON.parse(req.cookies.psl_session);
             //console.log(cookie);
             AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username,cookie.password);
+            AppServices.setCredential(cookie.username, cookie.password);
         }
 
         console.log("GET Open App");

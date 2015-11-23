@@ -1,6 +1,4 @@
 /*jslint node: true*/
-/*globals Promise:true*/
-"use strict";
 
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
@@ -18,22 +16,25 @@ CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 CloudFoundryServiceBindings = new CloudFoundryServiceBindings();
 
 function ServicesService(_CF_API_URL, _username, _password) {
+    "use strict";
     this.CF_API_URL = _CF_API_URL;
     this.username = _username;
     this.password = _password;
 }
 
 ServicesService.prototype.setEndpoint = function (endpoint) {
+    "use strict";
     this.CF_API_URL = endpoint;
 };
 
 ServicesService.prototype.setCredential = function (username, password) {
+    "use strict";
     this.username = username;
     this.password = password;
 };
 
 ServicesService.prototype.getServices = function () {
-
+    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -59,7 +60,7 @@ ServicesService.prototype.getServices = function () {
 };
 
 ServicesService.prototype.getService = function (service_guid) {
-
+    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -85,7 +86,7 @@ ServicesService.prototype.getService = function (service_guid) {
 };
 
 ServicesService.prototype.removeService = function (service_guid) {
-
+    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -110,8 +111,8 @@ ServicesService.prototype.removeService = function (service_guid) {
     });
 };
 
-ServicesService.prototype.addService = function (serviceName,host,port,username,password,dbname) {
-
+ServicesService.prototype.addService = function (serviceName, host, port, username, password, dbname) {
+    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -126,11 +127,11 @@ ServicesService.prototype.addService = function (serviceName,host,port,username,
         var access_token = null;
         var space_guid = null;
         var credentials = {
-            host : host,
-            port : port, 
-            username : username,
-            password : password,
-            dbname : dbname
+            host: host,
+            port: port,
+            username: username,
+            password: password,
+            dbname: dbname
         };
 
         CloudFoundry.getInfo().then(function (result) {
@@ -146,8 +147,8 @@ ServicesService.prototype.addService = function (serviceName,host,port,username,
                     return resolve();
                 });
             });
-        }).then(function (result) {           
-            return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials)
+        }).then(function () {
+            return CloudFoundryUserProvidedServices.create(token_type, access_token, serviceName, space_guid, credentials);
         }).then(function (result) {
             return resolve(result);
         }).catch(function (reason) {
@@ -159,7 +160,7 @@ ServicesService.prototype.addService = function (serviceName,host,port,username,
 };
 
 ServicesService.prototype.getAppsAvailableToBind = function () {
-
+    "use strict";
     var token_endpoint = null;
 
     var self = this;
