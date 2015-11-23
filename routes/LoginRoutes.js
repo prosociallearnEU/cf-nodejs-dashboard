@@ -32,18 +32,19 @@ module.exports = function (express) {
 
     router.post('/login', nocache, function (req, res) {
 
-        console.log("POST Login");
+        console.log("POST /login");
 
         var endpoint = req.body.endpoint;
         var username = req.body.username;
         var password = req.body.password;
 
-        console.log(endpoint);
-        console.log(username);
-        console.log(password);
+        console.log("CC Endpoint: " + endpoint);
+        console.log("Username: " + username);
+        console.log("Password: " + password);
 
         Login.auth(endpoint, username, password).then(function (result) {
-            console.log(result);
+            console.log("Authentication process: Success");
+            //console.log(result);
             var cookieValue = {
                 endpoint: endpoint,
                 username: username,
@@ -52,17 +53,36 @@ module.exports = function (express) {
             res.cookie(cookieName, JSON.stringify(cookieValue), {expires: 0, httpOnly: true});
             res.redirect('/home');
         }).catch(function (reason) {
-            console.log(reason);
-            res.redirect('/auth/loginError');
-        });
+            //console.log(reason);
+            
+            try{
+                var result = JSON.parse(reason);
+            }catch (error) {
+                res.render('global/globalError', {pageData: error});
+            }
 
+            if(result.error === "unauthorized"){
+                res.redirect('./loginError');
+            }else {
+                res.render('global/globalError', {pageData: result});
+            }
+        }).catch(function (reason) {
+            console.log(reason);
+            res.render('global/globalError', {pageData: "error"});
+        });
     });
 
     router.get('/loginError', nocache, function (req, res) {
+        
+        console.log("GET /loginError");
+
         res.render('login/loginError.jade');
     });
 
     router.get('/logout', nocache, function (req, res) {
+
+        console.log("GET /logout");
+
         res.clearCookie(cookieName);
         res.redirect('/auth');
     });

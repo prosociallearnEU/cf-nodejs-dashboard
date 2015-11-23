@@ -22,6 +22,7 @@ module.exports = function (express) {
 	    }
 	    ssl = true;//Local
 	    if (ssl) {
+	    	console.log("Redirect to /auth");
 	        res.redirect('/auth');
 	    } else {
 	        res.redirect('https://psldeploymanager6.cfapps.io');

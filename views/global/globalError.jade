@@ -1,0 +1,15 @@
+//- loginError.jade
+extends ../_templates/baseTemplate.jade
+
+block bodyContent
+    p
+        div.alert.alert-danger(role="alert") Internal Error.
+    p
+        pre
+            !{pageData}
+    p
+        span.
+            Please, try to 
+        a(href="/auth/") login 
+        span.
+            again.
