@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 
 //Services
-var AppServices = require("../services/AppServices");
+var AppServices = require("../services/AppService");
 AppServices = new AppServices();
 
 module.exports = function (express) {
