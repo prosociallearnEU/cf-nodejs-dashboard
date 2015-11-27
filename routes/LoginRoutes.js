@@ -30,7 +30,7 @@ module.exports = function (express) {
         res.render('login/login.jade');
     });
 
-    router.post('/login', nocache, function (req, res) {
+    router.post('/login', function (req, res) {
 
         console.log("POST /login");
 
@@ -57,18 +57,18 @@ module.exports = function (express) {
             
             try{
                 var result = JSON.parse(reason);
+                if(result.error === "unauthorized"){
+                    res.redirect('./loginError');
+                }else {
+                    res.render('global/globalError', {pageData: result});
+                }
             }catch (error) {
-                res.render('global/globalError', {pageData: error});
+                res.render('global/globalError', {pageData: reason});
             }
 
-            if(result.error === "unauthorized"){
-                res.redirect('./loginError');
-            }else {
-                res.render('global/globalError', {pageData: result});
-            }
         }).catch(function (reason) {
             console.log(reason);
-            res.render('global/globalError', {pageData: "error"});
+            res.render('global/globalError', {pageData: "Error"});
         });
     });
 
