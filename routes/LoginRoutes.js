@@ -53,8 +53,8 @@ module.exports = function (express) {
             res.cookie(cookieName, JSON.stringify(cookieValue), {expires: 0, httpOnly: true});
             res.redirect('/home');
         }).catch(function (reason) {
-            //console.log(reason);
-            
+
+            //Parse output to detect "unauthorized" case        
             try{
                 var result = JSON.parse(reason);
                 if(result.error === "unauthorized"){
@@ -62,13 +62,15 @@ module.exports = function (express) {
                 }else {
                     res.render('global/globalError', {pageData: result});
                 }
+            //Endpoint case
             }catch (error) {
                 res.render('global/globalError', {pageData: reason});
             }
 
+        //Others
         }).catch(function (reason) {
             console.log(reason);
-            res.render('global/globalError', {pageData: "Error"});
+            res.render('global/globalError', {pageData: "INTERNAL_ERROR"});
         });
     });
 
