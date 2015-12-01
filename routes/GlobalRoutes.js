@@ -38,11 +38,20 @@ module.exports = function (express) {
 	        console.log(req.signedCookies.psl_session);
 	    }
 	*/
+		var username = "";
+
 	    if (req.cookies.psl_session) {
-	        console.log(req.cookies.psl_session);
+	    	try {
+				var cookie = JSON.parse(req.cookies.psl_session);	    		
+		        console.log(cookie);
+		        username = cookie.username;
+		        console.log(username);
+	    	} catch (error){
+	    		console.log("cookie is not JSON");
+	    	}
 	    }
 
-	    res.render('home.jade');
+	    res.render('home.jade', {pageData: {username: username}});
 	});
 
     return router;

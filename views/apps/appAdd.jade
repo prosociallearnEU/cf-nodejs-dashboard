@@ -1,6 +1,9 @@
 //- appAdd.jade
 extends ../_templates/mainPageTemplate.jade
 
+block username
+    span #{pageData.username}
+
 block bodyContent
 
     div.row
@@ -26,6 +29,11 @@ block bodyContent
                                 
                 div.form-group
                     button.btn.btn-primary(type="submit",) Submit
+
+                    span  
+                    a.btn.btn-default(href="/apps/", role="button")
+                        span.glyphicon.glyphicon-arrow-left.
+                            Back                                          
 
 block bodyScripts
 

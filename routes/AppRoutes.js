@@ -29,16 +29,23 @@ module.exports = function (express) {
     // GET /apps/
     router.get('/', nocache, function (req, res) {
 
+        var username = "";
+
         if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
         }
 
         console.log("GET /apps");
 
         return AppServices.getApps().then(function (result) {
-            res.render('apps/apps.jade', {pageData: {apps: result.resources}});
+            res.render('apps/apps.jade', {pageData: {username: username, apps: result.resources}});
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
@@ -48,10 +55,17 @@ module.exports = function (express) {
     // GET /apps/view/:guid
     router.get('/view/:guid', nocache, function (req, res) {
 
+        var username = "";
+
         if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
         }
 
         console.log("GET /apps/view/:guid");
@@ -61,7 +75,7 @@ module.exports = function (express) {
 
         return AppServices.view(app_guid).then(function (result) {
             //console.log(result);
-            res.render('apps/appView.jade', {pageData: {info: result}});
+            res.render('apps/appView.jade', {pageData: {username: username, info: result}});
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
@@ -69,7 +83,21 @@ module.exports = function (express) {
     });
 
     router.get('/add', nocache, function (req, res) {
-        res.render('apps/appAdd.jade');
+
+        var username = "";
+
+        if (req.cookies.psl_session) {
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
+        }
+
+        res.render('apps/appAdd.jade', {pageData: {username: username}});
     });
 
     router.post('/add', nocache, function (req, res) {
@@ -99,11 +127,17 @@ module.exports = function (express) {
 
     router.get('/log/:guid', nocache, function (req, res) {
 
+        var username = "";
+
         if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            //console.log(cookie);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
         }
 
         console.log("GET Apps Log");
@@ -113,7 +147,7 @@ module.exports = function (express) {
 
         return AppServices.getLogs(app_guid).then(function (result) {
             //console.log(result);
-            res.render('apps/appLog.jade', {pageData: {log: result, guid: app_guid}});
+            res.render('apps/appLog.jade', {pageData: {username: username, log: result, guid: app_guid}});
         }).catch(function (reason) {
             res.json({error: reason});
         });
@@ -192,7 +226,24 @@ module.exports = function (express) {
     });
 
     router.get('/upload', nocache, function (req, res) {
-        res.render('apps/appUpload.jade');
+
+        var username = "";
+
+        if (req.cookies.psl_session) {
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
+        }
+
+        console.log("GET /apps/upload");
+
+        res.render('apps/appUpload.jade', {pageData: {username: username}});
+
     });
 
     router.post('/upload', upload.single('file'), function (req, res) {
