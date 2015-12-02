@@ -8,25 +8,17 @@ block bodyContent
     div.row
         div.col-md-3
 
+            <!-- Remove p/span-->
             p
                 span 
 
-            table.table.table-hover
-                thead
-                    tr
-                        th #
-                        th Org
-                tbody
-                    - var n = 1
-                    each org in pageData.data.organizations.resources
-                        tr
-                            td= n++
-                            td 
-                                a(href="#", onclick='openApp(\'#{org.metadata.guid}\'); return false;') #{org.entity.name}
+            ul
+                - var n = 1
+                each org in pageData.data.organizations.resources
+                    li #{org.entity.name}
 
         div.col-md-9
-            h1 Home
-
+            h1 Welcome #{pageData.username}
 
             table.table.table-hover
                 thead
@@ -39,7 +31,7 @@ block bodyContent
                         tr
                             td= n++
                             td 
-                                a(href="#", onclick='openApp(\'#{space.metadata.guid}\'); return false;') #{space.entity.name}                                 
+                                a(href="/spaces/#{space.metadata.guid}/apps") #{space.entity.name}                                 
             span 
                 strong Memory used: 
             span #{pageData.data.orgMemory.memory_usage_in_mb} Mb.
