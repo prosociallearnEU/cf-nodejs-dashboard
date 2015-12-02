@@ -8,3 +8,32 @@ block bodyContent
     div.row
         div.col-md-12
             h1 Home
+
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th Org
+                tbody
+                    - var n = 1
+                    each org in pageData.data.organizations.resources
+                        tr
+                            td= n++
+                            td 
+                                a(href="#", onclick='openApp(\'#{org.metadata.guid}\'); return false;') #{org.entity.name}
+            span 
+                strong Memory used: 
+            span #{pageData.data.orgMemory.memory_usage_in_mb} Mb.
+            h2 Quota
+            table.table.table-hover
+                thead
+                    tr
+                        th Concept
+                        th Value
+                tbody
+                    tr
+                        td Quota name:
+                        td #{pageData.data.orgQuota.entity.name}                    
+                    tr
+                        td memory limit:
+                        td #{pageData.data.orgQuota.entity.memory_limit}

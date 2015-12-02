@@ -4,6 +4,10 @@
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+//Services
+var HomeService = require("../services/HomeService");
+HomeService = new HomeService();
+
 module.exports = function (express) {
 
     var router = express.Router();
@@ -25,7 +29,7 @@ module.exports = function (express) {
 	    	console.log("Redirect to /auth");
 	        res.redirect('/auth');
 	    } else {
-	        res.redirect('https://psldeploymanager6.cfapps.io');
+	        console.log("No https");
 	    }
 	});
 
@@ -33,25 +37,35 @@ module.exports = function (express) {
 
 		console.log("GET /home/")
 
-	/*
-	    if (req.signedCookies['psl_session']) {
-	        console.log(req.signedCookies.psl_session);
-	    }
-	*/
+		var endpoint = "";
 		var username = "";
+		var password = "";
+		var homeResult = null;
 
 	    if (req.cookies.psl_session) {
 	    	try {
 				var cookie = JSON.parse(req.cookies.psl_session);	    		
 		        console.log(cookie);
+		        endpoint = cookie.endpoint;
 		        username = cookie.username;
-		        console.log(username);
+		        password = cookie.password;
+                HomeService.setEndpoint(endpoint);
+                HomeService.setCredential(username, password);
+                return HomeService.getOrganizations().then(function (result) {
+                	homeResult = result;
+					console.log(homeResult);
+               		res.render('home.jade', {pageData: {username: username, data: homeResult}});
+		        }).catch(function (reason) {
+		            console.log(reason);
+		            //res.render('global/globalError', {pageData: reason});
+		        });
+
 	    	} catch (error){
-	    		console.log("cookie is not JSON");
+	    		console.log("cookie is not JSON", error);
 	    	}
 	    }
 
-	    res.render('home.jade', {pageData: {username: username}});
+
 	});
 
     return router;

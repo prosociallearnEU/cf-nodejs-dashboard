@@ -25,19 +25,19 @@ block bodyScripts
             var password = $("#password").val();
             
             var endpoint_regex = /^(http|https)/;
-            var username_regex = /^[a-zA-Z0-9]{5,15}$/;
+            var username_regex = /^[a-zA-Z0-9.]{5,15}$/;
 
             if (endpoint.match(endpoint_regex)) {
-                if (username.match(username_regex)) {
+                if (true) {
                     if (password.match(username_regex)) {
                         return true;
                     }else {
-                        alert("Password format is not correct.\nPattern: [a-zA-Z0-9]{5,15}");
+                        alert("Password format is not correct.\nPattern: [a-zA-Z0-9.]{5,15}");
                         $("#password").val("");
                         $("#password").focus();
                     }
                 }else {
-                    alert("Username format is not correct.\nPattern: [a-zA-Z0-9]{5,15}");
+                    alert("Username format is not correct.\nPattern: [a-zA-Z0-9.]{5,15}");
                     $("#username").val("");
                     $("#username").focus();                    
                 }
