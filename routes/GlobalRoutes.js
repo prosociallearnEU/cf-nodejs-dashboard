@@ -53,7 +53,7 @@ module.exports = function (express) {
                 HomeService.setCredential(username, password);
                 return HomeService.getOrganizations().then(function (result) {
                 	homeResult = result;
-					console.log(homeResult);
+					//console.log(homeResult);
                		res.render('home.jade', {pageData: {username: username, data: homeResult}});
 		        }).catch(function (reason) {
 		            console.log(reason);

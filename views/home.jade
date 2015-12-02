@@ -6,8 +6,10 @@ block username
 block bodyContent
 
     div.row
-        div.col-md-12
-            h1 Home
+        div.col-md-3
+
+            p
+                span 
 
             table.table.table-hover
                 thead
@@ -21,6 +23,23 @@ block bodyContent
                             td= n++
                             td 
                                 a(href="#", onclick='openApp(\'#{org.metadata.guid}\'); return false;') #{org.entity.name}
+
+        div.col-md-9
+            h1 Home
+
+
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th Space
+                tbody
+                    - var n = 1
+                    each space in pageData.data.spaces.resources
+                        tr
+                            td= n++
+                            td 
+                                a(href="#", onclick='openApp(\'#{space.metadata.guid}\'); return false;') #{space.entity.name}                                 
             span 
                 strong Memory used: 
             span #{pageData.data.orgMemory.memory_usage_in_mb} Mb.
@@ -42,4 +61,6 @@ block bodyContent
                         td #{pageData.data.orgQuota.entity.total_services}  
                     tr
                         td total routes:
-                        td #{pageData.data.orgQuota.entity.total_routes}                                                
+                        td #{pageData.data.orgQuota.entity.total_routes}
+
+               

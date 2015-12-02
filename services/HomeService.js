@@ -45,6 +45,7 @@ HomeServices.prototype.getOrganizations = function () {
     var org_guid = null;
     var quota_guid = null;
     var organizations = null;
+    var spaces = null;
     var orgMemory = null;
     var orgQuota = null;   
 
@@ -55,6 +56,8 @@ HomeServices.prototype.getOrganizations = function () {
             CloudFoundry.setEndPoint(self.CF_API_URL);
             CloudFoundryOrgs.setEndPoint(self.CF_API_URL);
             CloudFoundryOrgQuota.setEndPoint(self.CF_API_URL);
+            CloudFoundrySpaces.setEndPoint(self.CF_API_URL);
+
             CloudFoundry.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
@@ -77,10 +80,15 @@ HomeServices.prototype.getOrganizations = function () {
             }).then(function (result) {                
                 //console.log(result);
                 orgQuota = result;
+                return CloudFoundrySpaces.getSpaces(token_type, access_token);
+            }).then(function (result) {
+                spaces = result;
+
                 results = {
                     organizations: organizations,
                     orgMemory: orgMemory,
-                    orgQuota: orgQuota
+                    orgQuota: orgQuota,
+                    spaces: spaces
                 }                              
                 return resolve(results);
             }).catch(function (reason) {
