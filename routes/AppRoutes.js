@@ -27,6 +27,7 @@ module.exports = function (express) {
     }
 
     // GET /apps/
+    /*
     router.get('/', nocache, function (req, res) {
 
         var username = "";
@@ -51,6 +52,7 @@ module.exports = function (express) {
             res.render('global/globalError', {pageData: reason});
         });
     });
+    */
 
     // GET /apps/view/:guid
     router.get('/view/:guid', nocache, function (req, res) {
@@ -74,8 +76,38 @@ module.exports = function (express) {
         console.log("app_guid: " + app_guid);
 
         return AppServices.view(app_guid).then(function (result) {
-            //console.log(result);
+            console.log(result);
             res.render('apps/appView.jade', {pageData: {username: username, info: result}});
+        }).catch(function (reason) {
+            console.log(reason);
+            res.render('global/globalError', {pageData: reason});
+        });
+    });
+
+    // GET /apps/view/:guid
+    router.get('/new/:guid', nocache, function (req, res) {
+
+        var username = "";
+
+        if (req.cookies.psl_session) {
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
+        }
+
+        console.log("GET /apps/view/:guid");
+
+        var app_guid = req.params.guid;
+        console.log("app_guid: " + app_guid);
+
+        return AppServices.view(app_guid).then(function (result) {
+            console.log(result);
+            res.render('apps/app.jade', {pageData: {username: username, app: result}});
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});
@@ -117,7 +149,7 @@ module.exports = function (express) {
         console.log("Buildpack: " + buildPack);
 
         return AppServices.add(appName, buildPack).then(function () {
-            res.redirect('/apps');
+            res.redirect('/home');
         }).catch(function (reason) {
             console.log(reason);
             res.render('global/globalError', {pageData: reason});

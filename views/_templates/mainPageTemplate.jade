@@ -4,15 +4,16 @@ extends ./baseTemplate.jade
 block navContent
     div.collapse.navbar-collapse(id="navbar")
         ul.nav.navbar-nav(id="mainNavBar")
-            li.dropdown
-                a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Applications 
-                    span.caret                            
-                ul.dropdown-menu
-                    li
-                        a(href="/apps/" id="btnApps") Get Applications
-                    li.divider(role="separator")
-                    li
-                        a(href="/apps/add" id="btnAppCreate") Create a new Application 
+            //
+                li.dropdown
+                    a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Applications 
+                        span.caret                            
+                    ul.dropdown-menu
+                        li
+                            a(href="/apps/" id="btnApps") Get Applications
+                        li.divider(role="separator")
+                        li
+                            a(href="/apps/add" id="btnAppCreate") Create a new Application 
             //
                 li.dropdown
                     a.dropdown-toggle( href="#", id="btnHome", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false" ) Services 

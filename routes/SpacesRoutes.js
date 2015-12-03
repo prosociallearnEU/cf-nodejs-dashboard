@@ -38,8 +38,7 @@ module.exports = function (express) {
                 SpaceService.setCredential(username, password);
                 return SpaceService.getApps(space_guid).then(function (result) {
                 	spaceResult = result;
-					console.log(spaceResult.apps.resources);
-               		//return res.json("asdfa");
+					//console.log(spaceResult.apps.resources);
                		res.render('spaces/spaceApps.jade', {pageData: {username: username, apps: spaceResult.apps.resources}});
 		        }).catch(function (reason) {
 		            console.log(reason);

@@ -8,7 +8,7 @@ block bodyContent
 
     div.row
         div.col-md-12
-            h1 Applications on space
+            h1 Applications
             table.table.table-hover
                 thead
                     tr
@@ -20,23 +20,40 @@ block bodyContent
                         th Options
                 tbody(id="result")
                     - var n = 1
-                    each app in pageData.apps
-                        tr
-                            td= n++
-                            td #{app.entity.name}
-                            td #{app.entity.package_state}
-                            td #{app.entity.state}
-                            td #{app.entity.instances}
-                            td 
-                                a.btn.btn-default(href="/apps/new/#{app.metadata.guid}", role="button") Details                                           
+
+                    tr
+                        td= n++
+                        td 
+                            a(href="#", onclick='openApp(\'#{pageData.app.guid}\'); return false;') #{pageData.app.name}
+                        td #{pageData.app.package_state}
+                        td #{pageData.app.state}
+                        td #{pageData.app.instances}
+                        td 
+                            a.btn.btn-default(href="/apps/view/#{pageData.app.guid}", role="button") View
+                            span  
+                            a.btn.btn-default(href="/apps/upload?app_guid=#{pageData.app.guid}", role="button") Upload  
+                            span 
+                            if (pageData.app.state === "STARTED")
+                                a.btn.btn-default(href="#", onclick='stopApp(\'#{pageData.app.guid}\'); return false;') Stop
+                            else
+                                a.btn.btn-default(href="#", onclick='startApp(\'#{pageData.app.guid}\'); return false;') Start
+                            span 
+                            a.btn.btn-default(href="#", onclick='removeApp(\'#{pageData.app.guid}\',\'#{pageData.app.space_guid}\'); return false;') Remove
+                            span 
+                            a.btn.btn-default(href="/apps/log/#{pageData.app.guid}", role="button") Log            
             p
-                a.btn.btn-primary(href="/apps/add", role="button")
-                    span.glyphicon.glyphicon-plus.
-                        Create a new application
-                span 
-                a.btn.btn-default(href="/home/", role="button")
+                a.btn.btn-primary(href="/spaces/#{pageData.app.space_guid}/apps", role="button")
                     span.glyphicon.glyphicon-arrow-left.
-                        Back                              
+                        Back
+                //
+                    span    
+                    a.btn.btn-default(href="/apps/", role="button")
+                        span.glyphicon.glyphicon-refresh.
+                            Refresh
+                
+                          
+                           
+
 
 block bodyScripts
 
@@ -85,7 +102,7 @@ block bodyScripts
 
         }
 
-        function removeApp(app_guid) {
+        function removeApp(app_guid,space_guid) {
             //console.log(app_guid);
 
             var url = "/apps/remove/" + app_guid;
@@ -97,6 +114,7 @@ block bodyScripts
             }).done(function (data) {
                 console.log(data);
                 location.reload();
+                location.href="/spaces/" + space_guid + "/apps"
             });
 
         }

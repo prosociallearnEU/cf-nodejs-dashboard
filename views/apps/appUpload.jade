@@ -18,7 +18,7 @@ block bodyContent
                     button(type="submit") Upload App
             p
             p
-                a.btn.btn-primary(href="/apps", role="button")
+                a.btn.btn-primary(href="/home/", role="button")
                     span.glyphicon.glyphicon-arrow-left.
                         Back
 
@@ -55,8 +55,7 @@ block bodyScripts
                     this.on("success", function (file) {
                         console.log("Added file: ", file.name);
 
-                        //drawAppTable();
-                        document.location.href="/apps/";
+                        document.location.href="/home/";
                     });
                 }
             };
