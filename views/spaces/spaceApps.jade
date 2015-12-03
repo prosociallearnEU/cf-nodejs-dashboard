@@ -1,0 +1,137 @@
+//- apps.jade
+extends ../_templates/mainPageTemplate.jade
+
+block username
+    span #{pageData.username}
+
+block bodyContent
+
+    div.row
+        div.col-md-12
+            h1 Applications
+            table.table.table-hover
+                thead
+                    tr
+                        th #
+                        th App
+                        th Package State
+                        th App State
+                        th Last update
+                        th Options
+                tbody(id="result")
+                    - var n = 1
+                    each app in pageData.apps
+                        tr
+                            td= n++
+                            td 
+                                a(href="#", onclick='openApp(\'#{app.metadata.guid}\'); return false;') #{app.entity.name}
+                            td #{app.entity.package_state}
+                            td #{app.entity.state}
+                            td #{app.metadata.updated_at}
+                            td 
+                                a.btn.btn-default(href="/apps/view/#{app.metadata.guid}", role="button") View
+                                span  
+                                a.btn.btn-default(href="/apps/upload?app_guid=#{app.metadata.guid}", role="button") Upload  
+                                span 
+                                if (app.entity.state === "STARTED")
+                                    a.btn.btn-default(href="#", onclick='stopApp(\'#{app.metadata.guid}\'); return false;') Stop
+                                else
+                                    a.btn.btn-default(href="#", onclick='startApp(\'#{app.metadata.guid}\'); return false;') Start
+                                span 
+                                a.btn.btn-default(href="#", onclick='removeApp(\'#{app.metadata.guid}\'); return false;') Remove
+                                span 
+                                a.btn.btn-default(href="/apps/log/#{app.metadata.guid}", role="button") Log            
+            p
+                a.btn.btn-primary(href="/apps/add", role="button")
+                    span.glyphicon.glyphicon-plus.
+                        Create a new application
+                span  
+                a.btn.btn-default(href="/apps/", role="button")
+                    span.glyphicon.glyphicon-refresh.
+                        Refresh
+
+block bodyScripts
+
+    script(type='text/javascript').
+
+        function stopApp(app_guid) {
+            //console.log(app_guid);
+
+            var url = "/apps/stop/" + app_guid;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: 'application/json'
+            }).done(function (data) {
+                if (data.error) {
+                    var message = $.parseJSON(data.error);
+                    console.log(message);
+                    alert(message.description);
+                } else {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+
+        }
+
+        function startApp(app_guid) {
+
+            var url = "/apps/start/" + app_guid;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: 'application/json'
+            }).done(function (data) {
+                if (data.error) {
+                    var message = $.parseJSON(data.error);
+                    console.log(message);
+                    alert(message.description);
+                } else {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+
+        }
+
+        function removeApp(app_guid) {
+            //console.log(app_guid);
+
+            var url = "/apps/remove/" + app_guid;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: 'application/json'
+            }).done(function (data) {
+                console.log(data);
+                location.reload();
+            });
+
+        }
+
+        function openApp(app_guid) {
+            //console.log(app_guid);
+
+            var url = "/apps/open/" + app_guid;
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json'
+            }).done(function (data) {
+                if (data.error) {
+                    var message = $.parseJSON(data.error);
+                    console.log(message);
+                    alert(message.description);
+                } else {
+                    console.log(data);
+                    window.open(data, '_blank');
+                }
+            });
+
+        }
+

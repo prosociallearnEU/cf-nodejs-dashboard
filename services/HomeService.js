@@ -1,6 +1,5 @@
 /*jslint node: true*/
 
-var fs = require('fs');
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 var CloudFoundryOrgs = require("cf-nodejs-client").Organizations;
