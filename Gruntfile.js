@@ -1,12 +1,6 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var localhost = 'http://localhost:';
-    var default_port = 9000;
-    var development_browser = "Google Chrome";
-    if(process.platform === "win32"){
-        development_browser = "Chrome";
-    }
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
