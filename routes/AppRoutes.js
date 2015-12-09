@@ -26,11 +26,16 @@ module.exports = function (express) {
         next();
     }
 
-    // GET /apps/
-    /*
-    router.get('/', nocache, function (req, res) {
+    // GET /apps/:guid
+    router.get('/:guid', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid");
 
         var username = "";
+        var back = {
+            path:"/home/",
+            text:"Home"
+        }
 
         if (req.cookies.psl_session) {
             try {
@@ -38,26 +43,34 @@ module.exports = function (express) {
                 username = cookie.username;
                 AppServices.setEndpoint(cookie.endpoint);
                 AppServices.setCredential(cookie.username, cookie.password);
+
+                var app_guid = req.params.guid;
+                console.log("app_guid: " + app_guid);
+
+                return AppServices.view(app_guid).then(function (result) {
+                    res.render('apps/app.jade', {pageData: {username: username, app: result}});
+                }).catch(function (reason) {
+                    console.log(reason);
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
+                });
+
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
 
-        console.log("GET /apps");
-
-        return AppServices.getApps().then(function (result) {
-            res.render('apps/apps.jade', {pageData: {username: username, apps: result.resources}});
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
     });
-    */
 
-    // GET /apps/view/:guid
-    router.get('/view/:guid', nocache, function (req, res) {
+    // GET /apps/:guid/view/
+    router.get('/:guid/view', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/view");
 
         var username = "";
+        var back = {
+            path:"/home",
+            text:"Home"
+        }
 
         if (req.cookies.psl_session) {
             try {
@@ -65,27 +78,28 @@ module.exports = function (express) {
                 username = cookie.username;
                 AppServices.setEndpoint(cookie.endpoint);
                 AppServices.setCredential(cookie.username, cookie.password);
+
+                var app_guid = req.params.guid;
+                console.log("app_guid: " + app_guid);
+
+                return AppServices.view(app_guid).then(function (result) {
+                    //console.log(result);
+                    res.render('apps/appView.jade', {pageData: {username: username, info: result}});
+                }).catch(function (reason) {
+                    console.log(reason);
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
+                });
+
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
 
-        console.log("GET /apps/view/:guid");
-
-        var app_guid = req.params.guid;
-        console.log("app_guid: " + app_guid);
-
-        return AppServices.view(app_guid).then(function (result) {
-            console.log(result);
-            res.render('apps/appView.jade', {pageData: {username: username, info: result}});
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
     });
 
-    // GET /apps/view/:guid
-    router.get('/new/:guid', nocache, function (req, res) {
+    router.get('/:guid/upload', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/upload");
 
         var username = "";
 
@@ -93,27 +107,51 @@ module.exports = function (express) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
                 username = cookie.username;
-                AppServices.setEndpoint(cookie.endpoint);
-                AppServices.setCredential(cookie.username, cookie.password);
+
+                var app_guid = req.params.guid;
+                console.log("app_guid: " + app_guid);
+
+                res.render('apps/appUpload.jade', {pageData: {username: username, app_guid: app_guid}});
+
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
 
-        console.log("GET /apps/view/:guid");
-
-        var app_guid = req.params.guid;
-        console.log("app_guid: " + app_guid);
-
-        return AppServices.view(app_guid).then(function (result) {
-            console.log(result);
-            res.render('apps/app.jade', {pageData: {username: username, app: result}});
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
     });
 
+    router.post('/upload', upload.single('file'), function (req, res) {
+
+        console.log("POST /apps/upload");
+
+        var app_guid = null;
+
+        if (req.cookies.psl_session) {
+            var cookie = JSON.parse(req.cookies.psl_session);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username, cookie.password);
+
+            app_guid = req.body.app_guid;
+            var zipPath = req.file.destination + req.file.filename;
+
+            console.log(app_guid);
+            console.log(zipPath);
+
+            return AppServices.upload(app_guid, zipPath).then(function (result) {
+                res.json(result);
+            }).catch(function (reason) {
+                console.log(reason);
+                var back = {
+                    path:"/apps/" + app_guid,
+                    text:"Apps"
+                }
+                res.render('global/globalError', {pageData: {error: result, back:back}});
+            });            
+        }
+
+    });
+
+    //GET /apps/add
     router.get('/add', nocache, function (req, res) {
 
         var username = "";
@@ -122,14 +160,13 @@ module.exports = function (express) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
                 username = cookie.username;
-                AppServices.setEndpoint(cookie.endpoint);
-                AppServices.setCredential(cookie.username, cookie.password);
+
+                res.render('apps/appAdd.jade', {pageData: {username: username}});
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
 
-        res.render('apps/appAdd.jade', {pageData: {username: username}});
     });
 
     router.post('/add', nocache, function (req, res) {
@@ -257,52 +294,7 @@ module.exports = function (express) {
 
     });
 
-    router.get('/upload', nocache, function (req, res) {
 
-        var username = "";
-
-        if (req.cookies.psl_session) {
-            try {
-                var cookie = JSON.parse(req.cookies.psl_session);
-                username = cookie.username;
-                AppServices.setEndpoint(cookie.endpoint);
-                AppServices.setCredential(cookie.username, cookie.password);
-            } catch (error){
-                console.log("cookie is not JSON");
-            }                
-        }
-
-        console.log("GET /apps/upload");
-
-        res.render('apps/appUpload.jade', {pageData: {username: username}});
-
-    });
-
-    router.post('/upload', upload.single('file'), function (req, res) {
-
-        if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            //console.log(cookie);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
-        }
-
-        console.log("POST Upload");
-
-        var app_guid = req.body.app_guid;
-        var zipPath = req.file.destination + req.file.filename;
-
-        console.log(app_guid);
-        console.log(zipPath);
-
-        return AppServices.upload(app_guid, zipPath).then(function (result) {
-            console.log(result);
-            res.json(result);
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
-    });
 
     router.post('/open/:guid', nocache, function (req, res) {
 

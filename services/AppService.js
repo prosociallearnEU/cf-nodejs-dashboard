@@ -187,11 +187,11 @@ AppServices.prototype.upload = function (app_guid, filePath) {
                         if (error) {
                             return reject(error);
                         }
-                        return resolve();
+                        return resolve(result);
                     });
                 });
             }).then(function (result) {
-                return resolve();
+                return resolve(result);
             }).catch(function (reason) {
                 console.log(reason)
                 return reject(reason);

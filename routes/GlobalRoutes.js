@@ -60,8 +60,8 @@ module.exports = function (express) {
                 	homeResult = result;
                		res.render('home.jade', {pageData: {username: username, data: homeResult}});
 		        }).catch(function (reason) {
-		            console.log(reason);
-		            //res.render('global/globalError', {pageData: reason});
+		            //console.log(reason);
+		            res.render('global/globalError', {pageData: {error: reason, back:back}});
 		        });
 
 	    	} catch (error){

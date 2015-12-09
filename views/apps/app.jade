@@ -29,9 +29,9 @@ block bodyContent
                         td #{pageData.app.state}
                         td #{pageData.app.instances}
                         td 
-                            a.btn.btn-default(href="/apps/view/#{pageData.app.guid}", role="button") View
+                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/view", role="button") View
                             span  
-                            a.btn.btn-default(href="/apps/upload?app_guid=#{pageData.app.guid}", role="button") Upload  
+                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/upload", role="button") Upload  
                             span 
                             if (pageData.app.state === "STARTED")
                                 a.btn.btn-default(href="#", onclick='stopApp(\'#{pageData.app.guid}\'); return false;') Stop

@@ -12,13 +12,13 @@ block bodyContent
             p
 
             form.dropzone(method="post", action="/apps/upload/", id="dropzoneExample", enctype="multipart/form-data")
-                input(type="hidden", name="app_guid", id="app_guid")
+                input(type="hidden", name="app_guid", id="app_guid", value="#{pageData.app_guid}")
                 div.fallback
                     input(type="file", name="file")
                     button(type="submit") Upload App
             p
             p
-                a.btn.btn-primary(href="/home/", role="button")
+                a.btn.btn-primary(href="/apps/#{pageData.app_guid}", role="button")
                     span.glyphicon.glyphicon-arrow-left.
                         Back
 
@@ -27,35 +27,11 @@ block bodyScripts
     script(src='/Scripts/lib/dropzone.min.js')
     script(type='text/javascript').
 
-        var getUrlParameter = function getUrlParameter(sParam) {
-            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-                sURLVariables = sPageURL.split('&'),
-                sParameterName,
-                i;
-
-            for (i = 0; i < sURLVariables.length; i++) {
-                sParameterName = sURLVariables[i].split('=');
-
-                if (sParameterName[0] === sParam) {
-                    return sParameterName[1] === undefined ? true : sParameterName[1];
-                }
-            }
-        };
-
-        $( document ).ready(function() {
-            var app_guid = getUrlParameter("app_guid");
-            $("#app_guid").val(app_guid);
-        });
-
-    script(type='text/javascript').
-
         $(function () {
             Dropzone.options.dropzoneExample = {
                 init: function () {
                     this.on("success", function (file) {
-                        console.log("Added file: ", file.name);
-
-                        document.location.href="/home/";
+                        document.location.href="/apps/" + $('#app_guid').val();
                     });
                 }
             };
