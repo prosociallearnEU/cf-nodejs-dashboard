@@ -27,6 +27,11 @@ module.exports = function (express) {
         var space_guid = req.params.guid;
         console.log("space_guid: " + space_guid);
 
+        var back = {
+            path:"/home/",
+            text:"Home"
+        }
+
 	    if (req.cookies.psl_session) {
 	    	try {
 				var cookie = JSON.parse(req.cookies.psl_session);	    		
@@ -42,12 +47,14 @@ module.exports = function (express) {
                		res.render('spaces/spaceApps.jade', {pageData: {username: username, apps: spaceResult.apps.resources}});
 		        }).catch(function (reason) {
 		            console.log(reason);
-		            //res.render('global/globalError', {pageData: reason});
-		        });                
-                
+		            res.render('global/globalError', {pageData: {error: reason, back:back}});
+		        }).catch(function (reason) {
+		        	console.log(reason);
+		        });  
 
 	    	} catch (error){
 	    		console.log("cookie is not JSON", error);
+	    		res.render('global/globalError', {pageData: {error: result, back:back}});
 	    	}
 	    }
 

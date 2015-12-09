@@ -42,6 +42,11 @@ module.exports = function (express) {
 		var password = "";
 		var homeResult = null;
 
+        var back = {
+            path:"/home/",
+            text:"Home"
+        }
+
 	    if (req.cookies.psl_session) {
 	    	try {
 				var cookie = JSON.parse(req.cookies.psl_session);	    		
@@ -53,7 +58,6 @@ module.exports = function (express) {
                 HomeService.setCredential(username, password);
                 return HomeService.getOrganizations().then(function (result) {
                 	homeResult = result;
-					//console.log(homeResult);
                		res.render('home.jade', {pageData: {username: username, data: homeResult}});
 		        }).catch(function (reason) {
 		            console.log(reason);
@@ -63,6 +67,8 @@ module.exports = function (express) {
 	    	} catch (error){
 	    		console.log("cookie is not JSON", error);
 	    	}
+	    }else {
+	    	console.log("No session cookie");
 	    }
 
 

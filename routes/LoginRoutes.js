@@ -12,7 +12,7 @@ module.exports = function (express) {
 
     var router = express.Router();
     router.use(bodyParser.json());
-    router.use(bodyParser.urlencoded({extended: false}));// parse application/x-www-form-urlencoded
+    router.use(bodyParser.urlencoded({extended: false}));
 
     var cookieName = "psl_session";
     //TODO: Move to config file
@@ -27,6 +27,9 @@ module.exports = function (express) {
     }
 
     router.get('/', nocache, function (req, res) {
+
+        console.log("GET /auth/login");
+
         res.render('login/login.jade');
     });
 
@@ -42,6 +45,11 @@ module.exports = function (express) {
         console.log("Username: " + username);
         console.log("Password: " + password);
 
+        var back = {
+            path:"/auth/",
+            text:"Login"
+        }
+
         Login.auth(endpoint, username, password).then(function (result) {
             console.log("Authentication process: Success");
             //console.log(result);
@@ -51,6 +59,8 @@ module.exports = function (express) {
                 password: password
             };
             res.cookie(cookieName, JSON.stringify(cookieValue), {expires: 0, httpOnly: true});
+            
+            console.log("Redirect to /home")
             res.redirect('/home');
         }).catch(function (reason) {
 
@@ -58,27 +68,19 @@ module.exports = function (express) {
             try{
                 var result = JSON.parse(reason);
                 if(result.error === "unauthorized"){
-                    res.redirect('./loginError');
+                    res.render('global/globalError', {pageData: {error: result.error, back:back}});
                 }else {
-                    res.render('global/globalError', {pageData: result});
+                    res.render('global/globalError', {pageData: {error: result, back:back}});
                 }
             //Endpoint case
-            }catch (error) {
-                res.render('global/globalError', {pageData: reason});
+            }catch (error) {             
+                res.render('global/globalError', {pageData: {error: reason, back:back}});
             }
 
         //Others
         }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: "INTERNAL_ERROR"});
+            res.render('global/globalError', {pageData: {error: reason, back:back}});
         });
-    });
-
-    router.get('/loginError', nocache, function (req, res) {
-        
-        console.log("GET /loginError");
-
-        res.render('login/loginError.jade');
     });
 
     router.get('/logout', nocache, function (req, res) {

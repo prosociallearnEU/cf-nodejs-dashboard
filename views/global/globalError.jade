@@ -5,10 +5,8 @@ block bodyContent
     p
         div.alert.alert-danger(role="alert") Internal Error.
     p
-        pre !{pageData}
+        pre !{pageData.error}
     p
-        span.
-            Please, try to 
-        a(href="/auth/") login 
-        span.
-            again.
+        span Please, try to 
+        a(href="#{pageData.back.path}") #{pageData.back.text} 
+        span again.
