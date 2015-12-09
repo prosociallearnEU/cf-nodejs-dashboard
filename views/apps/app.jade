@@ -62,7 +62,7 @@ block bodyScripts
         function stopApp(app_guid) {
             //console.log(app_guid);
 
-            var url = "/apps/stop/" + app_guid;
+            var url = "/apps/" + app_guid + "/stop";
 
             $.ajax({
                 url: url,
@@ -70,9 +70,7 @@ block bodyScripts
                 contentType: 'application/json'
             }).done(function (data) {
                 if (data.error) {
-                    var message = $.parseJSON(data.error);
-                    console.log(message);
-                    alert(message.description);
+                    alert(data.reason);
                 } else {
                     console.log(data);
                     location.reload();
@@ -83,7 +81,7 @@ block bodyScripts
 
         function startApp(app_guid) {
 
-            var url = "/apps/start/" + app_guid;
+            var url = "/apps/" + app_guid + "/start";            
 
             $.ajax({
                 url: url,
@@ -91,9 +89,7 @@ block bodyScripts
                 contentType: 'application/json'
             }).done(function (data) {
                 if (data.error) {
-                    var message = $.parseJSON(data.error);
-                    console.log(message);
-                    alert(message.description);
+                    alert(data.reason);
                 } else {
                     console.log(data);
                     location.reload();

@@ -134,7 +134,7 @@ module.exports = function (express) {
             app_guid = req.body.app_guid;
             var zipPath = req.file.destination + req.file.filename;
 
-            console.log(app_guid);
+            console.log("app_guid: " + app_guid);
             console.log(zipPath);
 
             return AppServices.upload(app_guid, zipPath).then(function (result) {
@@ -147,6 +147,54 @@ module.exports = function (express) {
                 }
                 res.render('global/globalError', {pageData: {error: result, back:back}});
             });            
+        }
+
+    });
+
+    router.get('/:guid/stop', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/stop");
+
+        if (req.cookies.psl_session) {
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username, cookie.password);
+
+            var app_guid = req.params.guid;
+            console.log("app_guid: " + app_guid);
+
+            return AppServices.stop(app_guid).then(function (result) {
+                console.log(result);
+                res.json({ result: 1 });
+            }).catch(function (reason) {
+                console.log(reason);
+                res.json({ error: 1, reason:reason });                
+            });            
+        }
+
+    });
+
+    router.get('/:guid/start', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/start");
+
+        if (req.cookies.psl_session) {
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username, cookie.password);
+
+            var app_guid = req.params.guid;
+            console.log(app_guid);
+
+            return AppServices.start(app_guid).then(function (result) {
+                console.log(result);
+                res.json({ result: 1 });
+            }).catch(function (reason) {
+                console.log(reason);
+                res.json({ error: 1, reason:reason });                
+            });         
         }
 
     });
@@ -222,53 +270,7 @@ module.exports = function (express) {
         });
     });
 
-    router.get('/stop/:guid', nocache, function (req, res) {
 
-        if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            //console.log(cookie);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
-        }
-
-        console.log("GET Apps Stop");
-
-        var app_guid = req.params.guid;
-        console.log(app_guid);
-
-        return AppServices.stop(app_guid).then(function (result) {
-            console.log(result);
-            res.json(result);
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
-
-    });
-
-    router.get('/start/:guid', nocache, function (req, res) {
-
-        if (req.cookies.psl_session) {
-            var cookie = JSON.parse(req.cookies.psl_session);
-            //console.log(cookie);
-            AppServices.setEndpoint(cookie.endpoint);
-            AppServices.setCredential(cookie.username, cookie.password);
-        }
-
-        console.log("GET Apps Start");
-
-        var app_guid = req.params.guid;
-        console.log(app_guid);
-
-        return AppServices.start(app_guid).then(function (result) {
-            console.log(result);
-            res.json(result);
-        }).catch(function (reason) {
-            console.log(reason);
-            res.render('global/globalError', {pageData: reason});
-        });
-
-    });
 
     router.get('/remove/:guid', nocache, function (req, res) {
 
