@@ -352,6 +352,45 @@ AppServices.prototype.start = function (app_guid) {
     });
 };
 
+AppServices.prototype.restage = function (app_guid) {
+    "use strict";
+    var token_endpoint = null;
+    var authorization_endpoint = null;
+    var token_type = null;
+    var access_token = null;
+
+    var self = this;
+
+    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudFoundryApps.setEndPoint(this.CF_API_URL);
+
+    return new Promise(function (resolve, reject) {
+
+        try {
+
+            CloudFoundry.getInfo().then(function (result) {
+                token_endpoint = result.token_endpoint;
+                authorization_endpoint = result.authorization_endpoint;
+                CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
+                return CloudFoundryUsersUAA.login(self.username, self.password);
+            }).then(function (result) {
+                token_type = result.token_type;
+                access_token = result.access_token;
+                return CloudFoundryApps.restage(token_type, access_token, app_guid);
+            }).then(function (result) {
+                return resolve(result.entity.state);
+            }).catch(function (reason) {
+                console.log(reason);
+                return reject(reason);
+            });
+
+        } catch (error) {
+            return reject(error);
+        }
+
+    });
+};
+
 AppServices.prototype.remove = function (app_guid) {
     "use strict";
     var token_endpoint = null;

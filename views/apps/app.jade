@@ -38,7 +38,10 @@ block bodyContent
                             else
                                 a.btn.btn-default(href="#", onclick='startApp(\'#{pageData.app.guid}\'); return false;') Start
                             span 
+                            a.btn.btn-default(href="#", onclick='restageApp(\'#{pageData.app.guid}\'); return false;') Restage
+                            span 
                             a.btn.btn-default(href="#", onclick='removeApp(\'#{pageData.app.guid}\',\'#{pageData.app.space_guid}\'); return false;') Remove
+
                             span 
                             a.btn.btn-default(href="/apps/#{pageData.app.guid}/log", role="button") Log            
             p
@@ -81,6 +84,25 @@ block bodyScripts
         function startApp(app_guid) {
 
             var url = "/apps/" + app_guid + "/start";            
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: 'application/json'
+            }).done(function (data) {
+                if (data.error) {
+                    alert(data.reason);
+                } else {
+                    console.log(data);
+                    location.reload();
+                }
+            });
+
+        }
+
+        function restageApp(app_guid) {
+
+            var url = "/apps/" + app_guid + "/restage";            
 
             $.ajax({
                 url: url,

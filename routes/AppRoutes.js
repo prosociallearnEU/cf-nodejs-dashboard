@@ -199,6 +199,30 @@ module.exports = function (express) {
 
     });
 
+    router.get('/:guid/restage', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/restage");
+
+        if (req.cookies.psl_session) {
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username, cookie.password);
+
+            var app_guid = req.params.guid;
+            console.log("app_guid: " + app_guid);
+
+            return AppServices.restage(app_guid).then(function (result) {
+                console.log(result);
+                res.json({ result: 1 });
+            }).catch(function (reason) {
+                console.log(reason);
+                res.json({ error: 1, reason:reason });                
+            });         
+        }
+
+    });
+
     router.get('/:guid/remove', nocache, function (req, res) {
 
         console.log("GET Apps Remove");
