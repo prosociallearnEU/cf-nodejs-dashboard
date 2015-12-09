@@ -40,14 +40,13 @@ block bodyContent
                             span 
                             a.btn.btn-default(href="#", onclick='removeApp(\'#{pageData.app.guid}\',\'#{pageData.app.space_guid}\'); return false;') Remove
                             span 
-                            a.btn.btn-default(href="/apps/log/#{pageData.app.guid}", role="button") Log            
+                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/log", role="button") Log            
             p
                 a.btn.btn-primary(href="/spaces/#{pageData.app.space_guid}/apps", role="button")
                     span.glyphicon.glyphicon-arrow-left.
                         Back
-                //
                     span    
-                    a.btn.btn-default(href="/apps/", role="button")
+                    a.btn.btn-default(href="/apps/#{pageData.app.guid}", role="button")
                         span.glyphicon.glyphicon-refresh.
                             Refresh
                 
@@ -99,26 +98,32 @@ block bodyScripts
         }
 
         function removeApp(app_guid,space_guid) {
-            //console.log(app_guid);
 
-            var url = "/apps/remove/" + app_guid;
+            var r = confirm("Are you sure to remove the app?");
+            if (r == false) {
+                return true;
+            }
+
+            var url = "/apps/" + app_guid + "/remove";
 
             $.ajax({
                 url: url,
                 type: 'GET',
                 contentType: 'application/json'
             }).done(function (data) {
-                console.log(data);
-                location.reload();
-                location.href="/spaces/" + space_guid + "/apps"
+                if (data.error) {
+                    alert(data.reason);
+                } else {
+                    console.log(data);
+                    location.href="/spaces/" + space_guid + "/apps";
+                }
             });
 
         }
 
         function openApp(app_guid) {
-            //console.log(app_guid);
 
-            var url = "/apps/open/" + app_guid;
+            var url = "/apps/" + app_guid + "/open";
 
             $.ajax({
                 url: url,
@@ -126,12 +131,10 @@ block bodyScripts
                 contentType: 'application/json'
             }).done(function (data) {
                 if (data.error) {
-                    var message = $.parseJSON(data.error);
-                    console.log(message);
-                    alert(message.description);
+                    alert(data.reason);
                 } else {
                     console.log(data);
-                    window.open(data, '_blank');
+                    window.open(data.url, '_blank');
                 }
             });
 

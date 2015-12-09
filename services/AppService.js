@@ -36,14 +36,13 @@ AppServices.prototype.setCredential = function (username, password) {
     this.password = password;
 };
 
-AppServices.prototype.add = function (appName, buildPack) {
+AppServices.prototype.add = function (space_guid, appName, buildPack) {
     "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
     var access_token = null;
     var app_guid = null;
-    var space_guid = null;
     var domain_guid = null;
     var route_guid = null;
 
@@ -68,13 +67,6 @@ AppServices.prototype.add = function (appName, buildPack) {
                 token_type = result.token_type;
                 access_token = result.access_token;
 
-                return CloudFoundrySpaces.getSpaces(token_type, access_token).then(function (result) {
-                    return new Promise(function (resolve) {
-                        space_guid = result.resources[0].metadata.guid;
-                        return resolve();
-                    });
-                });
-            }).then(function () {
                 return CloudFoundryDomains.getDomains(token_type, access_token).then(function (result) {
                     return new Promise(function (resolve) {
                         domain_guid = result.resources[0].metadata.guid;

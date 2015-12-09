@@ -9,7 +9,8 @@ block bodyContent
     div.row
         div.col-md-12
             h1 Create App
-            form(method="post", action="/apps/add", id="formAppAdd")
+            form(method="post", action="/spaces/apps/add", id="formAppAdd")
+                input(type="hidden", name="space_guid", id="space_guid", value="#{pageData.space_guid}")
                 div.form-group
                     label.sr-only(for='appname') Application name
                     input.form-control(type="text", id="appname", name="appname", placeholder="Application name")
