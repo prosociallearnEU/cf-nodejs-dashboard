@@ -1,0 +1,140 @@
+//- appAdd.jade
+extends ../_templates/mainPageTemplate.jade
+
+block username
+    span #{pageData.username}
+
+block bodyContent
+
+    div.row
+        div.col-md-12
+            h1 Scale App
+            form(method="post", action="/apps/scale", id="formAppScale")
+                input(type="hidden", name="app_guid", id="app_guid", value="#{pageData.app_guid}")
+                div.form-group
+                    span Buildpacks: 
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/staticfile-buildpack" checked="checked").
+                        span.
+                            Static 
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/nodejs-buildpack")
+                        span.
+                            Node.js
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/java-buildpack")
+                        span.
+                            JEE
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/php-buildpack")
+                        span.
+                            PHP  
+                    label.radio-inline
+                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/python-buildpack")
+                        span.
+                            Python 
+                div.form-group
+                    span Instances: 
+                    label.radio-inline
+                        input(type="radio", id="instances", name="instances", value="1" checked="checked").
+                        span.
+                            1 
+                    label.radio-inline
+                        input(type="radio", id="instances", name="instances", value="2")
+                        span.
+                            2
+                    label.radio-inline
+                        input(type="radio", id="instances", name="instances", value="3")
+                        span.
+                            3
+                    label.radio-inline
+                        input(type="radio", id="instances", name="instances", value="4")
+                        span.
+                            4  
+                    label.radio-inline
+                        input(type="radio", id="instances", name="instances", value="5")
+                        span.
+                            5                            
+                div.form-group
+                    span Memory: 
+                    label.radio-inline
+                        input(type="radio", id="memory", name="memory", value="128" checked="checked").
+                        span.
+                            128 
+                    label.radio-inline
+                        input(type="radio", id="memory", name="memory", value="256")
+                        span.
+                            256
+                    label.radio-inline
+                        input(type="radio", id="memory", name="memory", value="512")
+                        span.
+                            512
+                    label.radio-inline
+                        input(type="radio", id="memory", name="memory", value="1024")
+                        span.
+                            1024 
+                    label.radio-inline
+                        input(type="radio", id="memory", name="memory", value="2048")
+                        span.
+                            2048
+                div.form-group
+                    span disk_quota: 
+                    label.radio-inline
+                        input(type="radio", id="disk_quota", name="disk_quota", value="128" checked="checked").
+                        span.
+                            128 
+                    label.radio-inline
+                        input(type="radio", id="disk_quota", name="disk_quota", value="256")
+                        span.
+                            256
+                    label.radio-inline
+                        input(type="radio", id="disk_quota", name="disk_quota", value="512")
+                        span.
+                            512
+                    label.radio-inline
+                        input(type="radio", id="disk_quota", name="disk_quota", value="1024")
+                        span.
+                            1024 
+                    label.radio-inline
+                        input(type="radio", id="disk_quota", name="disk_quota", value="2048")
+                        span.
+                            2048                                                               
+                div.form-group
+                    span state: 
+                    label.radio-inline
+                        input(type="radio", id="state", name="state", value="STARTED" checked="checked").
+                        span.
+                            STARTED 
+                    label.radio-inline
+                        input(type="radio", id="state", name="state", value="STOPPED")
+                        span.
+                            STOPPED 
+                //
+                    div.form-group
+                        span Diego: 
+                        label.radio-inline
+                            input(type="radio", id="diego", name="diego", value="true" checked="checked").
+                            span.
+                                true 
+                        label.radio-inline
+                            input(type="radio", id="diego", name="diego", value="false")
+                            span.
+                                false 
+                    div.form-group
+                        span enable_ssh: 
+                        label.radio-inline
+                            input(type="radio", id="enable_ssh", name="enable_ssh", value="true" checked="checked").
+                            span.
+                                true 
+                        label.radio-inline
+                            input(type="radio", id="enable_ssh", name="enable_ssh", value="false")
+                            span.
+                                false 
+
+                div.form-group
+                    button.btn.btn-primary(type="submit",) Scale App
+
+                    span  
+                    a.btn.btn-default(href="/apps/#{pageData.app_guid}", role="button")
+                        span.glyphicon.glyphicon-arrow-left.
+                            Back                                          

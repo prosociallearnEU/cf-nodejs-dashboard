@@ -41,9 +41,10 @@ block bodyContent
                             a.btn.btn-default(href="#", onclick='restageApp(\'#{pageData.app.guid}\'); return false;') Restage
                             span 
                             a.btn.btn-default(href="#", onclick='removeApp(\'#{pageData.app.guid}\',\'#{pageData.app.space_guid}\'); return false;') Remove
-
                             span 
                             a.btn.btn-default(href="/apps/#{pageData.app.guid}/log", role="button") Log            
+                            span 
+                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/scale", role="button") Scale                               
             p
                 a.btn.btn-primary(href="/spaces/#{pageData.app.space_guid}/apps", role="button")
                     span.glyphicon.glyphicon-arrow-left.

@@ -305,6 +305,83 @@ module.exports = function (express) {
 
     });
 
+    router.get('/:guid/scale', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/scale");
+
+        var username = "";
+
+        if (req.cookies.psl_session) {
+            try {
+                var cookie = JSON.parse(req.cookies.psl_session);
+                username = cookie.username;
+
+                var app_guid = req.params.guid;                            
+                console.log("app_guid: " + app_guid);
+                                                                                                                
+                res.render('apps/appScale.jade', {pageData: {username: username, app_guid: app_guid}});
+
+            } catch (error){
+                console.log("cookie is not JSON");
+            }                
+        }
+
+    });
+
+    router.post('/scale', nocache, function (req, res) {
+
+        console.log("GET /apps/:guid/scale");
+
+        if (req.cookies.psl_session) {
+            var cookie = JSON.parse(req.cookies.psl_session);
+            //console.log(cookie);
+            AppServices.setEndpoint(cookie.endpoint);
+            AppServices.setCredential(cookie.username, cookie.password);
+
+            var app_guid = req.body.app_guid;
+            var buildpack = req.body.buildpack;
+            var instances = parseInt(req.body.instances);
+            var memory = parseInt(req.body.memory);
+            var disk_quota = parseInt(req.body.disk_quota);
+            var state = req.body.state;
+            //var diego = req.body.diego;
+            //var enable_ssh = req.body.enable_ssh;
+
+            /*                             
+            console.log("app_guid: " + app_guid);
+            console.log("buildpack: " + buildpack);
+            console.log("instances: " + instances);
+            console.log("memory: " + memory);
+            console.log("disk_quota: " + disk_quota);
+            console.log("state: " + state);
+            console.log("diego: " + diego);
+            console.log("enable_ssh: " + enable_ssh);
+            */
+
+            var appOptions = {
+                "buildpack": buildpack,
+                "instances" : instances,
+                "memory" : memory,
+                "disk_quota" : disk_quota,
+                "state" : state                         
+            };
+
+            console.log(appOptions);
+
+            return AppServices.update(app_guid, appOptions).then(function (result) {
+                console.log(result.metadata.guid);
+                res.redirect('/apps/' + result.metadata.guid);
+            }).catch(function (reason) {
+                console.log(reason);
+                res.json({ error: 1, reason:reason });                
+            });
+         
+
+            res.json({ error: 1, reason:"OK" });
+        }
+
+    });
+
     return router;
 };
 
