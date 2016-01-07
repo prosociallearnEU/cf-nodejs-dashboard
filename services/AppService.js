@@ -398,6 +398,7 @@ AppServices.prototype.remove = function (app_guid) {
     var token_type = null;
     var access_token = null;
     var route_guid = null;
+    var no_route = false;
 
     var self = this;
 
@@ -419,9 +420,16 @@ AppServices.prototype.remove = function (app_guid) {
                 access_token = result.access_token;
                 return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
             }).then(function (result) {
-                route_guid = result.resources[0].metadata.guid;
+                if(result.total_results === 0){
+                    no_route = true;
+                } else {
+                    route_guid = result.resources[0].metadata.guid;
+                }
                 return CloudFoundryApps.remove(token_type, access_token, app_guid);
             }).then(function () {
+                if(no_route) {
+                    return resolve("NO_ROUTE");
+                }
                 return CloudFoundryRoutes.remove(token_type, access_token, route_guid);
             }).then(function (result) {
                 return resolve(result);
