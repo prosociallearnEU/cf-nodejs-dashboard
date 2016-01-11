@@ -27,7 +27,7 @@ block bodyContent
                             a(href="#", onclick='openApp(\'#{pageData.app.guid}\'); return false;') #{pageData.app.name}
                         td #{pageData.app.package_state}
                         td #{pageData.app.state}
-                        td #{pageData.app.instances}
+                        td #{pageData.app.running_instances} / #{pageData.app.instances}
                         td 
                             a.btn.btn-default(href="/apps/#{pageData.app.guid}/view", role="button") View
                             span  

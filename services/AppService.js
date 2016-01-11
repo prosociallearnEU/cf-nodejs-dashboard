@@ -9,6 +9,8 @@ var CloudFoundryDomains = require("cf-nodejs-client").Domains;
 var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
 var CloudFoundryLogs = require("cf-nodejs-client").Logs;
+var CloudFoundryServiceBindings = require("cf-nodejs-client").ServiceBindings;
+
 CloudFoundry = new CloudFoundry();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
 CloudFoundryApps = new CloudFoundryApps(this.CF_API_URL);
@@ -16,7 +18,9 @@ CloudFoundrySpaces = new CloudFoundrySpaces(this.CF_API_URL);
 CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
 CloudFoundryRoutes = new CloudFoundryRoutes(this.CF_API_URL);
 CloudFoundryJobs = new CloudFoundryJobs(this.CF_API_URL);
+CloudFoundryServiceBindings = new CloudFoundryServiceBindings(this.CF_API_URL);
 CloudFoundryLogs = new CloudFoundryLogs();
+
 
 function AppServices(_CF_API_URL, _username, _password) {
     "use strict";
@@ -438,12 +442,14 @@ AppServices.prototype.remove = function (app_guid) {
     var access_token = null;
     var route_guid = null;
     var no_route = false;
+    var no_serviceBinding = false;
 
     var self = this;
 
     CloudFoundry.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
     CloudFoundryRoutes.setEndPoint(this.CF_API_URL);
+    CloudFoundryServiceBindings.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
@@ -456,7 +462,19 @@ AppServices.prototype.remove = function (app_guid) {
                 return CloudFoundryUsersUAA.login(self.username, self.password);
             }).then(function (result) {
                 token_type = result.token_type;
-                access_token = result.access_token;
+                access_token = result.access_token;                
+                //app_guid
+                var filter = {
+                    'q': 'app_guid:' + app_guid
+                };            
+                return CloudFoundryServiceBindings.getServiceBindings(token_type, access_token, filter);
+            }).then(function (result) {
+                if(result.total_results === 0){
+                    no_serviceBinding = true;
+                } else {
+                    return reject("EXIST_SERVICE_BINDING");
+                }                
+
                 return CloudFoundryApps.getAppRoutes(token_type, access_token, app_guid);
             }).then(function (result) {
                 if(result.total_results === 0){
