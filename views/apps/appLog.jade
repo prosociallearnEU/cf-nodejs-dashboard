@@ -17,7 +17,8 @@ block bodyContent
                                 th Log
                         tbody(id="result")
                             tr
-                                td #{pageData.log}
+                                td 
+                                    pre #{pageData.log}
                     p
                         a.btn.btn-primary(href="/apps/#{pageData.guid}", role="button")
                             span.glyphicon.glyphicon-arrow-left.
