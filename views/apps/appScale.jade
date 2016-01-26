@@ -9,7 +9,7 @@ block bodyContent
     div.row
         div.col-md-12
             h1 Scale App
-            form(method="post", action="/apps/scale", id="formAppScale")
+            form(method="post", action="/apps/scale", id="formAppScale", onsubmit="return validate(this);")
                 input(type="hidden", name="app_guid", id="app_guid", value="#{pageData.app_guid}")
                 div.form-group
                     span Buildpacks: 
@@ -24,7 +24,7 @@ block bodyContent
                     label.radio-inline
                         input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/java-buildpack")
                         span.
-                            JEE
+                            Java
                     label.radio-inline
                         input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/php-buildpack")
                         span.
@@ -137,4 +137,12 @@ block bodyContent
                     span  
                     a.btn.btn-default(href="/apps/#{pageData.app_guid}", role="button")
                         span.glyphicon.glyphicon-arrow-left.
-                            Back                                          
+                            Back    
+
+block bodyScripts
+
+    script(type='text/javascript').
+
+        function validate(form) {
+            return confirm('Are you sure to scale this App?');
+        }                                      

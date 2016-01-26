@@ -26,7 +26,7 @@ block bodyContent
                     label.radio-inline
                         input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/java-buildpack")
                         span.
-                            JEE
+                            Java
                     label.radio-inline
                         input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/php-buildpack")
                         span.
@@ -40,7 +40,7 @@ block bodyContent
                     button.btn.btn-primary(type="submit",) Submit
 
                     span  
-                    a.btn.btn-default(href="/apps/", role="button")
+                    a.btn.btn-default(href="/spaces/#{pageData.space_guid}/apps", role="button")
                         span.glyphicon.glyphicon-arrow-left.
                             Back                                          
 
