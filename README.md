@@ -94,6 +94,8 @@ The possible actions provided in the page are:
 * *Log:* This method is used to get logs from the application.
 * *Scale:* This method is used to update some parameters in the application.
 
+The operations: Open, Start/Stop, Restage & Remove will be handled in this page.
+
 **App / View**
 
 This page will show information about the app:
@@ -107,6 +109,20 @@ This page will help you in the process to upload your app to the platform. To up
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/appUpload.png)
 
 If the process goes well, the page will be redirected to previous page.
+
+**App / Logs**
+
+This page will show information about logs registered in Cloud Foundry.
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/appLogs.png)
+
+**App / Scale**
+
+This page give the opportunity to scale/update application parameters to run on CF.
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/appScale.png)
+
+
 
 
 
