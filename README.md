@@ -28,6 +28,7 @@ The app will redirect to login area:
 Once, you have authenticated in the previous step, you will be redirected to home:
 
 **Home**
+
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/home.png)
 
 This view, will be used to show:
