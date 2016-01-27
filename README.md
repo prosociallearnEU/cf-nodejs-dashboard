@@ -21,6 +21,7 @@ open http://localhost:5000/
 ### User Interface
 
 **Login**
+
 The app will redirect to login area:
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/login.png)
