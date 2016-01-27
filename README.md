@@ -75,7 +75,26 @@ var appOptions = {
 };
 ```
 
-The page will create in the app a new application and this action will associate a new route with the name of the app.
+The page will create a new application and this action will associate a new route with the name of the app.
+
+**App**
+
+This page will help the developer in the whole life cycle.
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/app.png)
+
+The possible actions provided in the page are:
+
+* Open: This method checks if the application is running and open in a new tab the application.
+* View: This method shows details about the app's configuration. 
+* Upload: This method is used to upload source code to the app.
+* Start/Stop: This method is used to Start/Stop an app.
+* Restage: This method is used to Restage the Droplet
+* Remove: This method is used to remove an application.
+* Log: This method is used to get logs from the application.
+* Scale: This method is used to update some parameters in the application.
+
+
 
 
 
