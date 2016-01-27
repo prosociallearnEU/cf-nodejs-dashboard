@@ -45,16 +45,38 @@ If you click in the space:
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/spaceApps.png)
 
-The UI will show the list of apps created in the space and some interesting aspects of every app:
+The page will show the list of apps created in the space and some interesting aspects of every app:
 
 * Stage status
 * App status
 * Instances
 
-The UI has a button to go to the detail of every app. The UI has other actions:
+The page has a button to go to the detail of every app. The page has other actions:
 
 * Add a new application to current space
 * Refresh window
+
+**Space / Apps / Add**
+
+If you click in button *"Create a new application"* the previous page, you will se the following page:
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/createApp.png)
+
+In this page, the user has to type a short name of the new app to add to the space and the buildpack. The app will create a new app with the associated buildpack. By default, a new app will be created with this configuration:
+
+``` json
+var appOptions = {
+    name: appName,
+    space_guid: space_guid,
+    instances: 1,
+    memory: 256,
+    disk_quota: 256,
+    buildpack: buildPack
+};
+```
+
+The page will create in the app a new application and this action will associate a new route with the name of the app.
+
 
 
 
