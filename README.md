@@ -13,12 +13,41 @@ node index.js
 and later, open a webbrowser and type:
 
 ``` bash
-http://localhost:5000/
+open http://localhost:5000/
 ```
 
 The app will redirect to login area:
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/login.png)
+
+Once, you have authenticated in the previous step, you will be redirected to home:
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/home.png)
+
+This view, will be used to show:
+
+* List of Organization
+* List of Spaces from the first Organization
+* Memory used in the First Organization
+* Organization Quota associated with the first Organization
+
+If you click in the space:
+
+![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/spaceApps.png)
+
+The UI will show the list of apps created in the space and some interesting aspects of every app:
+
+* Stage status
+* App status
+* Instances
+
+The UI has a button to go to the detail of every app. The UI has other actions:
+
+* Add a new application to current space
+* Refresh window
+
+
+
 
 
 
