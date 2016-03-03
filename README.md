@@ -122,13 +122,3 @@ This page give the opportunity to scale/update application parameters to run on 
 
 ![ScreenShot](https://raw.githubusercontent.com/prosociallearnEU/cf-nodejs-dashboard/master/docs/screenshots/appScale.png)
 
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@
     "cf"
   ],
   "engines": {
-    "node": "4.2.3",
+    "node": "4.2.5",
     "npm": "2.14.2"
   },
   "repository": {
@@ -24,7 +24,7 @@
   "author": "Juan Antonio Breña Moral <bren@juanantonio.info> (http://www.juanantonio.info)",
   "license": "Apache-2.0",
   "dependencies": {
-    "cf-nodejs-client": "0.11.1",
+    "cf-nodejs-client": "https://github.com/prosociallearnEU/cf-nodejs-client.git#v0.11.1",
     "express": "4.13.3",
     "body-parser": "1.14.1",
     "cookie-parser": "1.4.0",
