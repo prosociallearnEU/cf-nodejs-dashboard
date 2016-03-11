@@ -27,8 +27,6 @@ SpaceServices.prototype.setCredential = function (username, password) {
 SpaceServices.prototype.getApps = function (space_guid) {
     var token_endpoint = null;
     var authorization_endpoint = null;
-    var token_type = null;
-    var access_token = null;
 
     var self = this;
     var results = null;
@@ -44,9 +42,8 @@ SpaceServices.prototype.getApps = function (space_guid) {
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
                 return CloudFoundryUsersUAA.login(self.username, self.password);
             }).then(function (result) {
-                token_type = result.token_type;
-                access_token = result.access_token;             
-                return CloudFoundrySpaces.getSpaceApps(token_type, access_token, space_guid);
+                CloudFoundrySpaces.setToken(result);
+                return CloudFoundrySpaces.getSpaceApps(space_guid);
             }).then(function (result) {
                 apps = result;
                 results = {
