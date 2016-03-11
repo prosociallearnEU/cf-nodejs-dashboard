@@ -1,4 +1,5 @@
 /*jslint node: true*/
+"use strict";
 
 var fs = require('fs');
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
@@ -22,26 +23,22 @@ CloudFoundryServiceBindings = new CloudFoundryServiceBindings(this.CF_API_URL);
 CloudFoundryLogs = new CloudFoundryLogs();
 
 
-function AppServices(_CF_API_URL, _username, _password) {
-    "use strict";
+function AppServices(_CF_API_URL, _username, _password) {    
     this.CF_API_URL = _CF_API_URL;
     this.username = _username;
     this.password = _password;
 }
 
 AppServices.prototype.setEndpoint = function (endpoint) {
-    "use strict";
     this.CF_API_URL = endpoint;
 };
 
 AppServices.prototype.setCredential = function (username, password) {
-    "use strict";
     this.username = username;
     this.password = password;
 };
 
 AppServices.prototype.add = function (space_guid, appName, buildPack) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -152,7 +149,6 @@ AppServices.prototype.add = function (space_guid, appName, buildPack) {
 };
 
 AppServices.prototype.upload = function (app_guid, filePath) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -189,7 +185,7 @@ AppServices.prototype.upload = function (app_guid, filePath) {
             }).then(function (result) {
                 return resolve(result);
             }).catch(function (reason) {
-                console.log(reason)
+                console.log(reason);
                 return reject(reason);
             });
 
@@ -201,7 +197,6 @@ AppServices.prototype.upload = function (app_guid, filePath) {
 };
 
 AppServices.prototype.stop = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -240,7 +235,6 @@ AppServices.prototype.stop = function (app_guid) {
 };
 
 AppServices.prototype.update = function (app_guid, appOptions) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -279,7 +273,6 @@ AppServices.prototype.update = function (app_guid, appOptions) {
 };
 
 AppServices.prototype.view = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -318,7 +311,6 @@ AppServices.prototype.view = function (app_guid) {
 };
 
 AppServices.prototype.getApps = function () {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -357,7 +349,6 @@ AppServices.prototype.getApps = function () {
 };
 
 AppServices.prototype.start = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -396,7 +387,6 @@ AppServices.prototype.start = function (app_guid) {
 };
 
 AppServices.prototype.restage = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -435,7 +425,6 @@ AppServices.prototype.restage = function (app_guid) {
 };
 
 AppServices.prototype.remove = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -503,7 +492,6 @@ AppServices.prototype.remove = function (app_guid) {
 };
 
 AppServices.prototype.open = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var token_type = null;
@@ -549,7 +537,6 @@ AppServices.prototype.open = function (app_guid) {
 };
 
 AppServices.prototype.getLogs = function (app_guid) {
-    "use strict";
     var token_endpoint = null;
     var authorization_endpoint = null;
     var logging_endpoint = null;
