@@ -2,7 +2,7 @@
 "use strict";
 
 var fs = require('fs');
-var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
+var CloudController = require("cf-nodejs-client").CloudController;
 var CloudFoundryUsersUAA = require("cf-nodejs-client").UsersUAA;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
 var CloudFoundrySpaces = require("cf-nodejs-client").Spaces;
@@ -12,14 +12,14 @@ var CloudFoundryJobs = require("cf-nodejs-client").Jobs;
 var CloudFoundryLogs = require("cf-nodejs-client").Logs;
 var CloudFoundryServiceBindings = require("cf-nodejs-client").ServiceBindings;
 
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryUsersUAA = new CloudFoundryUsersUAA();
-CloudFoundryApps = new CloudFoundryApps(this.CF_API_URL);
-CloudFoundrySpaces = new CloudFoundrySpaces(this.CF_API_URL);
-CloudFoundryDomains = new CloudFoundryDomains(this.CF_API_URL);
-CloudFoundryRoutes = new CloudFoundryRoutes(this.CF_API_URL);
-CloudFoundryJobs = new CloudFoundryJobs(this.CF_API_URL);
-CloudFoundryServiceBindings = new CloudFoundryServiceBindings(this.CF_API_URL);
+CloudFoundryApps = new CloudFoundryApps();
+CloudFoundrySpaces = new CloudFoundrySpaces();
+CloudFoundryDomains = new CloudFoundryDomains();
+CloudFoundryRoutes = new CloudFoundryRoutes();
+CloudFoundryJobs = new CloudFoundryJobs();
+CloudFoundryServiceBindings = new CloudFoundryServiceBindings();
 CloudFoundryLogs = new CloudFoundryLogs();
 
 
@@ -47,7 +47,7 @@ AppServices.prototype.add = function (space_guid, appName, buildPack) {
     var domain_guid = null;
     var route_guid = null;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundrySpaces.setEndPoint(this.CF_API_URL);
     CloudFoundryDomains.setEndPoint(this.CF_API_URL);
     CloudFoundryRoutes.setEndPoint(this.CF_API_URL);
@@ -59,7 +59,7 @@ AppServices.prototype.add = function (space_guid, appName, buildPack) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -154,7 +154,7 @@ AppServices.prototype.upload = function (app_guid, filePath) {
     var token_type = null;
     var access_token = null;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     var self = this;
@@ -163,7 +163,7 @@ AppServices.prototype.upload = function (app_guid, filePath) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -204,14 +204,14 @@ AppServices.prototype.stop = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -242,14 +242,14 @@ AppServices.prototype.update = function (app_guid, appOptions) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -280,14 +280,14 @@ AppServices.prototype.view = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -318,14 +318,14 @@ AppServices.prototype.getApps = function () {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -356,14 +356,14 @@ AppServices.prototype.start = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -394,14 +394,14 @@ AppServices.prototype.restage = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -435,7 +435,7 @@ AppServices.prototype.remove = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
     CloudFoundryRoutes.setEndPoint(this.CF_API_URL);
     CloudFoundryServiceBindings.setEndPoint(this.CF_API_URL);
@@ -444,7 +444,7 @@ AppServices.prototype.remove = function (app_guid) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -498,7 +498,7 @@ AppServices.prototype.open = function (app_guid) {
     var access_token = null;
     var url = null;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     var self = this;
@@ -507,7 +507,7 @@ AppServices.prototype.open = function (app_guid) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 CloudFoundryUsersUAA.setEndPoint(authorization_endpoint);
@@ -543,13 +543,13 @@ AppServices.prototype.getLogs = function (app_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
         try {
 
-            CloudFoundry.getInfo().then(function (result) {
+            CloudController.getInfo().then(function (result) {
                 token_endpoint = result.token_endpoint;
                 authorization_endpoint = result.authorization_endpoint;
                 logging_endpoint = result.logging_endpoint;
