@@ -1,4 +1,5 @@
 /*jslint node: true*/
+"use strict";
 
 var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
@@ -7,6 +8,7 @@ var CloudFoundryDomains = require("cf-nodejs-client").Domains;
 var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryUserProvidedServices = require("cf-nodejs-client").UserProvidedServices;
 var CloudFoundryServiceBindings = require("cf-nodejs-client").ServiceBindings;
+
 CloudFoundry = new CloudFoundry();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();
@@ -15,26 +17,22 @@ CloudFoundryRoutes = new CloudFoundryRoutes();
 CloudFoundryUserProvidedServices = new CloudFoundryUserProvidedServices();
 CloudFoundryServiceBindings = new CloudFoundryServiceBindings();
 
-function ServicesService(_CF_API_URL, _username, _password) {
-    "use strict";
+function ServicesService(_CF_API_URL, _username, _password) {    
     this.CF_API_URL = _CF_API_URL;
     this.username = _username;
     this.password = _password;
 }
 
 ServicesService.prototype.setEndpoint = function (endpoint) {
-    "use strict";
     this.CF_API_URL = endpoint;
 };
 
 ServicesService.prototype.setCredential = function (username, password) {
-    "use strict";
     this.username = username;
     this.password = password;
 };
 
 ServicesService.prototype.getServices = function () {
-    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -60,7 +58,6 @@ ServicesService.prototype.getServices = function () {
 };
 
 ServicesService.prototype.getService = function (service_guid) {
-    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -86,7 +83,6 @@ ServicesService.prototype.getService = function (service_guid) {
 };
 
 ServicesService.prototype.removeService = function (service_guid) {
-    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -112,7 +108,6 @@ ServicesService.prototype.removeService = function (service_guid) {
 };
 
 ServicesService.prototype.addService = function (serviceName, host, port, username, password, dbname) {
-    "use strict";
     var token_endpoint = null;
 
     var self = this;
@@ -160,7 +155,6 @@ ServicesService.prototype.addService = function (serviceName, host, port, userna
 };
 
 ServicesService.prototype.getAppsAvailableToBind = function () {
-    "use strict";
     var token_endpoint = null;
 
     var self = this;

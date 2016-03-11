@@ -1,5 +1,5 @@
 /*jslint node: true*/
-
+"use strict";
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
@@ -8,14 +8,13 @@ var multer = require('multer');
 var AppServices = require("../services/AppService");
 AppServices = new AppServices();
 
-module.exports = function (express) {
-    "use strict";
+module.exports = function (express) {    
     var router = express.Router();
     var upload = multer({dest: 'uploads/'});
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({extended: false}));// parse application/x-www-form-urlencoded
 
-    var cookieName = "psl_session";
+    //var cookieName = "psl_session";
     var cookieSecret = "secret";//TODO: Move to config file
     router.use(cookieParser(cookieSecret));
 
@@ -35,7 +34,7 @@ module.exports = function (express) {
         var back = {
             path:"/home/",
             text:"Home"
-        }
+        };
 
         if (req.cookies.psl_session) {
             try {
@@ -70,7 +69,7 @@ module.exports = function (express) {
         var back = {
             path:"/home",
             text:"Home"
-        }
+        };
 
         if (req.cookies.psl_session) {
             try {
@@ -144,8 +143,8 @@ module.exports = function (express) {
                 var back = {
                     path:"/apps/" + app_guid,
                     text:"Apps"
-                }
-                res.render('global/globalError', {pageData: {error: result, back:back}});
+                };
+                res.render('global/globalError', {pageData: {error: reason, back:back}});
             });            
         }
 
@@ -270,8 +269,8 @@ module.exports = function (express) {
                     var back = {
                         path:"/apps/" + app_guid,
                         text:"Apps"
-                    }
-                    res.render('global/globalError', {pageData: {error: result, back:back}});
+                    };
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
                 });
 
             } catch (error){
@@ -375,9 +374,7 @@ module.exports = function (express) {
                 console.log(reason);
                 res.json({ error: 1, reason:reason });                
             });
-         
-
-            res.json({ error: 1, reason:"OK" });
+            //res.json({ error: 1, reason:"OK" });
         }
 
     });
