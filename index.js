@@ -9,8 +9,8 @@ var http = require('http').Server(app);
 app.use('/', require('./routes/GlobalRoutes')(express));
 app.use('/auth/', require('./routes/LoginRoutes')(express));
 app.use('/spaces/', require('./routes/SpacesRoutes')(express));
-app.use('/apps/', require('./routes/AppRoutes')(express));
-app.use('/services/', require('./routes/ServiceRoutes')(express));
+//app.use('/apps/', require('./routes/AppRoutes')(express));
+//app.use('/services/', require('./routes/ServiceRoutes')(express));
 app.use(express.static(__dirname + '/public'));
 
 //Templating
