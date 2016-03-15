@@ -37,12 +37,14 @@ block bodyContent
                             Python 
                                                     
                 div.form-group
-                    button.btn.btn-primary(type="submit",) Submit
+                    button.btn.btn-primary(type="submit") 
+                        span.glyphicon.glyphicon-ok
+                        |  Submit
 
                     span  
                     a.btn.btn-default(href="/spaces/#{pageData.space_guid}/apps", role="button")
-                        span.glyphicon.glyphicon-arrow-left.
-                            Back                                          
+                        span.glyphicon.glyphicon-arrow-left
+                        |  Back                                          
 
 block bodyScripts
 
