@@ -27,7 +27,7 @@ module.exports = function (express) {
 
 	router.get('/:guid/apps', function (req, res) {
 
-		console.log("GET /spaces/:guid/apps")
+		console.log("GET /spaces/:guid/apps");
 
 		var endpoint = "";
 		var username = "";
@@ -36,12 +36,10 @@ module.exports = function (express) {
 
         var space_guid = req.params.guid;
         console.log("space_guid: " + space_guid);
-
         var back = {
             path:"/home/",
             text:"Home"
-        }
-
+        };
 	    if (req.cookies.psl_session) {
 	    	try {
 				var cookie = JSON.parse(req.cookies.psl_session);	    		
@@ -63,8 +61,8 @@ module.exports = function (express) {
 		        });  
 
 	    	} catch (error){
-	    		console.log("cookie is not JSON", error);
-	    		res.render('global/globalError', {pageData: {error: result, back:back}});
+	    		console.log("cookie is not JSON", error);	    		
+	    		res.render('global/globalError', {pageData: {error: error, back:back}});
 	    	}
 	    }
 
@@ -115,7 +113,7 @@ module.exports = function (express) {
 		        var back = {
 		            path:"/spaces/" + space_guid + "/apps",
 		            text:"Space"
-		        }
+		        };
 	            res.render('global/globalError', {pageData: {error: reason, back:back}});
 	        });
 
