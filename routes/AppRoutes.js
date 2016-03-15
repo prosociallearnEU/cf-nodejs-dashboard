@@ -31,6 +31,7 @@ module.exports = function (express) {
         console.log("GET /apps/:guid");
 
         var username = "";
+        var summary;
         var back = {
             path:"/home/",
             text:"Home"
@@ -47,7 +48,18 @@ module.exports = function (express) {
                 console.log("app_guid: " + app_guid);
 
                 return AppServices.view(app_guid).then(function (result) {
-                    res.render('apps/app.jade', {pageData: {username: username, app: result}});
+                    summary = result;
+                    var myUrl;
+                    myUrl = AppServices.open(app_guid).then(function (result) {
+                        return result;
+                    }).catch(function (reason) {
+                        console.log (reason);
+                        return "";                            
+                    });                
+                    return myUrl;
+                }).then(function (result) {
+                    console.log(result);
+                    res.render('apps/app.jade', {pageData: {username: username, app: summary, address: result}});
                 }).catch(function (reason) {
                     console.log(reason);
                     res.render('global/globalError', {pageData: {error: reason, back:back}});
