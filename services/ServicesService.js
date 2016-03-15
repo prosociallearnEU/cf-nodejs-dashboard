@@ -1,7 +1,7 @@
 /*jslint node: true*/
 "use strict";
 
-var CloudFoundry = require("cf-nodejs-client").CloudFoundry;
+var CloudController = require("cf-nodejs-client").CloudController;
 var CloudFoundryApps = require("cf-nodejs-client").Apps;
 var CloudFoundrySpaces = require("cf-nodejs-client").Spaces;
 var CloudFoundryDomains = require("cf-nodejs-client").Domains;
@@ -9,7 +9,7 @@ var CloudFoundryRoutes = require("cf-nodejs-client").Routes;
 var CloudFoundryUserProvidedServices = require("cf-nodejs-client").UserProvidedServices;
 var CloudFoundryServiceBindings = require("cf-nodejs-client").ServiceBindings;
 
-CloudFoundry = new CloudFoundry();
+CloudController = new CloudController();
 CloudFoundryApps = new CloudFoundryApps();
 CloudFoundrySpaces = new CloudFoundrySpaces();
 CloudFoundryDomains = new CloudFoundryDomains();
@@ -37,14 +37,14 @@ ServicesService.prototype.getServices = function () {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryUserProvidedServices.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
-        CloudFoundry.getInfo().then(function (result) {
+        CloudController.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            return CloudController.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
             return CloudFoundryUserProvidedServices.getServices(result.token_type, result.access_token);
         }).then(function (result) {
@@ -59,17 +59,13 @@ ServicesService.prototype.getServices = function () {
 
 ServicesService.prototype.getService = function (service_guid) {
     var token_endpoint = null;
-
     var self = this;
-
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryUserProvidedServices.setEndPoint(this.CF_API_URL);
-
     return new Promise(function (resolve, reject) {
-
-        CloudFoundry.getInfo().then(function (result) {
+        CloudController.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            return CloudController.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
             return CloudFoundryUserProvidedServices.getService(result.token_type, result.access_token, service_guid);
         }).then(function (result) {
@@ -87,14 +83,14 @@ ServicesService.prototype.removeService = function (service_guid) {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryUserProvidedServices.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
-        CloudFoundry.getInfo().then(function (result) {
+        CloudController.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            return CloudController.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
             return CloudFoundryUserProvidedServices.delete(result.token_type, result.access_token, service_guid);
         }).then(function (result) {
@@ -112,7 +108,7 @@ ServicesService.prototype.addService = function (serviceName, host, port, userna
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundrySpaces.setEndPoint(this.CF_API_URL);
     CloudFoundryUserProvidedServices.setEndPoint(this.CF_API_URL);
 
@@ -129,9 +125,9 @@ ServicesService.prototype.addService = function (serviceName, host, port, userna
             dbname: dbname
         };
 
-        CloudFoundry.getInfo().then(function (result) {
+        CloudController.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            return CloudController.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
             token_type = result.token_type;
             access_token = result.access_token;
@@ -159,14 +155,14 @@ ServicesService.prototype.getAppsAvailableToBind = function () {
 
     var self = this;
 
-    CloudFoundry.setEndPoint(this.CF_API_URL);
+    CloudController.setEndPoint(this.CF_API_URL);
     CloudFoundryApps.setEndPoint(this.CF_API_URL);
 
     return new Promise(function (resolve, reject) {
 
-        CloudFoundry.getInfo().then(function (result) {
+        CloudController.getInfo().then(function (result) {
             token_endpoint = result.token_endpoint;
-            return CloudFoundry.login(token_endpoint, self.username, self.password);
+            return CloudController.login(token_endpoint, self.username, self.password);
         }).then(function (result) {
             return CloudFoundryApps.getApps(result.token_type, result.access_token);
         }).then(function (result) {
