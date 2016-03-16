@@ -5,110 +5,147 @@ block username
     span #{pageData.username}
 
 block bodyContent
-
     div.row
         div.col-md-12
             h1 Scale App
             form(method="post", action="/apps/scale", id="formAppScale", onsubmit="return validate(this);")
                 input(type="hidden", name="app_guid", id="app_guid", value="#{pageData.app_guid}")
+                input(type="hidden", name="prep_memory", id="prep_memory", value="#{pageData.summary.memory}")
+                input(type="hidden", name="prep_buildpack", id="prep_buildpack", value="#{pageData.summary.buildpack}")
+                input(type="hidden", name="prep_instances", id="prep_instances", value="#{pageData.summary.instances}")
+                input(type="hidden", name="prep_disk_quota", id="prep_disk_quota", value="#{pageData.summary.disk_quota}")
+                input(type="hidden", name="prep_state", id="prep_disk_state", value="#{pageData.summary.state}")
                 div.form-group
-                    span Buildpacks: 
-                    label.radio-inline
-                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/staticfile-buildpack" checked="checked").
-                        span.
-                            Static 
-                    label.radio-inline
-                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/nodejs-buildpack")
-                        span.
-                            Node.js
-                    label.radio-inline
-                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/java-buildpack")
-                        span.
-                            Java
-                    label.radio-inline
-                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/php-buildpack")
-                        span.
-                            PHP  
-                    label.radio-inline
-                        input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/python-buildpack")
-                        span.
-                            Python 
+                    div.row(style="width:50%;")
+                        div.col-md-2
+                            span Buildpacks: 
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/staticfile-buildpack").
+                                span.
+                                    Static 
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/nodejs-buildpack")
+                                span.
+                                    Node.js
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/java-buildpack")
+                                span.
+                                    Java
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/php-buildpack")
+                                span.
+                                    PHP  
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="buildpack", name="buildpack", value="https://github.com/cloudfoundry/python-buildpack")
+                                span.
+                                    Python 
                 div.form-group
-                    span Instances: 
-                    label.radio-inline
-                        input(type="radio", id="instances", name="instances", value="1" checked="checked").
-                        span.
-                            1 
-                    label.radio-inline
-                        input(type="radio", id="instances", name="instances", value="2")
-                        span.
-                            2
-                    label.radio-inline
-                        input(type="radio", id="instances", name="instances", value="3")
-                        span.
-                            3
-                    label.radio-inline
-                        input(type="radio", id="instances", name="instances", value="4")
-                        span.
-                            4  
-                    label.radio-inline
-                        input(type="radio", id="instances", name="instances", value="5")
-                        span.
-                            5                            
+                    div.row(style="width:50%;")
+                        div.col-md-2
+                            span Instances: 
+                        div.col-md-2                            
+                            label.radio-inline
+                                input(type="radio", id="instances", name="instances", value="1" checked="checked").
+                                span.
+                                    1 
+                        div.col-md-2
+                            label.radio-inline
+                                input(type="radio", id="instances", name="instances", value="2")
+                                span.
+                                    2
+                        div.col-md-2                                    
+                            label.radio-inline
+                                input(type="radio", id="instances", name="instances", value="3")
+                                span.
+                                    3
+                        div.col-md-2                                    
+                            label.radio-inline
+                                input(type="radio", id="instances", name="instances", value="4")
+                                span.
+                                    4  
+                        div.col-md-2                                    
+                            label.radio-inline
+                                input(type="radio", id="instances", name="instances", value="5")
+                                span.
+                                    5                            
                 div.form-group
-                    span Memory: 
-                    label.radio-inline
-                        input(type="radio", id="memory", name="memory", value="128" checked="checked").
-                        span.
-                            128 
-                    label.radio-inline
-                        input(type="radio", id="memory", name="memory", value="256")
-                        span.
-                            256
-                    label.radio-inline
-                        input(type="radio", id="memory", name="memory", value="512")
-                        span.
-                            512
-                    label.radio-inline
-                        input(type="radio", id="memory", name="memory", value="1024")
-                        span.
-                            1024 
-                    label.radio-inline
-                        input(type="radio", id="memory", name="memory", value="2048")
-                        span.
-                            2048
+                    div.row(style="width:50%;")
+                        div.col-md-2                    
+                            span Memory: 
+                        div.col-md-2                                                    
+                            label.radio-inline
+                                input(type="radio", id="memory", name="memory", value="128" checked="checked").
+                                span.
+                                    128 
+                        div.col-md-2                                                            
+                            label.radio-inline
+                                input(type="radio", id="memory", name="memory", value="256")
+                                span.
+                                    256
+                        div.col-md-2                                                            
+                            label.radio-inline
+                                input(type="radio", id="memory", name="memory", value="512")
+                                span.
+                                    512
+                        div.col-md-2                                                            
+                            label.radio-inline
+                                input(type="radio", id="memory", name="memory", value="1024")
+                                span.
+                                    1024 
+                        div.col-md-2                                                            
+                            label.radio-inline
+                                input(type="radio", id="memory", name="memory", value="2048")
+                                span.
+                                    2048
                 div.form-group
-                    span disk_quota: 
-                    label.radio-inline
-                        input(type="radio", id="disk_quota", name="disk_quota", value="128" checked="checked").
-                        span.
-                            128 
-                    label.radio-inline
-                        input(type="radio", id="disk_quota", name="disk_quota", value="256")
-                        span.
-                            256
-                    label.radio-inline
-                        input(type="radio", id="disk_quota", name="disk_quota", value="512")
-                        span.
-                            512
-                    label.radio-inline
-                        input(type="radio", id="disk_quota", name="disk_quota", value="1024")
-                        span.
-                            1024 
-                    label.radio-inline
-                        input(type="radio", id="disk_quota", name="disk_quota", value="2048")
-                        span.
-                            2048                                                               
+                    div.row(style="width:50%;")
+                        div.col-md-2                         
+                            span disk_quota: 
+                        div.col-md-2                                                         
+                            label.radio-inline
+                                input(type="radio", id="disk_quota", name="disk_quota", value="128" checked="checked").
+                                span.
+                                    128 
+                        div.col-md-2                                                                 
+                            label.radio-inline
+                                input(type="radio", id="disk_quota", name="disk_quota", value="256")
+                                span.
+                                    256
+                        div.col-md-2                                                                 
+                            label.radio-inline
+                                input(type="radio", id="disk_quota", name="disk_quota", value="512")
+                                span.
+                                    512
+                        div.col-md-2                                                                 
+                            label.radio-inline
+                                input(type="radio", id="disk_quota", name="disk_quota", value="1024")
+                                span.
+                                    1024 
+                        div.col-md-2                                                                 
+                            label.radio-inline
+                                input(type="radio", id="disk_quota", name="disk_quota", value="2048")
+                                span.
+                                    2048                                                               
                 div.form-group
-                    span state: 
-                    label.radio-inline
-                        input(type="radio", id="state", name="state", value="STARTED" checked="checked").
-                        span.
-                            STARTED 
-                    label.radio-inline
-                        input(type="radio", id="state", name="state", value="STOPPED")
-                        span.
-                            STOPPED 
+                    div.row(style="width:50%;")
+                        div.col-md-2                                                                                                                                 
+                            span state: 
+                        div.col-md-2                                                                                                 
+                            label.radio-inline
+                                input(type="radio", id="state", name="state", value="STARTED" checked="checked").
+                                span.
+                                    STARTED 
+                        div.col-md-2                                                                 
+                            label.radio-inline
+                                input(type="radio", id="state", name="state", value="STOPPED")
+                                span.
+                                    STOPPED 
+                        div.col-md-6 &nbsp
                 //
                     div.form-group
                         span Diego: 
@@ -132,18 +169,35 @@ block bodyContent
                                 false 
 
                 div.form-group
-                    button.btn.btn-primary(type="submit",) Scale App
+                    button.btn.btn-primary(type="submit",) 
+                        span.glyphicon.glyphicon-ok
+                        |  Scale App
 
                     span  
                     a.btn.btn-default(href="/apps/#{pageData.app_guid}", role="button")
                         span.glyphicon.glyphicon-arrow-left
                         |  Back
-                        
-
 block bodyScripts
 
     script(type='text/javascript').
 
         function validate(form) {
             return confirm('Are you sure to scale this App?');
-        }                                      
+        }
+
+        $( document ).ready(function() {
+            var myMemory = $("#prep_memory").val();
+            var myBuildpack = $("#prep_buildpack").val();
+            var myInstances = $("#prep_instances").val();
+            var myDiskQuota = $("#prep_disk_quota").val();
+            var myState = $("#prep_state").val();
+            $("input[name=memory][value=" + myMemory + "]").prop('checked', true);
+            $("input[name=instances][value=" + myInstances + "]").prop('checked', true);
+            $("input[name=disk_quota][value=" + myDiskQuota + "]").prop('checked', true);
+            $("input[name=state][value=" + myState + "]").prop('checked', true);
+            $("input[name=buildpack]").each(function(){
+                if ($(this).attr("value")==myBuildpack){
+                    $(this).prop('checked', true);
+                }
+            });
+        });

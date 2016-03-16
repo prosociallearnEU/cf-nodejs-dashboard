@@ -27,26 +27,21 @@ module.exports = function (express) {
 
     // GET /apps/:guid
     router.get('/:guid', nocache, function (req, res) {
-
         console.log("GET /apps/:guid");
-
         var username = "";
         var summary;
         var back = {
             path:"/home/",
             text:"Home"
         };
-
         if (req.cookies.psl_session) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
                 username = cookie.username;
                 AppServices.setEndpoint(cookie.endpoint);
                 AppServices.setCredential(cookie.username, cookie.password);
-
                 var app_guid = req.params.guid;
                 console.log("app_guid: " + app_guid);
-
                 return AppServices.view(app_guid).then(function (result) {
                     summary = result;
                     var myUrl;
@@ -69,7 +64,6 @@ module.exports = function (express) {
                 console.log("cookie is not JSON");
             }                
         }
-
     });
 
     // GET /apps/:guid/view/
@@ -94,7 +88,6 @@ module.exports = function (express) {
                 console.log("app_guid: " + app_guid);
 
                 return AppServices.view(app_guid).then(function (result) {
-                    //console.log(result);
                     res.render('apps/appView.jade', {pageData: {username: username, info: result}});
                 }).catch(function (reason) {
                     console.log(reason);
@@ -317,26 +310,29 @@ module.exports = function (express) {
     });
 
     router.get('/:guid/scale', nocache, function (req, res) {
-
         console.log("GET /apps/:guid/scale");
-
-        var username = "";
-
         if (req.cookies.psl_session) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
-                username = cookie.username;
-
-                var app_guid = req.params.guid;                            
-                console.log("app_guid: " + app_guid);
-                                                                                                                
-                res.render('apps/appScale.jade', {pageData: {username: username, app_guid: app_guid}});
-
+                var username = cookie.username;
+                var app_guid = req.params.guid;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+                return AppServices.view(app_guid).then(function (result) {
+                    //console.log(result);
+                    res.render('apps/appScale.jade', {pageData: {username: username, app_guid: app_guid, summary: result}});
+                }).catch(function (reason) {
+                    console.log(reason);
+                    var back = {
+                        path:"/apps/" + app_guid,
+                        text:"Apps"
+                    };                    
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
+                });
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
-
     });
 
     router.post('/scale', nocache, function (req, res) {

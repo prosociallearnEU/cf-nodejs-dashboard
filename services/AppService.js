@@ -269,9 +269,7 @@ AppServices.prototype.view = function (app_guid) {
                 return CloudFoundryUsersUAA.login(self.username, self.password);
             }).then(function (result) {
                 CloudFoundryApps.setToken(result);
-                var mySummary = CloudFoundryApps.getSummary(app_guid);
-                console.log("mySummary ->" + mySummary + "<-");
-                return mySummary;
+                return CloudFoundryApps.getSummary(app_guid);
             }).then(function (result) {
                 return resolve(result);
             }).catch(function (reason) {
