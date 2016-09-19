@@ -23,8 +23,7 @@ block bodyContent
 
                     tr
                         td= n++
-                        td 
-                            a(href="#", onclick='openApp(\'#{pageData.app.guid}\'); return false;') #{pageData.app.name}
+                        td #{pageData.app.name}
                         td #{pageData.app.package_state}
                         td #{pageData.app.state}
                         td #{pageData.app.running_instances} / #{pageData.app.instances}
@@ -44,15 +43,22 @@ block bodyContent
                             span 
                             a.btn.btn-default(href="/apps/#{pageData.app.guid}/log", role="button") Log            
                             span 
-                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/scale", role="button") Scale                               
+                            a.btn.btn-default(href="/apps/#{pageData.app.guid}/scale", role="button") Scale    
+                    tr
+                        td(style="border-top:0px; border-bottom:1px solid #ddd;") &nbsp;                            
+                            if pageData.address === ""
+                                td(colspan=6, style="border-top:0px; border-bottom:1px solid #ddd;") Not running
+                            else
+                                td(colspan=6, style="border-top:0px; border-bottom:1px solid #ddd;") 
+                                    a(href="#{pageData.address}") #{pageData.address}
             p
                 a.btn.btn-primary(href="/spaces/#{pageData.app.space_guid}/apps", role="button")
-                    span.glyphicon.glyphicon-arrow-left.
-                        Back
-                    span 
-                    a.btn.btn-default(href="/apps/#{pageData.app.guid}", role="button")
-                        span.glyphicon.glyphicon-refresh.
-                            Refresh
+                    span.glyphicon.glyphicon-arrow-left
+                    |  Back
+                span 
+                a.btn.btn-default(href="/apps/#{pageData.app.guid}", role="button")
+                    span.glyphicon.glyphicon-refresh
+                    |  Refresh
                 
                           
                            

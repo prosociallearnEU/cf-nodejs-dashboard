@@ -6,11 +6,11 @@ block bodyContent
     form.form-signin(method="post", action="/auth/login", id="formLogin" novalidate="novalidate")
         h2.form-signin-heading Please sign in
         label.sr-only(for='endpoint') API Endpoint
-        input.form-control(type="text", id="endpoint", name="endpoint", placeholder="https://api.run.pivotal.io", required, autofocus)
+        input.form-control(type="text", id="endpoint", name="endpoint", placeholder="https://api.run.pivotal.io", required, autofocus, value="")
         label.sr-only(for='username') Username
-        input.form-control(type="text", id="username", name="username", placeholder="Username", required)
+        input.form-control(type="text", id="username", name="username", placeholder="Username", required, value="")
         label.sr-only(for='password') Password
-        input.form-control(type="password", id="password", name="password", placeholder="Password", required )
+        input.form-control(type="password", id="password", name="password", placeholder="Password", required, value="" )
         button.btn.btn-lg.btn-primary.btn-block(type='submit', id="btnLoginSubmit") Sign in
 
 block bodyScripts
@@ -25,19 +25,19 @@ block bodyScripts
             var password = $("#password").val();
             
             var endpoint_regex = /^(http|https)/;
-            var username_regex = /^[a-zA-Z0-9.@]{5,25}$/;
+            var username_regex = /^[a-zA-Z0-9.@-]{5,35}$/;
 
             if (endpoint.match(endpoint_regex)) {
                 if (username.match(username_regex) !== null) {
                     if (password.match(username_regex) !== null) {
                         return true;
                     }else {
-                        alert("Password format is not correct.\nPattern: [a-zA-Z0-9.@]{5,25}");
+                        alert("Password format is not correct.\nPattern: [a-zA-Z0-9.@/-]{5,35}");
                         $("#password").val("");
                         $("#password").focus();
                     }
                 }else {
-                    alert("Username format is not correct.\nPattern: [a-zA-Z0-9.@]{5,25}");
+                    alert("Username format is not correct.\nPattern: [a-zA-Z0-9.@/-]{5,35}");
                     $("#username").val("");
                     $("#username").focus();                    
                 }

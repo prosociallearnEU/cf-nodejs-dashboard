@@ -1,5 +1,5 @@
 /*jslint node: true*/
-
+"use strict";
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var multer = require('multer');
@@ -8,14 +8,13 @@ var multer = require('multer');
 var AppServices = require("../services/AppService");
 AppServices = new AppServices();
 
-module.exports = function (express) {
-    "use strict";
+module.exports = function (express) {    
     var router = express.Router();
     var upload = multer({dest: 'uploads/'});
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({extended: false}));// parse application/x-www-form-urlencoded
 
-    var cookieName = "psl_session";
+    //var cookieName = "psl_session";
     var cookieSecret = "secret";//TODO: Move to config file
     router.use(cookieParser(cookieSecret));
 
@@ -28,27 +27,34 @@ module.exports = function (express) {
 
     // GET /apps/:guid
     router.get('/:guid', nocache, function (req, res) {
-
         console.log("GET /apps/:guid");
-
         var username = "";
+        var summary;
         var back = {
             path:"/home/",
             text:"Home"
-        }
-
+        };
         if (req.cookies.psl_session) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
                 username = cookie.username;
                 AppServices.setEndpoint(cookie.endpoint);
                 AppServices.setCredential(cookie.username, cookie.password);
-
                 var app_guid = req.params.guid;
                 console.log("app_guid: " + app_guid);
-
                 return AppServices.view(app_guid).then(function (result) {
-                    res.render('apps/app.jade', {pageData: {username: username, app: result}});
+                    summary = result;
+                    var myUrl;
+                    myUrl = AppServices.open(app_guid).then(function (result) {
+                        return result;
+                    }).catch(function (reason) {
+                        console.log (reason);
+                        return "";                            
+                    });                
+                    return myUrl;
+                }).then(function (result) {
+                    console.log(result);
+                    res.render('apps/app.jade', {pageData: {username: username, app: summary, address: result}});
                 }).catch(function (reason) {
                     console.log(reason);
                     res.render('global/globalError', {pageData: {error: reason, back:back}});
@@ -58,7 +64,6 @@ module.exports = function (express) {
                 console.log("cookie is not JSON");
             }                
         }
-
     });
 
     // GET /apps/:guid/view/
@@ -70,7 +75,7 @@ module.exports = function (express) {
         var back = {
             path:"/home",
             text:"Home"
-        }
+        };
 
         if (req.cookies.psl_session) {
             try {
@@ -83,7 +88,6 @@ module.exports = function (express) {
                 console.log("app_guid: " + app_guid);
 
                 return AppServices.view(app_guid).then(function (result) {
-                    //console.log(result);
                     res.render('apps/appView.jade', {pageData: {username: username, info: result}});
                 }).catch(function (reason) {
                     console.log(reason);
@@ -144,8 +148,8 @@ module.exports = function (express) {
                 var back = {
                     path:"/apps/" + app_guid,
                     text:"Apps"
-                }
-                res.render('global/globalError', {pageData: {error: result, back:back}});
+                };
+                res.render('global/globalError', {pageData: {error: reason, back:back}});
             });            
         }
 
@@ -270,8 +274,8 @@ module.exports = function (express) {
                     var back = {
                         path:"/apps/" + app_guid,
                         text:"Apps"
-                    }
-                    res.render('global/globalError', {pageData: {error: result, back:back}});
+                    };
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
                 });
 
             } catch (error){
@@ -306,26 +310,29 @@ module.exports = function (express) {
     });
 
     router.get('/:guid/scale', nocache, function (req, res) {
-
         console.log("GET /apps/:guid/scale");
-
-        var username = "";
-
         if (req.cookies.psl_session) {
             try {
                 var cookie = JSON.parse(req.cookies.psl_session);
-                username = cookie.username;
-
-                var app_guid = req.params.guid;                            
-                console.log("app_guid: " + app_guid);
-                                                                                                                
-                res.render('apps/appScale.jade', {pageData: {username: username, app_guid: app_guid}});
-
+                var username = cookie.username;
+                var app_guid = req.params.guid;
+                AppServices.setEndpoint(cookie.endpoint);
+                AppServices.setCredential(cookie.username, cookie.password);
+                return AppServices.view(app_guid).then(function (result) {
+                    //console.log(result);
+                    res.render('apps/appScale.jade', {pageData: {username: username, app_guid: app_guid, summary: result}});
+                }).catch(function (reason) {
+                    console.log(reason);
+                    var back = {
+                        path:"/apps/" + app_guid,
+                        text:"Apps"
+                    };                    
+                    res.render('global/globalError', {pageData: {error: reason, back:back}});
+                });
             } catch (error){
                 console.log("cookie is not JSON");
             }                
         }
-
     });
 
     router.post('/scale', nocache, function (req, res) {
@@ -375,9 +382,7 @@ module.exports = function (express) {
                 console.log(reason);
                 res.json({ error: 1, reason:reason });                
             });
-         
-
-            res.json({ error: 1, reason:"OK" });
+            //res.json({ error: 1, reason:"OK" });
         }
 
     });
